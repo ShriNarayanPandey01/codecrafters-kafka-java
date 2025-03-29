@@ -3,6 +3,7 @@ import java.net.ServerSocket;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 class byteArrayManipulation {
   public static int byteArrayToInt(byte[] b) {
@@ -57,6 +58,7 @@ public class Main {
       byte[] correlationId = new byte[4];
 
       inpuiStream.read(mssgSize);
+
       int mssg = byteTool.byteArrayToInt(mssgSize);
       inpuiStream.read(apiKey);
       short api = byteTool.byteArrayToShort(apiKey);
@@ -66,10 +68,26 @@ public class Main {
       int correlation = byteTool.byteArrayToInt(correlationId);
 
       OutputStream outputStream = clientSocket.getOutputStream();
-      outputStream.write(byteTool.intToByteArray(mssg)); // 4-byte message_size
-      outputStream.write(byteTool.intToByteArray(correlation)); // 4-byte correlation_id
-      outputStream.write(byteTool.shortToByteArray((short)0));
-      // outputStream.write(byteTool.shortToByteArray(version));
+      ArrayList<byte[]> responses = new ArrayList<>();
+      int responseSize = 0;
+      responses.add(byteTool.intToByteArray(correlation));
+      responseSize += 4;
+      if(version < 0 || version >4){
+        responses.add(new byte[]{0,35});
+        responseSize += 2;
+      }
+      else{
+        responses.add(new byte[]{0,0});
+        responses.add(new byte[]{0,18});
+        responses.add(new byte[]{0,3});
+        responses.add(new byte[]{0,4});
+        responseSize += 8;  
+      }
+
+      outputStream.write(byteTool.intToByteArray(responseSize));
+      for (byte[] response : responses) {
+        outputStream.write(response);
+      }
       
       outputStream.flush();
     } catch (IOException e) {
