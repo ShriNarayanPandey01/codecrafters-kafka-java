@@ -70,8 +70,8 @@ public class Main {
 
       OutputStream outputStream = clientSocket.getOutputStream();
       outputStream.write(byteTool.intToByteArray(mssg)); // 4-byte message_size
-      outputStream.write(byteTool.shortToByteArray(api)); // 2-byte api_key
-      outputStream.write(byteTool.shortToByteArray(version)); // 2-byte api_version
+      // outputStream.write(byteTool.shortToByteArray(api)); // 2-byte api_key
+      // outputStream.write(byteTool.shortToByteArray(version)); // 2-byte api_version
       outputStream.write(byteTool.intToByteArray(correlation)); // 4-byte correlation_id
       outputStream.flush();
     } catch (IOException e) {
