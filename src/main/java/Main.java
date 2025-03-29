@@ -75,7 +75,7 @@ public class Main {
       // outputStream.write(byteTool.shortToByteArray(api)); // 2-byte api_key
       // outputStream.write(byteTool.shortToByteArray(version)); // 2-byte api_version
       outputStream.write(byteTool.intToByteArray(correlation)); // 4-byte correlation_id
-      outputStream.write(new byte[]{0,23});
+      outputStream.write(byteTool.shortToByteArray((short)35));
       outputStream.flush();
     } catch (IOException e) {
       System.out.println("IOException: " + e.getMessage());
