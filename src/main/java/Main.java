@@ -84,7 +84,7 @@ public class Main {
         responseSize += 4;
         if(version < 0 || version >4){
           responses.add(new byte[]{0,35}); // error code
-          responses.add(new byte[]{2});
+          responses.add(new byte[]{0,2});
           responses.add(new byte[]{0,18}); //api key
           responses.add(new byte[]{0,0}); // min  version 
           responses.add(new byte[]{0,4}); // max version
@@ -94,8 +94,8 @@ public class Main {
           responseSize += 15;
         }
         else{
-          responses.add(new byte[]{0,0});
-          responses.add(new byte[]{2});
+          responses.add(new byte[]{0});
+          responses.add(new byte[]{0,2});
           responses.add(new byte[]{0,18}); //api key
           responses.add(new byte[]{0,3}); // min  version 
           responses.add(new byte[]{0,4}); // max version
