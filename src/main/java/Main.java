@@ -91,7 +91,7 @@ public class Main {
         }
         else{
           responses.add(new byte[]{0,0});
-          responses.add(new byte[]{0,2});
+          responses.add(new byte[]{2});
           responses.add(new byte[]{0,18}); //api key
           responses.add(new byte[]{0,3}); // min  version 
           responses.add(new byte[]{0,4}); // max version
