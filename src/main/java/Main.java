@@ -59,8 +59,8 @@ public class Main {
       inpuiStream.read(mssgSize);
       int mssg = byteTool.byteArrayToInt(mssgSize);
       inpuiStream.read(apiKey);
-      short api = byteTool.byteArrayToShort(apiKey);
-      inpuiStream.read(apiVersion);
+      // short api = byteTool.byteArrayToShort(apiKey);
+      // inpuiStream.read(apiVersion);
       short version = byteTool.byteArrayToShort(apiVersion);
       inpuiStream.read(correlationId);
       int correlation = byteTool.byteArrayToInt(correlationId);
