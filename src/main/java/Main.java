@@ -74,6 +74,7 @@ public class Main {
         OutputStream outputStream = clientSocket.getOutputStream();
         ArrayList<byte[]> responses = new ArrayList<>();
         int responseSize = 0;
+        System.out.println("correlationId : " + correlation);
         responses.add(byteTool.intToByteArray(correlation));
         responseSize += 4;
         if(version < 0 || version >4){
