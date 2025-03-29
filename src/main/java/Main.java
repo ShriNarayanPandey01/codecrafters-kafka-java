@@ -78,7 +78,7 @@ public class Main {
         responseSize += 4;
         if(version < 0 || version >4){
           responses.add(new byte[]{0,35});
-          responses.add(new byte[]{0,0});
+          responses.add(new byte[]{0,1});  //  minimumn
           responses.add(new byte[]{0,4});
           responses.add(new byte[]{0,0,0,0});
           responseSize += 7;
