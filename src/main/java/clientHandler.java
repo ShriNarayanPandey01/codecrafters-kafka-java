@@ -54,20 +54,19 @@ class ClientHandler extends Thread {
         
         responses.add(new byte[]{3});
         responses.add(apiKey); //api key
-        if(api == 18){
-            responses.add(new byte[]{0,0}); // min  version 
-            responses.add(new byte[]{0,4}); // max version
-        }
-        else if (api == 75) {
-            responses.add(new byte[]{0,0}); // min  version 
-            responses.add(new byte[]{0,0}); // max version
-        }
+
+        responses.add(new byte[]{0,0}); // min  version 
+        responses.add(new byte[]{0,4}); // max version
+
+        responses.add(new byte[]{0,0}); // min  version 
+        responses.add(new byte[]{0,0}); // max version
+    
         
         responses.add(new byte[]{0}); // tagged fields api section
         responses.add(new byte[]{0, 0, 0, 0}); // throttle
         responses.add(new byte[]{0}); // tagged fields final section
 
-        responseSize += 15;  
+        responseSize += 19;  
 
         outputStream.write(byteTool.intToByteArray(responseSize));
 
