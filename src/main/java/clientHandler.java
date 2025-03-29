@@ -52,7 +52,7 @@ class ClientHandler extends Thread {
           responses.add(new byte[]{0,0}); //error code
         }
         
-        responses.add(new byte[]{2});
+        responses.add(new byte[]{4});
         responses.add(apiKey); //api key
         if(api == 18){
             responses.add(new byte[]{0,0}); // min  version 
