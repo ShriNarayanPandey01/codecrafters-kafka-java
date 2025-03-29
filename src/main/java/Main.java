@@ -70,13 +70,13 @@ public class Main {
         inputStream.read(apiVersion);
         short version = byteTool.byteArrayToShort(apiVersion);
         inputStream.read(correlationId);
-        int correlation = byteTool.byteArrayToInt(correlationId);
+        // int correlation = byteTool.byteArrayToInt(correlationId);
 
         OutputStream outputStream = clientSocket.getOutputStream();
         ArrayList<byte[]> responses = new ArrayList<>();
         int responseSize = 0;
-        System.out.println("correlationId : " + correlation);
-        responses.add(byteTool.intToByteArray(correlation));
+        // System.out.println("correlationId : " + correlation);
+        responses.add(correlationId);
         responseSize += 4;
         if(version < 0 || version >4){
           responses.add(new byte[]{0,35});
