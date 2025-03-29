@@ -78,13 +78,13 @@ public class Main {
       }
       else{
         responses.add(new byte[]{0,0});
-        responses.add(new byte[]{1});
+        responses.add(new byte[]{0,2});
         responses.add(new byte[]{0,18}); //api key
         responses.add(new byte[]{0,3}); // min  version 
         responses.add(new byte[]{0,4}); // max version
-        responses.add(new byte[]{0}); // tagged fields api section
+        responses.add(new byte[]{0,0}); // tagged fields api section
         responses.add(new byte[]{0, 0, 0, 0}); // throttle
-        responses.add(new byte[]{0}); // tagged fields final section
+        responses.add(new byte[]{0,0}); // tagged fields final section
 
         responseSize += 15;  
       }
