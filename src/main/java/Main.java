@@ -80,7 +80,7 @@ public class Main {
           responses.add(new byte[]{0,35});
           responses.add(new byte[]{0,0});
           responses.add(new byte[]{0,4});
-          responses.add(new byte[]{0});
+          responses.add(new byte[]{0,0,0,0});
           responseSize += 7;
         }
         else{
