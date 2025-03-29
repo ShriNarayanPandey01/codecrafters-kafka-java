@@ -72,6 +72,9 @@ public class Main {
         inputStream.read(correlationId);
         int correlation = byteTool.byteArrayToInt(correlationId);
 
+        byte[] remainingBytes = new byte[mssg - 8];
+        inputStream.read(remainingBytes);
+
         OutputStream outputStream = clientSocket.getOutputStream();
         ArrayList<byte[]> responses = new ArrayList<>();
         int responseSize = 0;
