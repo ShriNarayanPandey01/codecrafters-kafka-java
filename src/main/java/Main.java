@@ -78,9 +78,11 @@ public class Main {
       }
       else{
         responses.add(new byte[]{0,0});
+        responses.add(new byte[]{0, 0, 0, 0});
         responses.add(new byte[]{0,18});
         responses.add(new byte[]{0,3});
         responses.add(new byte[]{0,4});
+        responses.add(new byte[]{0});
         responseSize += 8;  
       }
 
