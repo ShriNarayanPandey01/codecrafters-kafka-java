@@ -62,7 +62,7 @@ public class Main {
         inpuiStream.read(mssgSize);
 
         int mssg = byteTool.byteArrayToInt(mssgSize);
-        if(mssg == -1 || mssg ==0) break;
+        if(mssg == -1 ) break;
         inpuiStream.read(apiKey);
         short api = byteTool.byteArrayToShort(apiKey);
         inpuiStream.read(apiVersion);
