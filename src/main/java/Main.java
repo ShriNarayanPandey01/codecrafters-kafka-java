@@ -51,50 +51,54 @@ public class Main {
       serverSocket.setReuseAddress(true);
       // Wait for connection from client.
       clientSocket = serverSocket.accept();
-      InputStream inpuiStream = clientSocket.getInputStream();
-      byte[] mssgSize  = new byte[4];
-      byte[] apiKey = new byte[2];
-      byte[] apiVersion = new byte[2];
-      byte[] correlationId = new byte[4];
+      while(true)
+      {
+        InputStream inpuiStream = clientSocket.getInputStream();
+        byte[] mssgSize  = new byte[4];
+        byte[] apiKey = new byte[2];
+        byte[] apiVersion = new byte[2];
+        byte[] correlationId = new byte[4];
 
-      inpuiStream.read(mssgSize);
+        inpuiStream.read(mssgSize);
 
-      int mssg = byteTool.byteArrayToInt(mssgSize);
-      inpuiStream.read(apiKey);
-      short api = byteTool.byteArrayToShort(apiKey);
-      inpuiStream.read(apiVersion);
-      short version = byteTool.byteArrayToShort(apiVersion);
-      inpuiStream.read(correlationId);
-      int correlation = byteTool.byteArrayToInt(correlationId);
+        int mssg = byteTool.byteArrayToInt(mssgSize);
+        if(mssg == -1 || mssg ==0) break;
+        inpuiStream.read(apiKey);
+        short api = byteTool.byteArrayToShort(apiKey);
+        inpuiStream.read(apiVersion);
+        short version = byteTool.byteArrayToShort(apiVersion);
+        inpuiStream.read(correlationId);
+        int correlation = byteTool.byteArrayToInt(correlationId);
 
-      OutputStream outputStream = clientSocket.getOutputStream();
-      ArrayList<byte[]> responses = new ArrayList<>();
-      int responseSize = 0;
-      responses.add(byteTool.intToByteArray(correlation));
-      responseSize += 4;
-      if(version < 0 || version >4){
-        responses.add(new byte[]{0,35});
-        responseSize += 2;
-      }
-      else{
-        responses.add(new byte[]{0,0});
-        responses.add(new byte[]{2});
-        responses.add(new byte[]{0,18}); //api key
-        responses.add(new byte[]{0,3}); // min  version 
-        responses.add(new byte[]{0,4}); // max version
-        responses.add(new byte[]{0}); // tagged fields api section
-        responses.add(new byte[]{0, 0, 0, 0}); // throttle
-        responses.add(new byte[]{0}); // tagged fields final section
+        OutputStream outputStream = clientSocket.getOutputStream();
+        ArrayList<byte[]> responses = new ArrayList<>();
+        int responseSize = 0;
+        responses.add(byteTool.intToByteArray(correlation));
+        responseSize += 4;
+        if(version < 0 || version >4){
+          responses.add(new byte[]{0,35});
+          responseSize += 2;
+        }
+        else{
+          responses.add(new byte[]{0,0});
+          responses.add(new byte[]{2});
+          responses.add(new byte[]{0,18}); //api key
+          responses.add(new byte[]{0,3}); // min  version 
+          responses.add(new byte[]{0,4}); // max version
+          responses.add(new byte[]{0}); // tagged fields api section
+          responses.add(new byte[]{0, 0, 0, 0}); // throttle
+          responses.add(new byte[]{0}); // tagged fields final section
 
-        responseSize += 15;  
-      }
+          responseSize += 15;  
+        }
 
-      outputStream.write(byteTool.intToByteArray(responseSize));
-      for (byte[] response : responses) {
-        outputStream.write(response);
-      }
-      
-      outputStream.flush();
+        outputStream.write(byteTool.intToByteArray(responseSize));
+        for (byte[] response : responses) {
+          outputStream.write(response);
+        }
+        
+        outputStream.flush();
+    }
     } catch (IOException e) {
       System.out.println("IOException: " + e.getMessage());
     } finally {
