@@ -62,8 +62,10 @@ public class Main {
       inpuiStream.read(mssgSize);
       int mssg = byteTool.byteArrayToInt(mssgSize);
       inpuiStream.read(apiKey);
+      @SuppressWarnings("unused")
       short api = byteTool.byteArrayToShort(apiKey);
       inpuiStream.read(apiVersion);
+      @SuppressWarnings("unused")
       short version = byteTool.byteArrayToShort(apiVersion);
       inpuiStream.read(correlationId);
       int correlation = byteTool.byteArrayToInt(correlationId);
@@ -73,6 +75,7 @@ public class Main {
       // outputStream.write(byteTool.shortToByteArray(api)); // 2-byte api_key
       // outputStream.write(byteTool.shortToByteArray(version)); // 2-byte api_version
       outputStream.write(byteTool.intToByteArray(correlation)); // 4-byte correlation_id
+      outputStream.write(new byte[]{0,23});
       outputStream.flush();
     } catch (IOException e) {
       System.out.println("IOException: " + e.getMessage());
