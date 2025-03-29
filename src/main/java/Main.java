@@ -83,7 +83,7 @@ public class Main {
         responses.add(new byte[]{0,3});
         responses.add(new byte[]{0,4});
         responses.add(new byte[]{0});
-        responseSize += 8;  
+        responseSize += 13;  
       }
 
       outputStream.write(byteTool.intToByteArray(responseSize));
