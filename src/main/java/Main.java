@@ -82,7 +82,7 @@ public class Main {
           responses.add(new byte[]{0,35}); // error code
           responses.add(new byte[]{0,2});
           responses.add(byteTool.shortToByteArray(api)); //api key
-          responses.add(new byte[]{0,3}); // min  version 
+          responses.add(new byte[]{0,0}); // min  version 
           responses.add(new byte[]{0,4}); // max version
           responses.add(new byte[]{0}); // tagged fields api section
           responses.add(new byte[]{0, 0, 0, 0}); // throttle
