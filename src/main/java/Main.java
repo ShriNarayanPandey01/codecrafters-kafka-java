@@ -86,8 +86,8 @@ public class Main {
         responses.add(byteTool.intToByteArray(correlation));
         responseSize += 4;
         if(version < 0 || version >4){
-          responses.add(new byte[]{35}); // error code
-          responses.add(new byte[]{0,2});
+          responses.add(new byte[]{0,35}); // error code
+          responses.add(new byte[]{2});
           responses.add(new byte[]{0,18}); //api key
           responses.add(new byte[]{0,0}); // min  version 
           responses.add(new byte[]{0,4}); // max version
