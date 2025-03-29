@@ -78,10 +78,14 @@ public class Main {
         responseSize += 4;
         if(version < 0 || version >4){
           responses.add(new byte[]{0,35});
-          responses.add(new byte[]{0,1});  //  minimumn
-          responses.add(new byte[]{0,4});
-          responses.add(new byte[]{0,0,0,0});
-          responseSize += 7;
+          responses.add(new byte[]{2});
+          responses.add(byteTool.shortToByteArray(api)); //api key
+          responses.add(new byte[]{0,3}); // min  version 
+          responses.add(new byte[]{0,4}); // max version
+          responses.add(new byte[]{0}); // tagged fields api section
+          responses.add(new byte[]{0, 0, 0, 0}); // throttle
+          responses.add(new byte[]{0}); // tagged fields final section
+          responseSize += 15;
         }
         else{
           responses.add(new byte[]{0,0});
