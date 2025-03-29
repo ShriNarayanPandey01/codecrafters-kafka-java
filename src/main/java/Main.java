@@ -27,6 +27,13 @@ class byteArrayManipulation {
     result[3] = (byte) ((data & 0x000000FF) >> 0);
     return result;        
   }
+  public static byte[] shortToByteArray( short d ) {   
+    int data = (int)d; 
+    byte[] result = new byte[4];
+    result[2] = (byte) ((data & 0x0000FF00) >> 8);
+    result[3] = (byte) ((data & 0x000000FF) >> 0);
+    return result;        
+  }
 }
 public class Main {
   public static void main(String[] args){
@@ -62,8 +69,10 @@ public class Main {
       int correlation = byteTool.byteArrayToInt(correlationId);
 
       OutputStream outputStream = clientSocket.getOutputStream();
-      outputStream.write(byteTool.intToByteArray(4)); // 4-byte message_size
-      outputStream.write(byteTool.intToByteArray(correlation));
+      outputStream.write(byteTool.intToByteArray(mssg)); // 4-byte message_size
+      outputStream.write(byteTool.shortToByteArray(api)); // 2-byte api_key
+      outputStream.write(byteTool.shortToByteArray(version)); // 2-byte api_version
+      outputStream.write(byteTool.intToByteArray(correlation)); // 4-byte correlation_id
       outputStream.flush();
     } catch (IOException e) {
       System.out.println("IOException: " + e.getMessage());
