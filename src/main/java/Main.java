@@ -78,7 +78,10 @@ public class Main {
         responseSize += 4;
         if(version < 0 || version >4){
           responses.add(new byte[]{0,35});
-          responseSize += 2;
+          responses.add(new byte[]{0,0});
+          responses.add(new byte[]{0,4});
+          responses.add(new byte[]{0});
+          responseSize += 7;
         }
         else{
           responses.add(new byte[]{0,0});
