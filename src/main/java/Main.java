@@ -86,7 +86,7 @@ public class Main {
         responses.add(new byte[]{0, 0, 0, 0}); // throttle
         responses.add(new byte[]{0,0}); // tagged fields final section
 
-        responseSize += 15;  
+        responseSize += 18;  
       }
 
       outputStream.write(byteTool.intToByteArray(responseSize));
