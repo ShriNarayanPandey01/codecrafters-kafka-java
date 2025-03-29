@@ -27,13 +27,12 @@ class byteArrayManipulation {
     result[3] = (byte) ((data & 0x000000FF) >> 0);
     return result;        
   }
-  public static byte[] shortToByteArray( short d ) {   
-    int data = (int)d; 
-    byte[] result = new byte[4];
-    result[2] = (byte) ((data & 0x0000FF00) >> 8);
-    result[3] = (byte) ((data & 0x000000FF) >> 0);
-    return result;        
-  }
+  public static byte[] shortToByteArray(short d) {
+    byte[] result = new byte[2];
+    result[0] = (byte) ((d >> 8) & 0xFF);  // Higher byte
+    result[1] = (byte) (d & 0xFF);         // Lower byte
+    return result;
+}
 }
 public class Main {
   public static void main(String[] args){
