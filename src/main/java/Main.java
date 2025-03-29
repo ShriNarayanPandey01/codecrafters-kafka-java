@@ -80,14 +80,14 @@ public class Main {
         responseSize += 4;
         if(version < 0 || version >4){
           responses.add(new byte[]{0,35}); // error code
-          responses.add(new byte[]{0,2});
+          responses.add(new byte[]{2});
           responses.add(apiKey); //api key
           responses.add(new byte[]{0,0}); // min  version 
           responses.add(new byte[]{0,4}); // max version
           responses.add(new byte[]{0}); // tagged fields api section
           responses.add(new byte[]{0, 0, 0, 0}); // throttle
           responses.add(new byte[]{0}); // tagged fields final section
-          responseSize += 16;
+          responseSize += 15;
         }
         else{
           responses.add(new byte[]{0,0});
