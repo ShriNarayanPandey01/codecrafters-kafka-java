@@ -31,8 +31,8 @@ class byteArrayManipulation {
 
   public static byte[] shortToByteArray(short d) {
     byte[] result = new byte[2];
-    result[0] = (byte) ((d >> 8) & 0xFF);  // Higher byte
-    result[1] = (byte) (d & 0xFF);         // Lower byte
+    result[0] = (byte) ((d >> 8) & 0xFF); 
+    result[1] = (byte) (d & 0xFF);       
     return result;
 }
 }
@@ -70,28 +70,28 @@ public class Main {
         inputStream.read(apiVersion);
         short version = byteTool.byteArrayToShort(apiVersion);
         inputStream.read(correlationId);
-        // int correlation = byteTool.byteArrayToInt(correlationId);
+        int correlation = byteTool.byteArrayToInt(correlationId);
 
         OutputStream outputStream = clientSocket.getOutputStream();
         ArrayList<byte[]> responses = new ArrayList<>();
         int responseSize = 0;
-        // System.out.println("correlationId : " + correlation);
-        responses.add(correlationId);
+        System.out.println("correlationId : " + correlation);
+        responses.add(byteTool.intToByteArray(correlation));
         responseSize += 4;
         if(version < 0 || version >4){
-          responses.add(new byte[]{0,35});
-          responses.add(new byte[]{2});
+          responses.add(new byte[]{0,35}); // error code
+          responses.add(new byte[]{0,2});
           responses.add(byteTool.shortToByteArray(api)); //api key
           responses.add(new byte[]{0,3}); // min  version 
           responses.add(new byte[]{0,4}); // max version
           responses.add(new byte[]{0}); // tagged fields api section
           responses.add(new byte[]{0, 0, 0, 0}); // throttle
           responses.add(new byte[]{0}); // tagged fields final section
-          responseSize += 15;
+          responseSize += 16;
         }
         else{
           responses.add(new byte[]{0,0});
-          responses.add(new byte[]{2});
+          responses.add(new byte[]{0,2});
           responses.add(new byte[]{0,18}); //api key
           responses.add(new byte[]{0,3}); // min  version 
           responses.add(new byte[]{0,4}); // max version
@@ -99,7 +99,7 @@ public class Main {
           responses.add(new byte[]{0, 0, 0, 0}); // throttle
           responses.add(new byte[]{0}); // tagged fields final section
 
-          responseSize += 15;  
+          responseSize += 16;  
         }
 
         outputStream.write(byteTool.intToByteArray(responseSize));
