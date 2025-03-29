@@ -20,14 +20,15 @@ class byteArrayManipulation {
     }
     return (short)value;
   }
-  public static byte[] intToByteArray( int data ) {    
+  public static byte[] intToByteArray(int data) {    
     byte[] result = new byte[4];
-    result[0] = (byte) ((data & 0xFF000000) >> 24);
-    result[1] = (byte) ((data & 0x00FF0000) >> 16);
-    result[2] = (byte) ((data & 0x0000FF00) >> 8);
-    result[3] = (byte) ((data & 0x000000FF) >> 0);
+    result[0] = (byte) ((data >> 24) & 0xFF);
+    result[1] = (byte) ((data >> 16) & 0xFF);
+    result[2] = (byte) ((data >> 8) & 0xFF);
+    result[3] = (byte) (data & 0xFF);
     return result;        
-  }
+}
+
   public static byte[] shortToByteArray(short d) {
     byte[] result = new byte[2];
     result[0] = (byte) ((d >> 8) & 0xFF);  // Higher byte
