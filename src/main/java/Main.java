@@ -53,21 +53,22 @@ public class Main {
       clientSocket = serverSocket.accept();
       while(true)
       {
-        InputStream inpuiStream = clientSocket.getInputStream();
+        InputStream inputStream = clientSocket.getInputStream();
         byte[] mssgSize  = new byte[4];
         byte[] apiKey = new byte[2];
         byte[] apiVersion = new byte[2];
         byte[] correlationId = new byte[4];
 
-        inpuiStream.read(mssgSize);
+        if (inputStream.read(mssgSize) == -1) {
+          break;  // Client closed connection
+        }
 
         int mssg = byteTool.byteArrayToInt(mssgSize);
-        if(mssg == -1 ) break;
-        inpuiStream.read(apiKey);
+        inputStream.read(apiKey);
         short api = byteTool.byteArrayToShort(apiKey);
-        inpuiStream.read(apiVersion);
+        inputStream.read(apiVersion);
         short version = byteTool.byteArrayToShort(apiVersion);
-        inpuiStream.read(correlationId);
+        inputStream.read(correlationId);
         int correlation = byteTool.byteArrayToInt(correlationId);
 
         OutputStream outputStream = clientSocket.getOutputStream();
