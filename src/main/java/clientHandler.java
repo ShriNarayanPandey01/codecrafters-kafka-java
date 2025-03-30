@@ -41,34 +41,14 @@ class ClientHandler extends Thread {
         int correlation = byteTool.byteArrayToInt(correlationId);
 
         responses.add(correlationId);
-        System.out.println(api+"--"+version+"--"+correlation+"--");
+
         if(api == 75){
           clientLenght = new byte[2];
           inputStream.read(clientLenght);
           clientId = new byte[byteTool.byteArrayToInt(clientLenght)];
           inputStream.read(clientId);
-          byte[] buffer = new byte[1];
-          inputStream.read(buffer);
-          byte[] arrayLength = new byte[1];
-          inputStream.read(arrayLength);
-          byte[] topicNameLength = new byte[1];
-          inputStream.read(topicNameLength);
-          byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)];
-          inputStream.read(topicName);
-          
-          inputStream.read(buffer);
-          byte[] responsePartitionLimit = new byte[4];
-          inputStream.read(responsePartitionLimit);
-          
-          byte[] cursor = new byte[1];
-          inputStream.read(cursor);
-          
-          // inputStream.read(buffer);
-          // System.out.println("got here");
-          apiHandler.describePartitionAPI(responses,topicName , topicNameLength);
+          apiHandler.apiVersionsHandler(inputStream, mssg ,responses);
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
-          // remainingBytes = new byte[mssg - 10 + byteTool.byteArrayToInt(clientLenght)];
-          // inputStream.read(remainingBytes);
         }
         else{
           if(version < 0 || version >4){
@@ -93,7 +73,7 @@ class ClientHandler extends Thread {
           remainingBytes = new byte[mssg - 8];
           inputStream.read(remainingBytes);
         }
-        System.out.println(responseSize);
+
         outputStream.write(byteTool.intToByteArray(responseSize));
 
         for (byte[] response : responses) {

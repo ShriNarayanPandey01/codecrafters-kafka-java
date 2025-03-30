@@ -39,15 +39,32 @@ public class ApiHandler {
             responses.add(new byte[]{0, 0, 0, 0}); // throttle
             responses.add(new byte[]{(byte)0});  //null
     }
-    // public static void describePartitionHandler(InputStream inputStream, int mssg ,ArrayList<byte[]> responses){
-    //     try
-    //     {   
-    //         byteArrayManipulation byteTool = new byteArrayManipulation();
+    public static void describePartitionHandler(InputStream inputStream, int mssg ,ArrayList<byte[]> responses){
+        try
+        {   
+            byteArrayManipulation byteTool = new byteArrayManipulation();
+            byte[] buffer = new byte[1];
+            inputStream.read(buffer);
+            byte[] arrayLength = new byte[1];
+            inputStream.read(arrayLength);
+            byte[] topicNameLength = new byte[1];
+            inputStream.read(topicNameLength);
+            byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)];
+            inputStream.read(topicName);
+            
+            inputStream.read(buffer);
+            byte[] responsePartitionLimit = new byte[4];
+            inputStream.read(responsePartitionLimit);
+            
+            byte[] cursor = new byte[1];
+            inputStream.read(cursor);
+
+            describePartitionAPI(responses,topicName , topicNameLength);
             
 
-    //     }
-    //     catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
