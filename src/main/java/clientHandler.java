@@ -72,6 +72,7 @@ class ClientHandler extends Thread {
           responses.add(new byte[]{0, 0, 0, 0}); // throttle
           responses.add(new byte[]{(byte)0});  //null
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
+          System.out.println(responseSize);
           remainingBytes = new byte[mssg - responseSize];
           inputStream.read(remainingBytes);
         }

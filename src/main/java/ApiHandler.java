@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ApiHandler {
     public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName) {
-        // responses.add(new byte[]{(byte)0});
+        responses.add(new byte[]{(byte)0});
         responses.add(new byte[]{0,0,0,0});
         responses.add(new byte[]{2});
         responses.add(new byte[]{0,3});
