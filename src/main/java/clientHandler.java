@@ -56,7 +56,7 @@ class ClientHandler extends Thread {
           else{
             responses.add(new byte[]{0,0}); //error code
           }
-          apiHandler.apiVersionsHandler(inputStream,mssg,responses,responseSize);
+          apiHandler.apiVersionsHandler(inputStream,mssg,responseSize,responses);
           responseSize += 22;
         }
         
