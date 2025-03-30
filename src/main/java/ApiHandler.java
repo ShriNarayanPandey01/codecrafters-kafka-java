@@ -38,7 +38,7 @@ public class ApiHandler {
             responses.add(new byte[]{0, 0, 0, 0}); // throttle
             responses.add(new byte[]{(byte)0});  //null
     }
-    public static void describePartitionHandler(InputStream inputStream, int mssg , int responseSize ,ArrayList<byte[]> responses){
+    public static void describePartitionHandler(InputStream inputStream, int mssg ,ArrayList<byte[]> responses){
         try
         {   
             byteArrayManipulation byteTool = new byteArrayManipulation();
@@ -58,7 +58,6 @@ public class ApiHandler {
             inputStream.read(buffer);
 
             describePartitionAPI(responses,topicName);
-            responseSize += topicName.length + 33;
 
         }
         catch (IOException e) {

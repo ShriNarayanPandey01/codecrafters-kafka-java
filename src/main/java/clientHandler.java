@@ -41,7 +41,7 @@ class ClientHandler extends Thread {
         int correlation = byteTool.byteArrayToInt(correlationId);
 
         responses.add(correlationId);
-        
+        System.out.println(api+"--"+version+"--"+correlation+"--");
         if(api == 75){
           clientLenght = new byte[2];
           inputStream.read(clientLenght);
