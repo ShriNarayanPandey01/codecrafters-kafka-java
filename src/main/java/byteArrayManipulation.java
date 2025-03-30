@@ -51,6 +51,7 @@ public class byteArrayManipulation {
         for (byte[] response : responses) {
             size += response.length;
         }
+        System.out.println(size+"--");
         return size;
       }
 }
