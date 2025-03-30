@@ -47,7 +47,7 @@ class ClientHandler extends Thread {
           inputStream.read(clientLenght);
           clientId = new byte[byteTool.byteArrayToInt(clientLenght)];
           inputStream.read(clientId);
-          apiHandler.apiVersionsHandler(inputStream, mssg ,responses);
+          apiHandler.describePartitionHandler(inputStream, mssg ,responses);
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
         }
         else{
