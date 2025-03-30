@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class byteArrayManipulation {
     /**
@@ -45,4 +46,11 @@ public class byteArrayManipulation {
         result[1] = (byte) (d & 0xFF);       
         return result;
     }
+      public static int sizeOfMessage(ArrayList<byte[]> responses){
+        int size = 0;
+        for (byte[] response : responses) {
+            size += response.length;
+        }
+        return size;
+      }
 }

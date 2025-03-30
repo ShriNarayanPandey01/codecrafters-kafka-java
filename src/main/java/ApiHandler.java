@@ -24,7 +24,7 @@ public class ApiHandler {
         responses.add(new byte[]{(byte)0});
 
     }
-    public static void apiVersionsHandler(InputStream inputStream, int mssg , int responseSize ,ArrayList<byte[]> responses){
+    public static void apiVersionsHandler(InputStream inputStream, int mssg ,ArrayList<byte[]> responses){
      
             responses.add(new byte[]{3});
             responses.add(new byte[]{0,18}); //api key

@@ -19,11 +19,15 @@ class ClientHandler extends Thread {
       while(true)
       {
         InputStream inputStream = clientSocket.getInputStream();
+        OutputStream outputStream = clientSocket.getOutputStream();
         byte[] mssgSize  = new byte[4];
         byte[] apiKey = new byte[2];
         byte[] apiVersion = new byte[2];
         byte[] correlationId = new byte[4];
-
+        byte[] clientLenght , clientId ,remainingBytes ;
+        int responseSize;
+        ArrayList<byte[]> responses = new ArrayList<>();
+        ApiHandler apiHandler = new ApiHandler();
         if (inputStream.read(mssgSize) == -1) {
           break;  // Client closed connection
         }
@@ -35,46 +39,42 @@ class ClientHandler extends Thread {
         short version = byteTool.byteArrayToShort(apiVersion);
         inputStream.read(correlationId);
         int correlation = byteTool.byteArrayToInt(correlationId);
-        byte[] remainingBytes = new byte[mssg - 8];
-        inputStream.read(remainingBytes);
-
-        OutputStream outputStream = clientSocket.getOutputStream();
-        ArrayList<byte[]> responses = new ArrayList<>();
-        int responseSize = 0;
 
         responses.add(correlationId);
         
-        responseSize += 4;
-        if(version < 0 || version >4){
-          responses.add(new byte[]{0,35}); // error code
+        if(api == 75){
+          clientLenght = new byte[2];
+          inputStream.read(clientLenght);
+          clientId = new byte[byteTool.byteArrayToInt(clientLenght)];
+          inputStream.read(clientId);
+          apiHandler.apiVersionsHandler(inputStream, mssg ,responses);
+          responseSize = byteArrayManipulation.sizeOfMessage(responses);
+          remainingBytes = new byte[mssg - responseSize];
+          inputStream.read(remainingBytes);
         }
         else{
-          responses.add(new byte[]{0,0}); //error code
+          if(version < 0 || version >4){
+            responses.add(new byte[]{0,35}); // error code
+          }
+          else{
+            responses.add(new byte[]{0,0}); //error code
+          }
+          
+          responses.add(new byte[]{3});
+          responses.add(new byte[]{0,18}); //api key
+          responses.add(new byte[]{0,0}); // min  version 
+          responses.add(new byte[]{0,4}); // max version
+          responses.add(new byte[]{(byte)0}); // null
+          responses.add(new byte[]{0,75}); // api key
+          responses.add(new byte[]{0,0}); // min  version 
+          responses.add(new byte[]{0,0}); // max version
+          responses.add(new byte[]{(byte)0}); //null
+          responses.add(new byte[]{0, 0, 0, 0}); // throttle
+          responses.add(new byte[]{(byte)0});  //null
+          responseSize = byteArrayManipulation.sizeOfMessage(responses);
+          remainingBytes = new byte[mssg - responseSize];
+          inputStream.read(remainingBytes);
         }
-        
-        responses.add(new byte[]{3});
-        responses.add(new byte[]{0,18}); //api key
-        responses.add(new byte[]{0,0}); // min  version 
-        responses.add(new byte[]{0,4}); // max version
-
-
-        responses.add(new byte[]{(byte)0}); // null
-
-
-        responses.add(new byte[]{0,75}); // api key
-        responses.add(new byte[]{0,0}); // min  version 
-        responses.add(new byte[]{0,0}); // max version
-    
-        
-        responses.add(new byte[]{(byte)0}); //null
-
-
-        responses.add(new byte[]{0, 0, 0, 0}); // throttle
-
-        responses.add(new byte[]{(byte)0});  //null
-
-        responseSize += 22;  
-
         outputStream.write(byteTool.intToByteArray(responseSize));
 
         for (byte[] response : responses) {
