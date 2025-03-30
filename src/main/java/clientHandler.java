@@ -65,7 +65,7 @@ class ClientHandler extends Thread {
           
           // inputStream.read(buffer);
           // System.out.println("got here");
-          apiHandler.describePartitionAPI(responses,topicName);
+          apiHandler.describePartitionAPI(responses,topicName , topicNameLength);
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
           // remainingBytes = new byte[mssg - 10 + byteTool.byteArrayToInt(clientLenght)];
           // inputStream.read(remainingBytes);

@@ -3,13 +3,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ApiHandler {
-    public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName) {
-        byteArrayManipulation byteTool = new byteArrayManipulation();
+    public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName , byte[] topicLength) {
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{0,0,0,0}); // throttle
         responses.add(new byte[]{2}); // ArrayLength   ******
         responses.add(new byte[]{0,3}); // error code
-        responses.add(byteTool.intToByteArray(topicName.length)); // topic length
+        responses.add(topicLength); // topic length
         responses.add(topicName); // topicName
         byte[] nilUuid = new byte[] {
             0x00, 0x00, 0x00, 0x00, 
