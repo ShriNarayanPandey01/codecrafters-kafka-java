@@ -15,16 +15,17 @@ class ClientHandler extends Thread {
     byteArrayManipulation byteTool = new byteArrayManipulation();
 
     try {
-
       while(true)
       {
         InputStream inputStream = clientSocket.getInputStream();
         OutputStream outputStream = clientSocket.getOutputStream();
+
         byte[] mssgSize  = new byte[4];
         byte[] apiKey = new byte[2];
         byte[] apiVersion = new byte[2];
         byte[] correlationId = new byte[4];
         byte[] clientLenght , clientId ,remainingBytes ;
+        
         int responseSize;
         ArrayList<byte[]> responses = new ArrayList<>();
         ApiHandler apiHandler = new ApiHandler();

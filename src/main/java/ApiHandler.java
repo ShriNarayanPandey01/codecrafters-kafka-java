@@ -7,7 +7,7 @@ public class ApiHandler {
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{0,0,0,0}); // throttle
         responses.add(new byte[]{2}); // ArrayLength   ******
-        responses.add(new byte[]{0,3}); // error code
+        responses.add(new byte[]{0,0}); // error code
         responses.add(topicLength); // topic length
         responses.add(topicName); // topicName
         byte[] nilUuid = new byte[] {
@@ -56,11 +56,9 @@ public class ApiHandler {
             inputStream.read(topicNameLength);
             byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)];
             inputStream.read(topicName);
-            
             inputStream.read(buffer);
             byte[] responsePartitionLimit = new byte[4];
             inputStream.read(responsePartitionLimit);
-            
             byte[] cursor = new byte[1];
             inputStream.read(cursor);
 
