@@ -14,10 +14,10 @@ public class ApiHandler {
             0x00, 0x00, 0x00, 0x00, 
             0x00, 0x00, 0x40, 0x00, 
             (byte) 0x80, 0x00, 0x00, 0x00, 
-            0x00, 0x00, 0x00, 0x68
+            0x00, 0x00, 0x00, 0x00
         };
         responses.add(nilUuid); // topic id
-        responses.add(new byte[]{1}); // is internal
+        responses.add(new byte[]{(byte)0}); // is internal
         responses.add(new byte[]{(byte)2}); // partition array
         responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0}); // topic authorization operation
         responses.add(new byte[]{(byte)0}); // tag buffer
