@@ -53,7 +53,7 @@ class ClientHandler extends Thread {
           inputStream.read(arrayLength);
           byte[] topicNameLength = new byte[1];
           inputStream.read(topicNameLength);
-          byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)];
+          byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)-1];
           inputStream.read(topicName);
           
           inputStream.read(buffer);
@@ -63,8 +63,8 @@ class ClientHandler extends Thread {
           byte[] cursor = new byte[1];
           inputStream.read(cursor);
           
-          // inputStream.read(buffer);
-          // System.out.println("got here");
+          inputStream.read(buffer);
+          System.out.println("got here");
           apiHandler.describePartitionAPI(responses,topicName);
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
           // remainingBytes = new byte[mssg - 10 + byteTool.byteArrayToInt(clientLenght)];
