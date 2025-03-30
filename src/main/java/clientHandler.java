@@ -59,9 +59,10 @@ class ClientHandler extends Thread {
           inputStream.read(buffer);
           byte[] responsePartitionLimit = new byte[4];
           inputStream.read(responsePartitionLimit);
-          System.out.println("got here");
+          
           byte[] cursor = new byte[1];
           inputStream.read(cursor);
+          System.out.println("got here");
           inputStream.read(buffer);
 
           apiHandler.describePartitionAPI(responses,topicName);
