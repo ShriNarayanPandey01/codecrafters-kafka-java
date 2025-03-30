@@ -49,7 +49,7 @@ class ClientHandler extends Thread {
           inputStream.read(clientId);
           apiHandler.apiVersionsHandler(inputStream, mssg ,responses);
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
-          remainingBytes = new byte[mssg - responseSize];
+          remainingBytes = new byte[mssg - 10 + byteTool.byteArrayToInt(clientLenght)];
           inputStream.read(remainingBytes);
         }
         else{
