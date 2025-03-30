@@ -8,6 +8,7 @@ public class ApiHandler {
         responses.add(new byte[]{0,0,0,0});
         responses.add(new byte[]{2});
         responses.add(new byte[]{0,3});
+        System.out.println(topicName.length+"**");
         responses.add(topicName);
         byte[] nilUuid = new byte[] {
             0x00, 0x00, 0x00, 0x00, 
