@@ -51,36 +51,16 @@ class ClientHandler extends Thread {
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
         }
         else{
-          if(version < 0 || version >4){
-            responses.add(new byte[]{0,35}); // error code
-          }
-          else{
-            responses.add(new byte[]{0,0}); //error code
-          }
-          
-          // responses.add(new byte[]{3});
-          // responses.add(new byte[]{0,18}); //api key
-          // responses.add(new byte[]{0,0}); // min  version 
-          // responses.add(new byte[]{0,4}); // max version
-          // responses.add(new byte[]{(byte)0}); // null
-          // responses.add(new byte[]{0,75}); // api key
-          // responses.add(new byte[]{0,0}); // min  version 
-          // responses.add(new byte[]{0,0}); // max version
-          // responses.add(new byte[]{(byte)0}); //null
-          // responses.add(new byte[]{0, 0, 0, 0}); // throttle
-          // responses.add(new byte[]{(byte)0});  //null
-          apiHandler.apiVersionsHandler(inputStream, mssg ,responses);
+          apiHandler.apiVersionsHandler(inputStream, mssg,version ,responses);
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
           remainingBytes = new byte[mssg - 8];
           inputStream.read(remainingBytes);
         }
 
-        outputStream.write(byteTool.intToByteArray(responseSize));
-
+        outputStream.write(byteTool.intToByteArray(responseSize));  
         for (byte[] response : responses) {
           outputStream.write(response);
         }
-        
         outputStream.flush();
     }
     } catch (IOException e) {

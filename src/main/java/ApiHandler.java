@@ -25,8 +25,13 @@ public class ApiHandler {
         responses.add(new byte[]{(byte)0}); // tag buffer
 
     }
-    public static void apiVersionsHandler(InputStream inputStream, int mssg ,ArrayList<byte[]> responses){
-     
+    public static void apiVersionsHandler(InputStream inputStream, int mssg ,int version ,ArrayList<byte[]> responses){
+            if(version < 0 || version >4){
+                responses.add(new byte[]{0,35}); // error code
+            }
+            else{
+                responses.add(new byte[]{0,0}); //error code
+            }
             responses.add(new byte[]{3});
             responses.add(new byte[]{0,18}); //api key
             responses.add(new byte[]{0,0}); // min  version 
