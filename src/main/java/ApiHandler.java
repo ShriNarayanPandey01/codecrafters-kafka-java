@@ -4,25 +4,26 @@ import java.util.ArrayList;
 
 public class ApiHandler {
     public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName) {
-        responses.add(new byte[]{(byte)0});
-        responses.add(new byte[]{0,0,0,0});
-        responses.add(new byte[]{2});
-        responses.add(new byte[]{0,3});
-        System.out.println(topicName.length+"**");
-        responses.add(topicName);
+        byteArrayManipulation byteTool = new byteArrayManipulation();
+        responses.add(new byte[]{(byte)0}); // tag buffer
+        responses.add(new byte[]{0,0,0,0}); // throttle
+        responses.add(new byte[]{2}); // ArrayLength   ******
+        responses.add(new byte[]{0,3}); // error code
+        responses.add(byteTool.intToByteArray(topicName.length)); // topic length
+        responses.add(topicName); // topicName
         byte[] nilUuid = new byte[] {
             0x00, 0x00, 0x00, 0x00, 
             0x00, 0x00, 0x00, 0x00, 
             0x00, 0x00, 0x00, 0x00, 
             0x00, 0x00, 0x00, 0x00
         };
-        responses.add(nilUuid);
-        responses.add(new byte[]{0});
-        responses.add(new byte[]{1});
-        responses.add(new byte[]{0x00, 0x00, 0x0D, (byte)0xF8});
-        responses.add(new byte[]{(byte)0});
-        responses.add(new byte[]{(byte)0xff});
-        responses.add(new byte[]{(byte)0});
+        responses.add(nilUuid); // topic id
+        responses.add(new byte[]{(byte)0}); // is internal
+        responses.add(new byte[]{(byte)2}); // partition array
+        responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0}); // topic authorization operation
+        responses.add(new byte[]{(byte)0}); // tag buffer
+        responses.add(new byte[]{(byte)0xff}); // next cursor
+        responses.add(new byte[]{(byte)0}); // tag buffer
 
     }
     public static void apiVersionsHandler(InputStream inputStream, int mssg ,ArrayList<byte[]> responses){
