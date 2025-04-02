@@ -14,16 +14,34 @@ public class ApiHandler {
             0x00, 0x00, 0x00, 0x00, 
             0x00, 0x00, 0x40, 0x00, 
             (byte) 0x80, 0x00, 0x00, 0x00, 
-            0x00, 0x00, 0x74
+            0x00, 0x00,  0x74
         };
         responses.add(nilUuid); // topic id
         responses.add(new byte[]{0x00}); // is internal
         responses.add(new byte[]{(byte)2}); // partition array
-        responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0}); // topic authorization operation
+        // responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0}); // topic authorization operation
+        addPartitionArray(responses);
+        responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{(byte)0xff}); // next cursor
         responses.add(new byte[]{(byte)0}); // tag buffer
 
+    }
+
+    public static void addPartitionArray(ArrayList<byte[]> responses){
+        responses.add(new byte[]{(byte)2}); // array length 
+        responses.add(new byte[]{0,0}); // error code
+        responses.add(new byte[]{0,0,0,0}); //partition index
+        responses.add(new byte[]{0,0,0,(byte)(1)}); // leader id
+        responses.add(new byte[]{0,0,0,0}); // leader epoch
+        responses.add(new byte[]{(byte)2}); // replica array length
+        responses.add(new byte[]{0,0,0,(byte)1}); // replica array content
+        responses.add(new byte[]{(byte)2}); // ISR length
+        responses.add(new byte[]{0,0,0,(byte)1}); // ISR ARRAY content
+        responses.add(new byte[]{(byte)1}); // eligible leader replica
+        responses.add(new byte[]{(byte)1}); // last known ELR
+        responses.add(new byte[]{(byte)1}); // offline replica
+        responses.add(new byte[]{(byte)0}); // buffer
     }
     public static void apiVersionsHandler(InputStream inputStream, int mssg ,int version ,ArrayList<byte[]> responses){
             if(version < 0 || version >4){
