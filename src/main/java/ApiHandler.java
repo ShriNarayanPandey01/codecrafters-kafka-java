@@ -21,7 +21,7 @@ public class ApiHandler {
         responses.add(new byte[]{(byte)2}); // partition array
         // responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0}); // topic authorization operation
         addPartitionArray(responses);
-        responses.add(new byte[]{0x00,0x00,0x0d,0xf8}); // tag buffer
+        responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{(byte)0xff}); // next cursor
         responses.add(new byte[]{(byte)0}); // tag buffer
