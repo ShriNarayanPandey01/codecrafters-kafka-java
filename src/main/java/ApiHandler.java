@@ -24,6 +24,7 @@ public class ApiHandler {
         responses.add(new byte[]{(byte)0xff}); // next cursor
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{0,0,0,0}); // throttle
+        responses.add(new byte[]{0,0,0,0}); // throttle
 
     }
     public static void apiVersionsHandler(InputStream inputStream, int mssg ,int version ,ArrayList<byte[]> responses){
