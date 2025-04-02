@@ -19,7 +19,7 @@ public class ApiHandler {
         responses.add(nilUuid); // topic id
         responses.add(new byte[]{0x00}); // is internal
         responses.add(new byte[]{(byte)2}); // partition array
-        responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0}); // topic authorization operation
+        responses.add(new byte[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}); // topic authorization operation
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{(byte)0xff}); // next cursor
         responses.add(new byte[]{(byte)0}); // tag buffer
