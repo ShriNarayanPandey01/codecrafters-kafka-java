@@ -151,8 +151,9 @@ public class KafkaKRaftMetadataParser {
                 tbu += 51;
                 for(int i = 0 ; i < recordLengthInt ; i++){
                     byte[] length = new byte[1];
-                    raf.read(length);
                     System.out.println("got to this point yaayyy");
+                    raf.read(length);
+                    
                     int sort = ByteBuffer.wrap(length).getInt();
                     byte[] content = new byte[sort];
                     tbu += sort;
