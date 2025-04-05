@@ -1,5 +1,8 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class ApiHandler {
@@ -62,6 +65,19 @@ public class ApiHandler {
             responses.add(new byte[]{0, 0, 0, 0}); // throttle
             responses.add(new byte[]{(byte)0});  //null
     }
+    public static void searchTopicId(byte[] topicName , byte[] topicLength){
+        try{
+            FileInputStream fstream = new FileInputStream("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+            String strLine;
+            while ((strLine = br.readLine()) != null)   {
+                System.out.println (strLine);
+            }
+            fstream.close();
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
     public static void describePartitionHandler(InputStream inputStream, int mssg ,ArrayList<byte[]> responses){
         try
         {   
@@ -79,10 +95,9 @@ public class ApiHandler {
             inputStream.read(responsePartitionLimit);
             byte[] cursor = new byte[1];
             inputStream.read(cursor);
-
+            searchTopicId(topicName,topicNameLength);
             describePartitionAPI(responses,topicName , topicNameLength);
             
-
         }
         catch (IOException e) {
             e.printStackTrace();
