@@ -93,7 +93,7 @@ public class KafkaKRaftMetadataParser {
         byte[] keyLength = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
         for(int i = 0 ; i < byteTool.byteArrayToInt(keyLength) ; i++){
-            int value = ByteBuffer.wrap(Arrays.copyOfRange(data, ind , ind + 1)).getInt();
+            int value = byteTool.byteArrayToInt(Arrays.copyOfRange(data, ind , ind + 1));
             ind++;
             parseTopicKeyValue(Arrays.copyOfRange(data, ind , ind + value), map);
         }
