@@ -79,10 +79,10 @@ public class byteArrayManipulation {
         return size;
       }
 
-      public static void printByteArray(byte[] b) {
-        for (int i = 0; i < b.length; i++) {
-            System.out.print((byte)b[i] + " ");
-        }
+      public static void printByteArray(byte[] value) {
+        for (byte b : value) {
+          System.out.printf("%02X ", b);
+      }
         System.out.println();
     }
 }
