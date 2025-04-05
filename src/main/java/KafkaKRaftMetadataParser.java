@@ -133,21 +133,6 @@ public class KafkaKRaftMetadataParser {
                 raf.read(baseSequence);
                 raf.read(recordLength);
 
-                
-
-                int batchOffsetInt = ByteBuffer.wrap(batchOffset).getInt();
-                int batchLengthInt = ByteBuffer.wrap(batchLength).getInt();
-                int partitionLeaderEpochInt = ByteBuffer.wrap(partitionLeaderEpoch).getInt();
-                int magicByteInt = ByteBuffer.wrap(magicByte).getInt();
-                int CRCInt = ByteBuffer.wrap(CRC).getInt();
-                int attributesInt = ByteBuffer.wrap(attributes).getShort();
-                int lastOffsetInt = ByteBuffer.wrap(lastOffset).getInt();
-                System.out.println("got to this point yaayyy");
-                long baseTimestampLong = ByteBuffer.wrap(baseTimestamp).getLong();
-                long maxTimestampLong = ByteBuffer.wrap(maxTimestamp).getLong();
-                long produerIdLong = ByteBuffer.wrap(produerId).getLong();
-                short producerEpochShort = ByteBuffer.wrap(producerEpoch).getShort();
-                int baseSequenceInt = ByteBuffer.wrap(baseSequence).getInt();
                 int recordLengthInt = ByteBuffer.wrap(recordLength).getInt();
                 tbu += 51;
                 for(int i = 0 ; i < recordLengthInt ; i++){
