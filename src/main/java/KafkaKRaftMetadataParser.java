@@ -54,14 +54,14 @@ public class KafkaKRaftMetadataParser {
         ind++;
         byte[] type = Arrays.copyOfRange(data, ind, ind + 1);
         ind++;
-        String  nxtAction = (ByteBuffer.wrap(type).getInt() == 2) ? "topic" : "feature";
+        String  nxtAction = (byteTool.byteArrayToInt(type) == 2) ? "topic" : "feature";
         if(nxtAction == "topic"){
             byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
             byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
-            byte[] name = Arrays.copyOfRange(data, ind , ind + ByteBuffer.wrap(nameLength).getInt());
-            ind += ByteBuffer.wrap(nameLength).getInt();
+            byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength));
+            ind += byteTool.byteArrayToInt(nameLength)
             byte[] topicUUID  = Arrays.copyOfRange(data, ind , ind + 8);
             ind += 8;
             map.put(ByteBuffer.wrap(name).toString().replace("\0", ""), ByteBuffer.wrap(type).getLong());
