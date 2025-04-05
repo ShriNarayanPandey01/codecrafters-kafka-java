@@ -78,4 +78,11 @@ public class byteArrayManipulation {
         System.out.println(size+"--");
         return size;
       }
+
+      public static void printByteArray(byte[] b) {
+        for (int i = 0; i < b.length; i++) {
+            System.out.print(b[i] + " ");
+        }
+        System.out.println();
+    }
 }
