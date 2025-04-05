@@ -133,7 +133,7 @@ public class KafkaKRaftMetadataParser {
                 raf.read(baseSequence);
                 raf.read(recordLength);
 
-                System.out.println("got to this point yaayyy");
+                
 
                 int batchOffsetInt = ByteBuffer.wrap(batchOffset).getInt();
                 int batchLengthInt = ByteBuffer.wrap(batchLength).getInt();
@@ -142,6 +142,7 @@ public class KafkaKRaftMetadataParser {
                 int CRCInt = ByteBuffer.wrap(CRC).getInt();
                 int attributesInt = ByteBuffer.wrap(attributes).getShort();
                 int lastOffsetInt = ByteBuffer.wrap(lastOffset).getInt();
+                System.out.println("got to this point yaayyy");
                 long baseTimestampLong = ByteBuffer.wrap(baseTimestamp).getLong();
                 long maxTimestampLong = ByteBuffer.wrap(maxTimestamp).getLong();
                 long produerIdLong = ByteBuffer.wrap(produerId).getLong();
