@@ -133,6 +133,8 @@ public class KafkaKRaftMetadataParser {
                 raf.read(baseSequence);
                 raf.read(recordLength);
 
+                System.out.println("got to this point yaayyy");
+
                 int batchOffsetInt = ByteBuffer.wrap(batchOffset).getInt();
                 int batchLengthInt = ByteBuffer.wrap(batchLength).getInt();
                 int partitionLeaderEpochInt = ByteBuffer.wrap(partitionLeaderEpoch).getInt();
