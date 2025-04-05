@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class ApiHandler {
+
+    static KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
+    
     public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName , byte[] topicLength) {
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{0,0,0,0}); // throttle
@@ -96,7 +99,9 @@ public class ApiHandler {
             inputStream.read(responsePartitionLimit);
             byte[] cursor = new byte[1];
             inputStream.read(cursor);
-            searchTopicId(topicName,topicNameLength);
+            parser.parseMetaProperties("/tmp/kraft-combined-logs/meta.properties");
+            parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
+            parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
             describePartitionAPI(responses,topicName , topicNameLength);
             
         }
