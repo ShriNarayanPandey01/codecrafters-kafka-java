@@ -87,11 +87,23 @@ public class KafkaKRaftMetadataParser {
         int ind = 0;
         byte[] attributes = Arrays.copyOfRange(data, ind, ind + 1);
         ind++;
+        System.out.println("====== attributes ======");
+        byteTool.printByteArray(attributes);
+
         byte[] timeStampDelta = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
+        System.out.println("====== timeStampDelta ======");
+        byteTool.printByteArray(timeStampDelta);
+
         byte[] offsetDelta = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
+        System.out.println("====== offsetDelta ======");
+        byteTool.printByteArray(offsetDelta);
+
         byte[] keyLength = Arrays.copyOfRange(data, ind , ind + 1);
+        System.out.println("====== keyLength ======");
+        byteTool.printByteArray(keyLength);
+        
         ind++;
         for(int i = 0 ; i < byteTool.byteArrayToInt(keyLength) ; i++){
             int value = byteTool.byteArrayToInt(Arrays.copyOfRange(data, ind , ind + 1));
@@ -167,13 +179,17 @@ public class KafkaKRaftMetadataParser {
                     byte[] length = new byte[1];
                     
                     raf.read(length);
+                    System.out.println("====== Record " + i + " Length =====" );
+                    byteTool.printByteArray(length);
 
                     int sort = byteTool.byteArrayToInt(length);
-                    System.out.println("got to this point yaayyy " + sort);
-
                     byte[] content = new byte[sort];
                     tbu += sort;
+
                     raf.read(content);  
+                    System.out.println("====== Record " + i + " Content =====" );
+                    byteTool.printByteArray(content);
+
                     if(sort == 0) continue;
                     HashMap<String, Long> map = pareseTopic(content);
                     System.out.print(map.get("foo"));
