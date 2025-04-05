@@ -73,6 +73,7 @@ public class ApiHandler {
             while ((strLine = br.readLine()) != null)   {
                 System.out.println (strLine);
             }
+            System.out.println("triggerd the function");
             fstream.close();
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
