@@ -81,7 +81,7 @@ public class byteArrayManipulation {
 
       public static void printByteArray(byte[] b) {
         for (int i = 0; i < b.length; i++) {
-            System.out.print(b[i] + " ");
+            System.out.print((byte)b[i] + " ");
         }
         System.out.println();
     }
