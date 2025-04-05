@@ -148,6 +148,7 @@ public class KafkaKRaftMetadataParser {
                     byte[] content = new byte[sort];
                     tbu += sort;
                     raf.read(content);  
+                    if(sort == 0) continue;
                     HashMap<String, Long> map = pareseTopic(content);
                     System.out.print(map.get("foo"));
                 }
