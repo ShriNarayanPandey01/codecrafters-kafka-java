@@ -34,10 +34,10 @@ public class KafkaKRaftMetadataParser {
             System.out.println("Partition Epoch: " + partitionEpoch);
             System.out.println("Number of Replicas: " + numReplicas);
 
-            System.out.print("Replica IDs: ");
-            for (int i = 0; i < numReplicas; i++) {
-                System.out.print(buffer.getInt() + " ");
-            }
+            // System.out.print("Replica IDs: ");
+            // for (int i = 0; i < numReplicas; i++) {
+            //     System.out.print(buffer.getInt() + " ");
+            // }
             System.out.println();
 
         } catch (IOException e) {
