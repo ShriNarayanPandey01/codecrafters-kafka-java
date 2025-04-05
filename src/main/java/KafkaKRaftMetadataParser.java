@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Properties;
 
 public class KafkaKRaftMetadataParser {
+    static byteArrayManipulation byteTool = new byteArrayManipulation();
     static void parseMetaProperties(String filePath) {
         System.out.println("== Parsing meta.properties ==");
         try (FileInputStream fis = new FileInputStream(filePath)) {
@@ -140,7 +141,7 @@ public class KafkaKRaftMetadataParser {
                     
                     raf.read(length);
 
-                    int sort = ByteBuffer.wrap(length).getInt();
+                    int sort = byteTool.byteArrayToInt(length);
                     System.out.println("got to this point yaayyy " + sort);
 
                     byte[] content = new byte[sort];
