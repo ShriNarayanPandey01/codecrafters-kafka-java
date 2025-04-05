@@ -133,7 +133,7 @@ public class KafkaKRaftMetadataParser {
                 raf.read(baseSequence);
                 raf.read(recordLength);
 
-                System.out.println("got to this point yaayyy");
+                
 
                 int batchOffsetInt = ByteBuffer.wrap(batchOffset).getInt();
                 int batchLengthInt = ByteBuffer.wrap(batchLength).getInt();
@@ -152,6 +152,7 @@ public class KafkaKRaftMetadataParser {
                 for(int i = 0 ; i < recordLengthInt ; i++){
                     byte[] length = new byte[1];
                     raf.read(length);
+                    System.out.println("got to this point yaayyy");
                     int sort = ByteBuffer.wrap(length).getInt();
                     byte[] content = new byte[sort];
                     tbu += sort;
