@@ -99,8 +99,8 @@ public class ApiHandler {
             inputStream.read(responsePartitionLimit);
             byte[] cursor = new byte[1];
             inputStream.read(cursor);
-            parser.parseMetaProperties("/tmp/kraft-combined-logs/meta.properties");
-            parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
+            // parser.parseMetaProperties("/tmp/kraft-combined-logs/meta.properties");
+            // parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
             parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
             describePartitionAPI(responses,topicName , topicNameLength);
             

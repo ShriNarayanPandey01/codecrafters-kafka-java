@@ -1,6 +1,8 @@
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.file.*;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class KafkaKRaftMetadataParser {
@@ -45,19 +47,118 @@ public class KafkaKRaftMetadataParser {
         }
     }
 
+    static void parseTopicKeyValue(byte[] data , HashMap<String, Long> map) {
+        int ind = 0;
+        byte[] frameVersion = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
+        byte[] type = Arrays.copyOfRange(data, ind, ind + 1);
+        ind++;
+        String  nxtAction = (ByteBuffer.wrap(type).getInt() == 2) ? "topic" : "feature";
+        if(nxtAction == "topic"){
+            byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
+            ind++;
+            byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
+            ind++;
+            byte[] name = Arrays.copyOfRange(data, ind , ind + ByteBuffer.wrap(nameLength).getInt());
+            ind += ByteBuffer.wrap(nameLength).getInt();
+            byte[] topicUUID  = Arrays.copyOfRange(data, ind , ind + 8);
+            ind += 8;
+            map.put(ByteBuffer.wrap(name).toString().replace("\0", ""), ByteBuffer.wrap(type).getLong());
+            byte[] taggedFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
+            ind++;
+        }
+        else{
+            byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
+            ind++;
+            byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
+            ind++;
+            byte[] name = Arrays.copyOfRange(data, ind , ind + ByteBuffer.wrap(nameLength).getInt());
+            ind += ByteBuffer.wrap(nameLength).getInt();
+            byte[] featuredLevel = Arrays.copyOfRange(data, ind , ind + 2);
+            ind += 2;
+            byte[] toggledFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
+            ind++;
+        }
+        }
+    static HashMap<String, Long> pareseTopic(byte[] data) {
+        HashMap<String, Long> map = new HashMap<>();
+        int ind = 0;
+        byte[] attributes = Arrays.copyOfRange(data, ind, ind + 1);
+        ind++;
+        byte[] timeStampDelta = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
+        byte[] offsetDelta = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
+        byte[] keyLength = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
+        for(int i = 0 ; i < ByteBuffer.wrap(keyLength).getInt() ; i++){
+            int value = ByteBuffer.wrap(Arrays.copyOfRange(data, ind , ind + 1)).getInt();
+            ind++;
+            parseTopicKeyValue(Arrays.copyOfRange(data, ind , ind + value), map);
+        }
+
+        return map;
+    }
     static void parseLogSegment(String filePath) {
         System.out.println("\n== Parsing Kafka log segment ==");
         try (RandomAccessFile raf = new RandomAccessFile(filePath, "r")) {
             long fileLength = raf.length();
-            while (raf.getFilePointer() < fileLength) {
-                long offset = raf.readLong(); // 8 bytes
-                int size = raf.readInt(); // 4 bytes
-                byte[] recordBatch = new byte[size];
-                raf.readFully(recordBatch);
+            int tbu = 0 ; // total byte parsed
+            while(tbu < fileLength){
+                byte[] batchOffset = new byte[8];
+                byte[] batchLength = new byte[4];
+                byte[] partitionLeaderEpoch = new byte[4];
+                byte[] magicByte = new byte[1];
+                byte[] CRC =  new byte[4];
+                byte[] attributes = new byte[2];
+                byte[] lastOffset = new byte[4];
+                byte[] baseTimestamp = new byte[8];
+                byte[] maxTimestamp = new byte[8];
+                byte[] produerId = new byte[8];
+                byte[] producerEpoch = new byte[2];
+                byte[] baseSequence = new byte[4];
+                byte[] recordLength= new byte[4];
+                
+                raf.read(batchOffset);
+                raf.read(batchLength);
+                raf.read(partitionLeaderEpoch);
+                raf.read(magicByte);
+                raf.read(CRC);
+                raf.read(attributes);
+                raf.read(lastOffset);
+                raf.read(baseTimestamp);
+                raf.read(maxTimestamp);
+                raf.read(produerId);
+                raf.read(producerEpoch);
+                raf.read(baseSequence);
+                raf.read(recordLength);
 
-                System.out.printf("Record at offset %d, size %d bytes\n", offset, size);
-                // You can parse the recordBatch further here if needed
+                int batchOffsetInt = ByteBuffer.wrap(batchOffset).getInt();
+                int batchLengthInt = ByteBuffer.wrap(batchLength).getInt();
+                int partitionLeaderEpochInt = ByteBuffer.wrap(partitionLeaderEpoch).getInt();
+                int magicByteInt = ByteBuffer.wrap(magicByte).getInt();
+                int CRCInt = ByteBuffer.wrap(CRC).getInt();
+                int attributesInt = ByteBuffer.wrap(attributes).getShort();
+                int lastOffsetInt = ByteBuffer.wrap(lastOffset).getInt();
+                long baseTimestampLong = ByteBuffer.wrap(baseTimestamp).getLong();
+                long maxTimestampLong = ByteBuffer.wrap(maxTimestamp).getLong();
+                long produerIdLong = ByteBuffer.wrap(produerId).getLong();
+                short producerEpochShort = ByteBuffer.wrap(producerEpoch).getShort();
+                int baseSequenceInt = ByteBuffer.wrap(baseSequence).getInt();
+                int recordLengthInt = ByteBuffer.wrap(recordLength).getInt();
+                tbu += 51;
+                for(int i = 0 ; i < recordLengthInt ; i++){
+                    byte[] length = new byte[1];
+                    raf.read(length);
+                    int sort = ByteBuffer.wrap(length).getInt();
+                    byte[] content = new byte[sort];
+                    tbu += sort;
+                    raf.read(content);  
+                    HashMap<String, Long> map = pareseTopic(content);
+                    System.out.print(map.get("foo"));
+                }
             }
+ 
         } catch (IOException e) {
             System.err.println("Failed to parse log segment: " + e.getMessage());
         }
