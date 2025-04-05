@@ -73,8 +73,8 @@ public class KafkaKRaftMetadataParser {
             ind++;
             byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
-            byte[] name = Arrays.copyOfRange(data, ind , ind + ByteBuffer.wrap(nameLength).getInt());
-            ind += ByteBuffer.wrap(nameLength).getInt();
+            byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength));
+            ind += byteTool.byteArrayToInt(nameLength);
             byte[] featuredLevel = Arrays.copyOfRange(data, ind , ind + 2);
             ind += 2;
             byte[] toggledFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
