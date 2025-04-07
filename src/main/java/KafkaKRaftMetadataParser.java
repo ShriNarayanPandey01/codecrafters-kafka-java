@@ -88,11 +88,12 @@ public class KafkaKRaftMetadataParser {
             byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
             System.out.println("====== version ======");
+            byteTool.printByteArray(version);
             byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
             System.out.println("====== nameLength ======");
             byteTool.printByteArray(nameLength);
-            byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength));
+            byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength)-1);
             ind += byteTool.byteArrayToInt(nameLength);
             System.out.println("====== name ======");
             byteTool.printByteArray(name);
