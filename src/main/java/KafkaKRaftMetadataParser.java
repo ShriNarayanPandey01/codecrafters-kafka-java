@@ -52,34 +52,58 @@ public class KafkaKRaftMetadataParser {
         int ind = 0;
         byte[] frameVersion = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
+        System.out.println("====== frameVersion ======");
+        byteTool.printByteArray(frameVersion);
         byte[] type = Arrays.copyOfRange(data, ind, ind + 1);
         ind++;
+        System.out.println("====== type ======");
+        byteTool.printByteArray(type);
+
         String  nxtAction = (byteTool.byteArrayToInt(type) == 2) ? "topic" : "feature";
         if(nxtAction == "topic"){
             byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
+            System.out.println("====== version ======");
+            byteTool.printByteArray(version);
             byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
+            System.out.println("====== nameLength ======");
+            byteTool.printByteArray(nameLength);
             byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength));
             ind += byteTool.byteArrayToInt(nameLength);
+            System.out.println("====== name ======");
+            byteTool.printByteArray(name);
             byte[] topicUUID  = Arrays.copyOfRange(data, ind , ind + 8);
             ind += 8;
-            System.out.println(ByteBuffer.wrap(name).toString().replace("\0", ""));
+            System.out.println("====== topicUUID ======");
+            byteTool.printByteArray(topicUUID);
+            // System.out.println(ByteBuffer.wrap(name).toString().replace("\0", ""));
             map.put(ByteBuffer.wrap(name).toString().replace("\0", ""), ByteBuffer.wrap(type).getLong());
             byte[] taggedFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
+            System.out.println("====== taggedFeildCounts ======");
+            byteTool.printByteArray(taggedFeildCounts);
         }
         else{
             byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
+            System.out.println("====== version ======");
             byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
+            System.out.println("====== nameLength ======");
+            byteTool.printByteArray(nameLength);
             byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength));
             ind += byteTool.byteArrayToInt(nameLength);
+            System.out.println("====== name ======");
+            byteTool.printByteArray(name);
             byte[] featuredLevel = Arrays.copyOfRange(data, ind , ind + 2);
             ind += 2;
+            System.out.println("====== featuredLevel ======");
+            byteTool.printByteArray(featuredLevel);
             byte[] toggledFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
+            System.out.println("====== toggledFeildCounts ======");
+            byteTool.printByteArray(toggledFeildCounts);
         }
         }
     static HashMap<String, Long> pareseTopic(byte[] data) {
