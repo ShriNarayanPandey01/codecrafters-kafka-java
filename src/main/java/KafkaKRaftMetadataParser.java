@@ -229,14 +229,14 @@ public class KafkaKRaftMetadataParser {
                     System.out.println("====== Record " + i + " Length =====" );
                     byteTool.printByteArray(length);
                     
-                    int sort = byteTool.byteArrayToInt(length);
+                    int sort = byteTool.byteArrayToInt(Arrays.copyOfRange(length, 0, 1));
                     System.out.println("====== Record " + i + " big indian length =====" );
                     System.out.println(sort);
 
                     int recLength = byteTool.zigZagDecode(sort);
                     System.out.println("====== Record " + i + " zig zag length =====" );
                     System.out.println(recLength);
-                    
+
                     byte[] content = new byte[recLength];
                     
                     System.out.println("====== RECORD LENGTH ========");
