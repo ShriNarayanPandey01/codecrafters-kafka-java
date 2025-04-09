@@ -215,7 +215,7 @@ public class KafkaKRaftMetadataParser {
                     byteTool.printByteArray(length);
 
                     int sort = byteTool.byteArrayToInt(length);
-                    int recorLength = byteTool.zigZagDecode(sort)
+                    int recorLength = byteTool.zigZagDecode(sort);
                     byte[] content = new byte[recorLength];
                     
                     System.out.println("====== RECORD LENGTH >>"+sort );
