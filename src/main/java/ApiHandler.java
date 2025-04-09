@@ -106,14 +106,16 @@ public class ApiHandler {
                 System.out.println("Key = " + key);
                 byteTool.printByteArray(value);
             }
-            byte[] topic , errorCode;; 
+            byte[] topic , errorCode,partitionIndex; 
             if(map.containsKey(TOPIC.substring(0,3))){
                 topic = map.get(TOPIC.substring(0,3));
                 errorCode = new byte[]{0,0};
+                partitionIndex = new byte[]{0,2};
             }
             else {
                 topic = new byte[15];
                 errorCode = new byte[]{0,3};
+                partitionIndex = new byte[]{0,0};
             }
             describePartitionAPI(responses,topicName , topicNameLength , topic , errorCode);
             
