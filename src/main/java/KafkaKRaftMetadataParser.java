@@ -214,8 +214,8 @@ public class KafkaKRaftMetadataParser {
                     byteTool.printByteArray(length);
 
                     int sort = byteTool.byteArrayToInt(length);
-                    byte[] content = new byte[sort];
-                    tbu += sort;
+                    byte[] content = new byte[29];
+                    tbu += 29;
                     System.out.println("====== RECORD LENGTH >>"+sort );
                     raf.read(content);  
                     System.out.println("====== Record " + i + " Content =====" );
