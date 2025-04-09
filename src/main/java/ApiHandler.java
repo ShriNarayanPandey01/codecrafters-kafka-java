@@ -98,7 +98,7 @@ public class ApiHandler {
             // parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
             HashMap<String, byte[]> map = parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
             String TOPIC = new String(topicName);
-            System.out.println("final topic name "+TOPIC.substring(0,3));
+            System.out.println("final topic name "+TOPIC);
             byteTool.printByteArray(topicName);
             // byteTool.printByteArray(map.get(TOPIC));
             for (String key : map.keySet()) {
