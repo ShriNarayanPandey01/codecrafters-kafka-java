@@ -228,6 +228,7 @@ public class KafkaKRaftMetadataParser {
         byteTool.printByteArray(offsetDelta);
 
         byte[] keyLength = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
         System.out.println("====== keyLength ======");
         byteTool.printByteArray(keyLength);
         
