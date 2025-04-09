@@ -17,7 +17,7 @@ public class ApiHandler {
         responses.add(new byte[]{0,0}); // error code
         responses.add(topicLength); // topic length
         responses.add(topicName); // topicName
-        responses.add(topicUUID); // topic id
+        responses.add(new byte[16]); // topic id
         responses.add(new byte[]{0x00}); // is internal
         // responses.add(new byte[]{(byte)2}); // partition array
         // responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0}); // topic authorization operation
