@@ -240,7 +240,6 @@ public class KafkaKRaftMetadataParser {
             value = Arrays.copyOfRange(data, ind , ind + 1);
             ind += 1;
         }
-        ind++;
         for(int i = 0 ; i < byteTool.byteArrayToInt(keyLength) ; i++){
             int recordSize = byteTool.byteArrayToInt(Arrays.copyOfRange(value,0,1));
 
