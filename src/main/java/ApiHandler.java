@@ -10,11 +10,11 @@ public class ApiHandler {
 
     static KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
     
-    public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName , byte[] topicLength , byte[] topicUUID) {
+    public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName , byte[] topicLength , byte[] topicUUID , byte[] errorCode) {
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{0,0,0,0}); // throttle
         responses.add(new byte[]{2}); // ArrayLength   ******
-        responses.add(new byte[]{0,0}); // error code
+        responses.add(errorCode); // error code
         responses.add(topicLength); // topic length
         responses.add(topicName); // topicName
         responses.add(topicUUID); // topic id
@@ -106,14 +106,16 @@ public class ApiHandler {
                 System.out.println("Key = " + key);
                 byteTool.printByteArray(value);
             }
-            byte[] topic ; 
+            byte[] topic , errorCode;; 
             if(map.containsKey(TOPIC.substring(0,3))){
                 topic = map.get(TOPIC.substring(0,3));
+                errorCode = new byte[]{0,0};
             }
             else {
                 topic = new byte[15];
+                errorCode = new byte[]{0,3};
             }
-            describePartitionAPI(responses,topicName , topicNameLength , topic);
+            describePartitionAPI(responses,topicName , topicNameLength , topic , errorCode);
             
         }
         catch (IOException e) {
