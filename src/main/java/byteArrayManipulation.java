@@ -39,6 +39,19 @@ public class byteArrayManipulation {
        * @param data the integer to convert
        * @return the byte array representation of the integer
        */
+
+      public static long byteArrayToLong(byte[] bytes) {
+        if (bytes.length > 8) {
+            throw new IllegalArgumentException("Byte array too long to convert to long");
+        }
+
+        long value = 0;
+        for (int i = 0; i < bytes.length; i++) {
+            value <<= 8; // shift left by 8 bits
+            value |= (bytes[i] & 0xFF); // mask byte to avoid sign extension
+        }
+        return value;
+    }
       public static byte[] intToByteArray(int data) {    
         byte[] result = new byte[4];
         result[0] = (byte) ((data >> 24) & 0xFF);
