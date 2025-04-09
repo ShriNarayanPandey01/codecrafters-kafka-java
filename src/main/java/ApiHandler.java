@@ -17,7 +17,7 @@ public class ApiHandler {
         responses.add(new byte[]{0,0}); // error code
         responses.add(topicLength); // topic length
         responses.add(topicName); // topicName
-        responses.add(new byte[15]); // topic id
+        responses.add(topicUUID); // topic id
         responses.add(new byte[]{0x00}); // is internal
         // responses.add(new byte[]{(byte)2}); // partition array
         // responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0}); // topic authorization operation
@@ -96,11 +96,11 @@ public class ApiHandler {
             inputStream.read(cursor);
             // parser.parseMetaProperties("/tmp/kraft-combined-logs/meta.properties");
             // parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
-            HashMap<String, byte[]> map = parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
+            byte[] map = parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
             String TOPIC = new String(topicName);
 
             System.out.println("final topic name"+TOPIC);
-            describePartitionAPI(responses,topicName , topicNameLength , map.get(TOPIC));
+            describePartitionAPI(responses,topicName , topicNameLength , map);
             
         }
         catch (IOException e) {
