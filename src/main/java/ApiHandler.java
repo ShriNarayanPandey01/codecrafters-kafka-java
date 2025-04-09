@@ -106,7 +106,14 @@ public class ApiHandler {
                 System.out.println("Key = " + key);
                 byteTool.printByteArray(value);
             }
-            describePartitionAPI(responses,topicName , topicNameLength , map.get(TOPIC.substring(0,3)));
+            byte[] topic ; 
+            if(map.containsKey(TOPIC.substring(0,3))){
+                topic = map.get(TOPIC.substring(0,3));
+            }
+            else {
+                topic = new byte[15];
+            }
+            describePartitionAPI(responses,topicName , topicNameLength , topic);
             
         }
         catch (IOException e) {
