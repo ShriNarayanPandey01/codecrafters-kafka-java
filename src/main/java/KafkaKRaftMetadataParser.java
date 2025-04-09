@@ -37,17 +37,13 @@ public class KafkaKRaftMetadataParser {
             System.out.println("Partition Epoch: " + partitionEpoch);
             System.out.println("Number of Replicas: " + numReplicas);
 
-            // System.out.print("Replica IDs: ");
-            // for (int i = 0; i < numReplicas; i++) {
-            //     System.out.print(buffer.getInt() + " ");
-            // }
             System.out.println();
 
         } catch (IOException e) {
             System.err.println("Failed to read partition.metadata: " + e.getMessage());
         }
     }
-    static void parseTopicFeature(byte[] data , HashMap<String, byte[]> map) {
+    static void parseTopicTopic(byte[] data , HashMap<String, byte[]> map) {
         int ind = 0;
         byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
@@ -74,8 +70,28 @@ public class KafkaKRaftMetadataParser {
         System.out.println("====== taggedFeildCounts ======");
         byteTool.printByteArray(taggedFeildCounts);
     }
-    static void pareseTopicTopic(byte[] data) {
-        
+    static void pareseTopicFeature(byte[] data) {
+        int ind = 0;
+        byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
+        System.out.println("====== version ======");
+        byteTool.printByteArray(version);
+        byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
+        System.out.println("====== nameLength ======");
+        byteTool.printByteArray(nameLength);
+        byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength)-1);
+        ind += byteTool.byteArrayToInt(nameLength)-1;
+        System.out.println("====== name ======");
+        byteTool.printByteArray(name);
+        byte[] featuredLevel = Arrays.copyOfRange(data, ind , ind + 2);
+        ind += 2;
+        System.out.println("====== featuredLevel ======");
+        byteTool.printByteArray(featuredLevel);
+        byte[] toggledFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
+        System.out.println("====== toggledFeildCounts ======");
+        byteTool.printByteArray(toggledFeildCounts);
     }
     static void parseTopicPartitionHead(byte[] data) {
         
@@ -94,30 +110,32 @@ public class KafkaKRaftMetadataParser {
 
         String  nxtAction = (byteTool.byteArrayToInt(type) == 2) ? "topic" : "feature";
         if(nxtAction == "topic"){
-            parseTopicFeature(Arrays.copyOfRange(data, ind, data.length-1) , map);
+            parseTopicTopic(Arrays.copyOfRange(data, ind, data.length-1) , map);
             ind = data.length-1;
         }
         else{
-            byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
-            ind++;
-            System.out.println("====== version ======");
-            byteTool.printByteArray(version);
-            byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
-            ind++;
-            System.out.println("====== nameLength ======");
-            byteTool.printByteArray(nameLength);
-            byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength)-1);
-            ind += byteTool.byteArrayToInt(nameLength)-1;
-            System.out.println("====== name ======");
-            byteTool.printByteArray(name);
-            byte[] featuredLevel = Arrays.copyOfRange(data, ind , ind + 2);
-            ind += 2;
-            System.out.println("====== featuredLevel ======");
-            byteTool.printByteArray(featuredLevel);
-            byte[] toggledFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
-            ind++;
-            System.out.println("====== toggledFeildCounts ======");
-            byteTool.printByteArray(toggledFeildCounts);
+            // byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
+            // ind++;
+            // System.out.println("====== version ======");
+            // byteTool.printByteArray(version);
+            // byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
+            // ind++;
+            // System.out.println("====== nameLength ======");
+            // byteTool.printByteArray(nameLength);
+            // byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength)-1);
+            // ind += byteTool.byteArrayToInt(nameLength)-1;
+            // System.out.println("====== name ======");
+            // byteTool.printByteArray(name);
+            // byte[] featuredLevel = Arrays.copyOfRange(data, ind , ind + 2);
+            // ind += 2;
+            // System.out.println("====== featuredLevel ======");
+            // byteTool.printByteArray(featuredLevel);
+            // byte[] toggledFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
+            // ind++;
+            // System.out.println("====== toggledFeildCounts ======");
+            // byteTool.printByteArray(toggledFeildCounts);
+            pareseTopicFeature(Arrays.copyOfRange(data, ind,data.length-1));
+            ind = data.length-1;
         }
         byte[] headerArrayCount = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
