@@ -10,7 +10,7 @@ public class ApiHandler {
 
     static KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
     
-    public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName , byte[] topicLength , byte[] topicUUID , byte[] errorCode) {
+    public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName , byte[] topicLength , byte[] topicUUID , byte[] errorCode , byte[] partitionIndex) {
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{0,0,0,0}); // throttle
         responses.add(new byte[]{2}); // ArrayLength   ******
@@ -21,7 +21,7 @@ public class ApiHandler {
         responses.add(new byte[]{0x00}); // is internal
         // responses.add(new byte[]{(byte)2}); // partition array
         // responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0}); // topic authorization operation
-        addPartitionArray(responses);
+        addPartitionArray(responses , partitionIndex);
         responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{(byte)0xff}); // next cursor
@@ -29,8 +29,8 @@ public class ApiHandler {
 
     }
 
-    public static void addPartitionArray(ArrayList<byte[]> responses){
-        responses.add(new byte[]{(byte)2}); // array length 
+    public static void addPartitionArray(ArrayList<byte[]> responses , byte[] partitionIndex) {
+        responses.add(partitionIndex); // array length 
         responses.add(new byte[]{0,0}); // error code
         responses.add(new byte[]{0,0,0,0}); //partition index
         responses.add(new byte[]{0,0,0,(byte)(1)}); // leader id
@@ -110,14 +110,14 @@ public class ApiHandler {
             if(map.containsKey(TOPIC.substring(0,3))){
                 topic = map.get(TOPIC.substring(0,3));
                 errorCode = new byte[]{0,0};
-                partitionIndex = new byte[]{0,2};
+                partitionIndex = new byte[]{(byte)2};
             }
             else {
                 topic = new byte[15];
                 errorCode = new byte[]{0,3};
-                partitionIndex = new byte[]{0,0};
+                partitionIndex = new byte[]{0};
             }
-            describePartitionAPI(responses,topicName , topicNameLength , topic , errorCode);
+            describePartitionAPI(responses,topicName , topicNameLength , topic , errorCode , partitionIndex);
             
         }
         catch (IOException e) {
