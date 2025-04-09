@@ -136,7 +136,6 @@ public class KafkaKRaftMetadataParser {
             System.out.println("====== value ======");
             byteTool.printByteArray(Arrays.copyOfRange(data, ind-1 , ind));
             parseTopicKeyValue(Arrays.copyOfRange(data, ind , ind + value), map);
-            ind += value -1 ;
         }
         byte[] headArrayCount = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
@@ -215,8 +214,8 @@ public class KafkaKRaftMetadataParser {
                     byteTool.printByteArray(length);
 
                     int sort = byteTool.byteArrayToInt(length);
-                    byte[] content = new byte[30];
-                    tbu += 30;
+                    byte[] content = new byte[29];
+                    tbu += 29;
                     System.out.println("====== RECORD LENGTH >>"+sort );
                     raf.read(content);  
                     System.out.println("====== Record " + i + " Content =====" );
