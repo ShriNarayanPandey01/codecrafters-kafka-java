@@ -100,6 +100,11 @@ public class ApiHandler {
             String TOPIC = new String(topicName);
             System.out.println("final topic name "+TOPIC.substring(0,3));
             // byteTool.printByteArray(map.get(TOPIC));
+            for (String key : map.keySet()) {
+                byte[] value = map.get(key);
+                System.out.println("Key = " + key);
+                byteTool.printByteArray(value);
+            }
             describePartitionAPI(responses,topicName , topicNameLength , map.get(TOPIC.substring(0,3)));
             
         }
