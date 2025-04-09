@@ -209,8 +209,7 @@ public class KafkaKRaftMetadataParser {
         System.out.println("====== headerArrayCount ======");
         byteTool.printByteArray(headerArrayCount);    
     }
-    static HashMap<String, byte[]> pareseTopic(byte[] data,int I) {
-        HashMap<String, byte[]> map = new HashMap<>();
+    static HashMap<String, byte[]> pareseTopic(byte[] data,int I , HashMap<String, byte[]> map) {
         int ind = 0;
         byte[] attributes = Arrays.copyOfRange(data, ind, ind + 1);
         ind++;
@@ -341,7 +340,7 @@ public class KafkaKRaftMetadataParser {
                     byteTool.printByteArray(content);
 
                     if(sort == 0) continue;
-                    map = pareseTopic(content,i);
+                    map = pareseTopic(content,i,map);
                     System.out.println("***** Record iteration complete ****");
                 }
             }
