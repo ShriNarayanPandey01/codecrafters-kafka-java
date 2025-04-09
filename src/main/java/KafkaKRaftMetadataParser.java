@@ -106,7 +106,11 @@ public class KafkaKRaftMetadataParser {
             System.out.println("====== toggledFeildCounts ======");
             byteTool.printByteArray(toggledFeildCounts);
         }
-        }
+        byte[] headerArrayCount = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
+        System.out.println("====== headerArrayCount ======");
+        byteTool.printByteArray(headerArrayCount);    
+    }
     static HashMap<String, Long> pareseTopic(byte[] data) {
         HashMap<String, Long> map = new HashMap<>();
         int ind = 0;
@@ -137,10 +141,7 @@ public class KafkaKRaftMetadataParser {
             byteTool.printByteArray(Arrays.copyOfRange(data, ind-1 , ind));
             parseTopicKeyValue(Arrays.copyOfRange(data, ind , ind + value), map);
         }
-        byte[] headArrayCount = Arrays.copyOfRange(data, ind , ind + 1);
-        ind++;
-        System.out.println("====== headArrayCount ======");
-        byteTool.printByteArray(headArrayCount);
+       
 
         return map;
     }
