@@ -136,7 +136,7 @@ public class KafkaKRaftMetadataParser {
             System.out.println("====== value ======");
             byteTool.printByteArray(Arrays.copyOfRange(data, ind-1 , ind));
             parseTopicKeyValue(Arrays.copyOfRange(data, ind , ind + value), map);
-            ind += value;
+            ind += value -1 ;
         }
         byte[] headArrayCount = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
