@@ -84,7 +84,7 @@ public class byteArrayManipulation {
        * @return the total size in bytes of all the messages in the ArrayList
        */
       public static int sizeOfMessage(ArrayList<byte[]> responses){
-        if(responses == null) return 0;
+        if(responses.size() == 0) return 0;
         int size = 0;
         for (byte[] response : responses) {
             size += response.length;
