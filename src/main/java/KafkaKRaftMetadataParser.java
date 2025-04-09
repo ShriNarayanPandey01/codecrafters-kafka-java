@@ -78,7 +78,7 @@ public class KafkaKRaftMetadataParser {
             System.out.println("====== topicUUID ======");
             byteTool.printByteArray(topicUUID);
             String TOPIC = new String(name);
-            System.out.println("\n========= TOPIC NAME  ========\n"+TOPIC);
+            System.out.println("========= TOPIC NAME  ========\n"+TOPIC+"\n");
             map.put(TOPIC, byteTool.byteArrayToLong(type));
             byte[] taggedFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
             ind++;
