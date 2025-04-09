@@ -4,25 +4,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ApiHandler {
 
     static KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
     
-    public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName , byte[] topicLength) {
+    public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName , byte[] topicLength , byte[] topicUUID) {
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{0,0,0,0}); // throttle
         responses.add(new byte[]{2}); // ArrayLength   ******
         responses.add(new byte[]{0,0}); // error code
         responses.add(topicLength); // topic length
         responses.add(topicName); // topicName
-        byte[] nilUuid = new byte[] {
-            0x00, 0x00, 0x00, 0x00, 
-            0x00, 0x00, 0x40, 0x00, 
-            (byte) 0x80, 0x00, 0x00, 0x00, 
-            0x00, 0x00,  0x55
-        };
-        responses.add(nilUuid); // topic id
+        responses.add(topicUUID); // topic id
         responses.add(new byte[]{0x00}); // is internal
         // responses.add(new byte[]{(byte)2}); // partition array
         // responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0}); // topic authorization operation
@@ -101,8 +96,9 @@ public class ApiHandler {
             inputStream.read(cursor);
             // parser.parseMetaProperties("/tmp/kraft-combined-logs/meta.properties");
             // parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
-            parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
-            describePartitionAPI(responses,topicName , topicNameLength);
+            HashMap<String, byte[]> map = parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
+            String TOPIC = new String(topicName);
+            describePartitionAPI(responses,topicName , topicNameLength , map.get(TOPIC));
             
         }
         catch (IOException e) {

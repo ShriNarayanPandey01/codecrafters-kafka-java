@@ -97,7 +97,7 @@ public class KafkaKRaftMetadataParser {
         
     }
 
-    static void parseTopicKeyValue(byte[] data , HashMap<String, byte[]> map) {
+    static void parseTopicKeyValue(byte[] data ,int I, HashMap<String, byte[]> map) {
         int ind = 0;
         byte[] frameVersion = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
@@ -110,30 +110,15 @@ public class KafkaKRaftMetadataParser {
 
         String  nxtAction = (byteTool.byteArrayToInt(type) == 2) ? "topic" : "feature";
         if(nxtAction == "topic"){
-            parseTopicTopic(Arrays.copyOfRange(data, ind, data.length-1) , map);
+            if(I == 0){
+                parseTopicTopic(Arrays.copyOfRange(data, ind, data.length-1) , map);
+            }
+            else{
+                parseTopicPartitionHead(Arrays.copyOfRange(data, ind,data.length-1) );
+            }
             ind = data.length-1;
         }
         else{
-            // byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
-            // ind++;
-            // System.out.println("====== version ======");
-            // byteTool.printByteArray(version);
-            // byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
-            // ind++;
-            // System.out.println("====== nameLength ======");
-            // byteTool.printByteArray(nameLength);
-            // byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength)-1);
-            // ind += byteTool.byteArrayToInt(nameLength)-1;
-            // System.out.println("====== name ======");
-            // byteTool.printByteArray(name);
-            // byte[] featuredLevel = Arrays.copyOfRange(data, ind , ind + 2);
-            // ind += 2;
-            // System.out.println("====== featuredLevel ======");
-            // byteTool.printByteArray(featuredLevel);
-            // byte[] toggledFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
-            // ind++;
-            // System.out.println("====== toggledFeildCounts ======");
-            // byteTool.printByteArray(toggledFeildCounts);
             pareseTopicFeature(Arrays.copyOfRange(data, ind,data.length-1));
             ind = data.length-1;
         }
@@ -170,14 +155,15 @@ public class KafkaKRaftMetadataParser {
             ind++;
             System.out.println("====== value ======");
             byteTool.printByteArray(Arrays.copyOfRange(data, ind-1 , ind));
-            parseTopicKeyValue(Arrays.copyOfRange(data, ind , ind + value), map);
+            parseTopicKeyValue(Arrays.copyOfRange(data, ind , ind + value),I, map);
         }
        
 
         return map;
     }
-    static void parseLogSegment(String filePath) {
+    static HashMap<String, byte[]> parseLogSegment(String filePath) {
         System.out.println("\n== Parsing Kafka log segment ==");
+        HashMap<String, byte[]> map = new HashMap<>();
         try (RandomAccessFile raf = new RandomAccessFile(filePath, "r")) {
             long fileLength = raf.length();
             int tbu = 0 ; // total byte parsed
@@ -264,7 +250,7 @@ public class KafkaKRaftMetadataParser {
                     byteTool.printByteArray(content);
 
                     if(sort == 0) continue;
-                    HashMap<String, byte[]> map = pareseTopic(content,i);
+                    map = pareseTopic(content,i);
                     System.out.println("***** Record iteration complete ****");
                 }
             }
@@ -272,5 +258,6 @@ public class KafkaKRaftMetadataParser {
         } catch (IOException e) {
             System.err.println("Failed to parse log segment: " + e.getMessage());
         }
+        return map;
     }
 }
