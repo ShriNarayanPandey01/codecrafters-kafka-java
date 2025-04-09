@@ -61,7 +61,7 @@ public class KafkaKRaftMetadataParser {
         ind += byteTool.byteArrayToInt(nameLength);
         System.out.println("====== name ======");
         byteTool.printByteArray(name);
-        byte[] topicUUID  = Arrays.copyOfRange(data, ind , ind + 8);
+        byte[] topicUUID  = Arrays.copyOfRange(data, ind , ind + 16);
         ind += 8;
         System.out.println("====== topicUUID ======");
         byteTool.printByteArray(topicUUID);
