@@ -226,8 +226,6 @@ public class KafkaKRaftMetadataParser {
                     if(sort == 0) continue;
                     HashMap<String, Long> map = pareseTopic(content);
                     System.out.print(map.get("foo"));
-                    byte[] headerArrayCount = new byte[1];
-                    raf.read(headerArrayCount);
                     tbu += 1;
                 }
             }
