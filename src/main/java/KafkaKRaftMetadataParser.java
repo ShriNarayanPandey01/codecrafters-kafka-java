@@ -47,6 +47,39 @@ public class KafkaKRaftMetadataParser {
             System.err.println("Failed to read partition.metadata: " + e.getMessage());
         }
     }
+    static void parseTopicFeature(byte[] data) {
+        int ind = 0;
+        byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
+        System.out.println("====== version ======");
+        byteTool.printByteArray(version);
+        byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
+        System.out.println("====== nameLength ======");
+        byteTool.printByteArray(nameLength);
+        byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength));
+        ind += byteTool.byteArrayToInt(nameLength);
+        System.out.println("====== name ======");
+        byteTool.printByteArray(name);
+        byte[] topicUUID  = Arrays.copyOfRange(data, ind , ind + 8);
+        ind += 8;
+        System.out.println("====== topicUUID ======");
+        byteTool.printByteArray(topicUUID);
+        String TOPIC = new String(name);
+        System.out.println("========= TOPIC NAME  ========");
+        System.out.println(TOPIC);
+        map.put(TOPIC, byteTool.byteArrayToLong(type));
+        byte[] taggedFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
+        ind++;
+        System.out.println("====== taggedFeildCounts ======");
+        byteTool.printByteArray(taggedFeildCounts);
+    }
+    static void pareseTopicTopic(byte[] data) {
+        
+    }
+    static void parseTopicPartitionHead(byte[] data) {
+        
+    }
 
     static void parseTopicKeyValue(byte[] data , HashMap<String, Long> map) {
         int ind = 0;
@@ -61,29 +94,9 @@ public class KafkaKRaftMetadataParser {
 
         String  nxtAction = (byteTool.byteArrayToInt(type) == 2) ? "topic" : "feature";
         if(nxtAction == "topic"){
-            byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
-            ind++;
-            System.out.println("====== version ======");
-            byteTool.printByteArray(version);
-            byte[] nameLength = Arrays.copyOfRange(data, ind , ind + 1);
-            ind++;
-            System.out.println("====== nameLength ======");
-            byteTool.printByteArray(nameLength);
-            byte[] name = Arrays.copyOfRange(data, ind , ind + byteTool.byteArrayToInt(nameLength));
-            ind += byteTool.byteArrayToInt(nameLength);
-            System.out.println("====== name ======");
-            byteTool.printByteArray(name);
-            byte[] topicUUID  = Arrays.copyOfRange(data, ind , ind + 8);
-            ind += 8;
-            System.out.println("====== topicUUID ======");
-            byteTool.printByteArray(topicUUID);
-            String TOPIC = new String(name);
-            System.out.println("========= TOPIC NAME  ========\n"+TOPIC+"\n");
-            map.put(TOPIC, byteTool.byteArrayToLong(type));
-            byte[] taggedFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
-            ind++;
-            System.out.println("====== taggedFeildCounts ======");
-            byteTool.printByteArray(taggedFeildCounts);
+            // 
+            parseTopicFeature(Arrays.copyOfRange(data, ind, data.length-1));
+            ind = data.length-1;
         }
         else{
             byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
@@ -112,7 +125,7 @@ public class KafkaKRaftMetadataParser {
         System.out.println("====== headerArrayCount ======");
         byteTool.printByteArray(headerArrayCount);    
     }
-    static HashMap<String, Long> pareseTopic(byte[] data) {
+    static HashMap<String, Long> pareseTopic(byte[] data,int I) {
         HashMap<String, Long> map = new HashMap<>();
         int ind = 0;
         byte[] attributes = Arrays.copyOfRange(data, ind, ind + 1);
@@ -209,23 +222,26 @@ public class KafkaKRaftMetadataParser {
                 int recordLengthInt = ByteBuffer.wrap(recordLength).getInt();
                 tbu += 51;
                 for(int i = 0 ; i < recordLengthInt ; i++){
-                    byte[] length = new byte[1];
+                    byte[] length;
+                    if(i == 0) length = new byte[1];
+                    else length = new byte[2];    
                     
                     raf.read(length);
                     System.out.println("====== Record " + i + " Length =====" );
                     byteTool.printByteArray(length);
 
                     int sort = byteTool.byteArrayToInt(length);
-                    int recorLength = byteTool.zigZagDecode(sort);
-                    byte[] content = new byte[recorLength];
+                    int recordLength = byteTool.zigZagDecode(sort);
+                    byte[] content = new byte[recordLength];
                     
-                    System.out.println("====== RECORD LENGTH >>"+recordLength);
+                    System.out.println("====== RECORD LENGTH ========");
+                    System.out.println(recordLength);   
                     raf.read(content);  
                     System.out.println("====== Record " + i + " Content =====" );
                     byteTool.printByteArray(content);
 
                     if(sort == 0) continue;
-                    HashMap<String, Long> map = pareseTopic(content);
+                    HashMap<String, Long> map = pareseTopic(content,i);
                     System.out.println("***** Record iteration complete ****");
                 }
             }
