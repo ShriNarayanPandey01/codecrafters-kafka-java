@@ -19,7 +19,7 @@ public class ApiHandler {
         responses.add(topicName); // topicName
         responses.add(topicUUID); // topic id
         responses.add(new byte[]{0x00}); // is internal
-        if(errorCode[1] == 0){   
+        if(errorCode[1] == 3){   
             responses.add(partitionIndex); // partition array
             responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0});// topic authorization operation
         } 
