@@ -43,7 +43,7 @@ public class KafkaKRaftMetadataParser {
             System.err.println("Failed to read partition.metadata: " + e.getMessage());
         }
     }
-    static void parseTopicTopic(byte[] data , byte[] map) {
+    static void parseTopicTopic(byte[] data , HashMap<String, byte[]> map) {
         int ind = 0;
         byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
@@ -181,7 +181,7 @@ public class KafkaKRaftMetadataParser {
 
     }
 
-    static void parseTopicKeyValue(byte[] data ,int I, byte[] map) {
+    static void parseTopicKeyValue(byte[] data ,int I, HashMap<String, byte[]> map) {
         int ind = 0;
         byte[] frameVersion = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
@@ -209,8 +209,8 @@ public class KafkaKRaftMetadataParser {
         System.out.println("====== headerArrayCount ======");
         byteTool.printByteArray(headerArrayCount);    
     }
-    static byte[] pareseTopic(byte[] data,int I) {
-        byte[] map = new HashMap<>();
+    static HashMap<String, byte[]> pareseTopic(byte[] data,int I) {
+        HashMap<String, byte[]> map = new HashMap<>();
         int ind = 0;
         byte[] attributes = Arrays.copyOfRange(data, ind, ind + 1);
         ind++;
@@ -252,9 +252,9 @@ public class KafkaKRaftMetadataParser {
 
         return map;
     }
-    static byte[] parseLogSegment(String filePath) {
+    static HashMap<String, byte[]> parseLogSegment(String filePath) {
         System.out.println("\n== Parsing Kafka log segment ==");
-        byte[] map = new HashMap<>();
+        HashMap<String, byte[]> map = new HashMap<>();
         try (RandomAccessFile raf = new RandomAccessFile(filePath, "r")) {
             long fileLength = raf.length();
             int tbu = 0 ; // total byte parsed
