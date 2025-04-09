@@ -47,7 +47,7 @@ public class KafkaKRaftMetadataParser {
             System.err.println("Failed to read partition.metadata: " + e.getMessage());
         }
     }
-    static void parseTopicFeature(byte[] data , HashMap<String, Long> map) {
+    static void parseTopicFeature(byte[] data , HashMap<String, byte[]> map) {
         int ind = 0;
         byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
@@ -68,7 +68,7 @@ public class KafkaKRaftMetadataParser {
         String TOPIC = new String(name);
         System.out.println("========= TOPIC NAME  ========");
         System.out.println(TOPIC);
-        map.put(TOPIC, byteTool.byteArrayToLong(topicUUID));
+        map.put(TOPIC, topicUUID);
         byte[] taggedFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
         System.out.println("====== taggedFeildCounts ======");
@@ -81,7 +81,7 @@ public class KafkaKRaftMetadataParser {
         
     }
 
-    static void parseTopicKeyValue(byte[] data , HashMap<String, Long> map) {
+    static void parseTopicKeyValue(byte[] data , HashMap<String, byte[]> map) {
         int ind = 0;
         byte[] frameVersion = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
@@ -124,8 +124,8 @@ public class KafkaKRaftMetadataParser {
         System.out.println("====== headerArrayCount ======");
         byteTool.printByteArray(headerArrayCount);    
     }
-    static HashMap<String, Long> pareseTopic(byte[] data,int I) {
-        HashMap<String, Long> map = new HashMap<>();
+    static HashMap<String, byte[]> pareseTopic(byte[] data,int I) {
+        HashMap<String, byte[]> map = new HashMap<>();
         int ind = 0;
         byte[] attributes = Arrays.copyOfRange(data, ind, ind + 1);
         ind++;
@@ -246,7 +246,7 @@ public class KafkaKRaftMetadataParser {
                     byteTool.printByteArray(content);
 
                     if(sort == 0) continue;
-                    HashMap<String, Long> map = pareseTopic(content,i);
+                    HashMap<String, byte[]> map = pareseTopic(content,i);
                     System.out.println("***** Record iteration complete ****");
                 }
             }
