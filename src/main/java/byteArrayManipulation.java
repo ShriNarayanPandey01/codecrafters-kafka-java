@@ -85,4 +85,8 @@ public class byteArrayManipulation {
       }
         System.out.println();
     }
+
+    public static int zigZagDecode(int n) {
+      return (n >>> 1) ^ -(n & 1);
+  }
 }
