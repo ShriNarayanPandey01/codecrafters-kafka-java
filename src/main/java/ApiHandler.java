@@ -99,6 +99,7 @@ public class ApiHandler {
             HashMap<String, byte[]> map = parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
             String TOPIC = new String(topicName);
             System.out.println("final topic name "+TOPIC.substring(0,3));
+            byteTool.printByteArray(topicName);
             // byteTool.printByteArray(map.get(TOPIC));
             for (String key : map.keySet()) {
                 byte[] value = map.get(key);
