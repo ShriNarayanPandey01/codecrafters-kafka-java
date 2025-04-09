@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class ApiHandler {
 
     static KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
-    
+    static byteArrayManipulation byteTool = new byteArrayManipulation();
     public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName , byte[] topicLength , byte[] topicUUID , byte[] errorCode , byte[] partitionIndex) {
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{0,0,0,0}); // throttle
@@ -19,12 +19,15 @@ public class ApiHandler {
         responses.add(topicName); // topicName
         responses.add(topicUUID); // topic id
         responses.add(new byte[]{0x00}); // is internal
-        if(errorCode[1] == 3){   
-            responses.add(partitionIndex); // partition array
-            responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0});// topic authorization operation
-        } 
-        else{
-            addPartitionArray(responses , partitionIndex);
+        
+        for(int i = 0 ; i < byteTool.byteArrayToInt(partitionIndex); i++){
+            if(errorCode[1] == 3){   
+                responses.add(partitionIndex); // partition array
+                responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0});// topic authorization operation
+            } 
+            else{
+                addPartitionArray(responses , partitionIndex);
+            }
         }
         responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
         responses.add(new byte[]{(byte)0}); // tag buffer
