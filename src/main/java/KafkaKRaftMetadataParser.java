@@ -226,7 +226,6 @@ public class KafkaKRaftMetadataParser {
                     if(sort == 0) continue;
                     HashMap<String, Long> map = pareseTopic(content);
                     System.out.print(map.get("foo"));
-                    tbu += 1;
                 }
             }
  
