@@ -47,7 +47,7 @@ public class KafkaKRaftMetadataParser {
             System.err.println("Failed to read partition.metadata: " + e.getMessage());
         }
     }
-    static void parseTopicFeature(byte[] data) {
+    static void parseTopicFeature(byte[] data , HashMap<String, Long> map) {
         int ind = 0;
         byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
@@ -95,7 +95,7 @@ public class KafkaKRaftMetadataParser {
         String  nxtAction = (byteTool.byteArrayToInt(type) == 2) ? "topic" : "feature";
         if(nxtAction == "topic"){
             // 
-            parseTopicFeature(Arrays.copyOfRange(data, ind, data.length-1));
+            parseTopicFeature(Arrays.copyOfRange(data, ind, data.length-1) , map);
             ind = data.length-1;
         }
         else{
