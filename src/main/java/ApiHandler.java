@@ -45,9 +45,9 @@ public class ApiHandler {
         responses.add(new byte[]{0,0,0,(byte)1}); // replica array content
         responses.add(new byte[]{(byte)2}); // ISR length
         responses.add(new byte[]{0,0,0,(byte)1}); // ISR ARRAY content
-        responses.add(new byte[]{(byte)1}); // eligible leader replica
-        responses.add(new byte[]{(byte)1}); // last known ELR
-        responses.add(new byte[]{(byte)1}); // offline replica
+        // responses.add(new byte[]{(byte)1}); // eligible leader replica
+        // responses.add(new byte[]{(byte)1}); // last known ELR
+        // responses.add(new byte[]{(byte)1}); // offline replica
         responses.add(new byte[]{(byte)0}); // buffer
     }
     public static void apiVersionsHandler(InputStream inputStream, int mssg ,int version ,ArrayList<byte[]> responses){
@@ -102,7 +102,7 @@ public class ApiHandler {
             inputStream.read(cursor);
             // parser.parseMetaProperties("/tmp/kraft-combined-logs/meta.properties");
             // parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
-            parser.parseServerProperties("/tmp/server.properties");           
+            // parser.parseServerProperties("/tmp/server.properties");           
             HashMap<String, byte[]> map = parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
             String TOPIC = new String(topicName);
             System.out.println("final topic name "+TOPIC);
