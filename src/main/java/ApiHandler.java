@@ -32,7 +32,7 @@ public class ApiHandler {
         responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{(byte)0xff}); // next cursor
-        responses.add(new byte[]{(byte)0}); // tag buffer
+        responses.add(new byte[]{(byte)1}); // tag buffer
 
     }
 
