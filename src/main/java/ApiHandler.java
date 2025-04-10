@@ -23,13 +23,12 @@ public class ApiHandler {
         for(int i = 0 ; i < byteTool.byteArrayToInt(partitionIndex); i++){
             if(errorCode[1] == 3){   
                 responses.add(partitionIndex); // partition array
-                // topic authorization operation
             } 
             else{
                 addPartitionArray(responses , partitionIndex ,errorCode);
             }
         }
-        responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0});
+        responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0});// topic authorization operation
         responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
         responses.add(new byte[]{(byte)0}); // tag buffer
         responses.add(new byte[]{(byte)0xff}); // next cursor
