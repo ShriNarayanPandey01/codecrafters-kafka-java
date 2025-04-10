@@ -19,14 +19,14 @@ public class ApiHandler {
         responses.add(topicName); // topicName
         responses.add(topicUUID); // topic id
         responses.add(new byte[]{0x00}); // is internal
-        
+        responses.add(partitionIndex); // array length 
         for(int i = 0 ; i < byteTool.byteArrayToInt(partitionIndex); i++){
             if(errorCode[1] == 3){   
                 responses.add(partitionIndex); // partition array
                 responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0});// topic authorization operation
             } 
             else{
-                addPartitionArray(responses , partitionIndex);
+                addPartitionArray(responses , partitionIndex ,errorCode);
             }
         }
         responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
@@ -36,9 +36,8 @@ public class ApiHandler {
 
     }
 
-    public static void addPartitionArray(ArrayList<byte[]> responses , byte[] partitionIndex) {
-        responses.add(partitionIndex); // array length 
-        responses.add(new byte[]{0,0}); // error code
+    public static void addPartitionArray(ArrayList<byte[]> responses , byte[] partitionIndex , bytere[] errorCode) {
+        responses.add(errorCode); // error code
         responses.add(new byte[]{0,0,0,0}); //partition index
         responses.add(new byte[]{0,0,0,(byte)(1)}); // leader id
         responses.add(new byte[]{0,0,0,0}); // leader epoch
