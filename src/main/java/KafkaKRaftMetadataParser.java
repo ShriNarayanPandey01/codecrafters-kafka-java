@@ -350,4 +350,20 @@ public class KafkaKRaftMetadataParser {
         }
         return map;
     }
+
+    public static void parseServerProperties(String path) {
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream(path)) {
+            props.load(fis);
+            String port = props.getProperty("server.port");
+            String logDirs = props.getProperty("log.dirs");
+            String partitions = props.getProperty("num.partitions");
+            System.out.println("Server Port: " + port);
+            System.out.println("Log Dirs: " + logDirs);
+            System.out.println("Partitions: " + partitions);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
