@@ -22,7 +22,7 @@ public class ApiHandler {
         responses.add(partitionIndex); // array length 
         for(int i = 0 ; i < byteTool.byteArrayToInt(partitionIndex); i++){
             if(errorCode[1] == 3){   
-                responses.add(partitionIndex); // partition array
+                // responses.add(partitionIndex); // partition array
                 responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0});// topic authorization operation
             } 
             else{
@@ -45,9 +45,9 @@ public class ApiHandler {
         responses.add(new byte[]{0,0,0,(byte)1}); // replica array content
         responses.add(new byte[]{(byte)2}); // ISR length
         responses.add(new byte[]{0,0,0,(byte)1}); // ISR ARRAY content
-        // responses.add(new byte[]{(byte)1}); // eligible leader replica
-        // responses.add(new byte[]{(byte)1}); // last known ELR
-        // responses.add(new byte[]{(byte)1}); // offline replica
+        responses.add(new byte[]{(byte)1}); // eligible leader replica
+        responses.add(new byte[]{(byte)1}); // last known ELR
+        responses.add(new byte[]{(byte)1}); // offline replica
         responses.add(new byte[]{(byte)0}); // buffer
     }
     public static void apiVersionsHandler(InputStream inputStream, int mssg ,int version ,ArrayList<byte[]> responses){
