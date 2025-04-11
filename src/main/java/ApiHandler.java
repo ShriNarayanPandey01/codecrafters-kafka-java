@@ -26,7 +26,7 @@ public class ApiHandler {
                 responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0});// topic authorization operation
             } 
             else{
-                addPartitionArray(responses , partitionIndex ,errorCode);
+                addPartitionArray(responses , partitionIndex ,errorCode,i);
             }
         }
         responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
@@ -36,9 +36,9 @@ public class ApiHandler {
 
     }
 
-    public static void addPartitionArray(ArrayList<byte[]> responses , byte[] partitionIndex , byte[] errorCode) {
+    public static void addPartitionArray(ArrayList<byte[]> responses , byte[] partitionIndex , byte[] errorCode , int ind) {
         responses.add(errorCode); // error code
-        responses.add(new byte[]{0,0,0,0}); //partition index
+        responses.add(new byte[]{0,0,0,(byte)(ind-1)}); //partition index
         responses.add(new byte[]{0,0,0,(byte)(1)}); // leader id
         responses.add(new byte[]{0,0,0,0}); // leader epoch
         responses.add(new byte[]{(byte)2}); // replica array length
