@@ -20,7 +20,7 @@ public class ApiHandler {
         responses.add(topicUUID); // topic id
         responses.add(new byte[]{0x00}); // is internal
         responses.add(partitionIndex); // array length 
-        for(int i = 1 ; i < byteTool.byteArrayToInt(partitionIndex); i++){
+        for(int i = 1 ; i < 3; i++){
             if(errorCode[1] == 3){   
                 // responses.add(partitionIndex); // partition array
                 responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0});// topic authorization operation
@@ -49,7 +49,7 @@ public class ApiHandler {
         responses.add(new byte[]{(byte)1}); // last known ELR
         responses.add(new byte[]{(byte)1}); // offline replica
         responses.add(new byte[]{(byte)0}); // buffer
-    }
+    } 
     public static void apiVersionsHandler(InputStream inputStream, int mssg ,int version ,ArrayList<byte[]> responses){
             if(version < 0 || version >4){
                 responses.add(new byte[]{0,35}); // error code
@@ -117,7 +117,7 @@ public class ApiHandler {
             if(map.containsKey(TOPIC.substring(0,3))){
                 topic = map.get(TOPIC.substring(0,3));
                 errorCode = new byte[]{0,0};
-                partitionIndex = new byte[]{(byte)3};
+                partitionIndex = new byte[]{(byte)2};
             }
             else {
                 topic = new byte[15];
