@@ -38,7 +38,7 @@ public class ApiHandler {
 
     public static void addPartitionArray(ArrayList<byte[]> responses , byte[] partitionIndex , byte[] errorCode) {
         responses.add(errorCode); // error code
-        responses.add(new byte[]{0,0,0,1}); //partition index
+        responses.add(new byte[]{0,0,0,0}); //partition index
         responses.add(new byte[]{0,0,0,(byte)(1)}); // leader id
         responses.add(new byte[]{0,0,0,0}); // leader epoch
         responses.add(new byte[]{(byte)2}); // replica array length
@@ -122,7 +122,7 @@ public class ApiHandler {
             else {
                 topic = new byte[15];
                 errorCode = new byte[]{0,3};
-                partitionIndex = new byte[]{0};
+                partitionIndex = new byte[]{1};
             }
             describePartitionAPI(responses,topicName , topicNameLength , topic , errorCode , partitionIndex);
             
