@@ -20,7 +20,7 @@ public class ApiHandler {
         responses.add(topicUUID); // topic id
         responses.add(new byte[]{0x00}); // is internal
         responses.add(partitionIndex); // array length 
-        for(int i = 0 ; i < byteTool.byteArrayToInt(partitionIndex); i++){
+        for(int i = 1 ; i < byteTool.byteArrayToInt(partitionIndex); i++){
             if(errorCode[1] == 3){   
                 // responses.add(partitionIndex); // partition array
                 responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0});// topic authorization operation
