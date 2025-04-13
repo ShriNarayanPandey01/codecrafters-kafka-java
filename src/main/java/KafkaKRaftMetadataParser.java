@@ -265,7 +265,7 @@ public class KafkaKRaftMetadataParser {
             // Read byte by byte
             for (long i = 0; i < length; i++) {
                 int b = raf.readUnsignedByte();  // Read as unsigned
-                System.out.printf("Byte %05d: 0x%02X%n", i, b);
+                System.out.printf("Byte %05d: 0x%02X% ", i, b);
             }
 
         } catch (IOException e) {
@@ -275,7 +275,7 @@ public class KafkaKRaftMetadataParser {
     static HashMap<String, byte[]> parseLogSegment(String filePath) {
         System.out.println("\n== Parsing Kafka log segment ==");
         HashMap<String, byte[]> map = new HashMap<>();
-        // printWholeLogSegment(filePath);
+        printWholeLogSegment(filePath);
         File file = new File(filePath);
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             long fileLength = raf.length();
