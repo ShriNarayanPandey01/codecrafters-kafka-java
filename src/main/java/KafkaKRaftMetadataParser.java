@@ -230,7 +230,7 @@ public class KafkaKRaftMetadataParser {
 
         if(logFileInfo.topicNames.containsKey(new String(topicUUID))){
             String topicName = logFileInfo.topicNames.get(new String(topicUUID));
-            ArrayList<TopicRecord> topicRecords = logFileInfo.topics.get(topicName);
+            logFileInfo.topics.get(topicName).partitions.add(partitionRecord);
         }
 
     }
