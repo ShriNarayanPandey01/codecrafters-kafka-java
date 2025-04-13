@@ -105,6 +105,7 @@ public class ApiHandler {
             // parser.parseServerProperties("/tmp/server.properties");           
             HashMap<String, byte[]> map = parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
             parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
+            parser.partitioncount();
 
             String TOPIC = new String(topicName);
             System.out.println("final topic name "+TOPIC);

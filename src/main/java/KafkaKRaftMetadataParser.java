@@ -6,6 +6,22 @@ import java.util.HashMap;
 import java.util.Properties;
 
 public class KafkaKRaftMetadataParser {
+    static void partitioncount(){
+        File logDir = new File("/tmp/kraft-combined-logs");
+        int partitionCount = 0;
+
+        File[] files = logDir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory() && file.getName().matches(".*-\\d+$")) {
+                    partitionCount++;
+                    System.out.println("Partition found: " + file.getName());
+                }
+            }
+        }
+
+        System.out.println("Total partitions: " + partitionCount);
+    }
     static byteArrayManipulation byteTool = new byteArrayManipulation();
     static void parseMetaProperties(String filePath) {
         System.out.println("== Parsing meta.properties ==");
