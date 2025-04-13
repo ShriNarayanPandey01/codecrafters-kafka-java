@@ -112,7 +112,8 @@ public class ApiHandler {
             String TOPIC = new String(topicName);
             System.out.println("final topic name "+TOPIC);
             byteTool.printByteArray(topicName);
-            System.out.println(">>>>>>>>>"+logfile.topics.get(TOPIC).count);
+
+            // System.out.println(">>>>>>>>>"+logfile.topics.get(TOPIC).count);
             // byteTool.printByteArray(map.get(TOPIC));
             
             byte[] topic , errorCode,partitionIndex; 
