@@ -37,5 +37,5 @@ class TopicRecord{
 
 class LogFileInfo{
     HashMap<String, ArrayList<TopicRecord>> topics = new HashMap<>();
-    HashMap<String, ArrayList<TopicRecord>> topicUUIDs = new HashMap<>();
+    HashMap<String, byte[]> topicUUIDs = new HashMap<>();
 }

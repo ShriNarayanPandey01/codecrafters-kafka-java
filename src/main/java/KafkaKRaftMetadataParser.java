@@ -101,7 +101,7 @@ public class KafkaKRaftMetadataParser {
             ArrayList<TopicRecord> topicRecords = new ArrayList<TopicRecord>();
             topicRecords.add(topicRecord);
             logFileInfo.topics.put(TOPIC, topicRecords);
-            logFileInfo.topicUUIDs.put(new String(topicUUID), topicRecords);
+            logFileInfo.topicUUIDs.put(TOPIC, topicUUID);
         }
 
     }

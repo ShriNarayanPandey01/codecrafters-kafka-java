@@ -116,7 +116,7 @@ public class ApiHandler {
             
             byte[] topic , errorCode,partitionIndex; 
             if(logfile.topics.containsKey(TOPIC.substring(0,3))){
-                topic = logfile.topics.get(TOPIC.substring(0,3)).get(0).nameA;
+                topic = logfile.topicUUIDs.get(TOPIC.substring(0,3));
                 errorCode = new byte[]{0,0};
                 partitionIndex = new byte[]{(byte)3};
             }
