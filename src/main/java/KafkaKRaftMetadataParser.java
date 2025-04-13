@@ -18,7 +18,7 @@ public class KafkaKRaftMetadataParser {
             System.err.println("Failed to read meta.properties: " + e.getMessage());
         }
     }
-
+    static int count = 0;
     static void parsePartitionMetadata(String filePath) {
         System.out.println("\n== Parsing partition.metadata ==");
         try {
@@ -197,6 +197,7 @@ public class KafkaKRaftMetadataParser {
             parseTopicTopic(Arrays.copyOfRange(data, ind, data.length-1) , map);
         }
         else if(typeOfRecord == 3){
+            count++;
             parseTopicPartitionHead(Arrays.copyOfRange(data, ind,data.length-1) );
         }
         else{
@@ -247,7 +248,8 @@ public class KafkaKRaftMetadataParser {
             byteTool.printByteArray(value);
             parseTopicKeyValue(Arrays.copyOfRange(data, ind , ind + recordSize),I, map);
         }
-       
+        System.out.println("============no of partition here =========");
+        System.out.println(count);
 
         return map;
     }
