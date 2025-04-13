@@ -100,10 +100,12 @@ public class ApiHandler {
             inputStream.read(responsePartitionLimit);
             byte[] cursor = new byte[1];
             inputStream.read(cursor);
+
+            LogFileInfo logfile = new LogFileInfo();
             // parser.parseMetaProperties("/tmp/kraft-combined-logs/meta.properties");
             // parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
             // parser.parseServerProperties("/tmp/server.properties");           
-            HashMap<String, byte[]> map = parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
+            parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
             parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
             parser.partitioncount();
 
@@ -111,14 +113,10 @@ public class ApiHandler {
             System.out.println("final topic name "+TOPIC);
             byteTool.printByteArray(topicName);
             // byteTool.printByteArray(map.get(TOPIC));
-            for (String key : map.keySet()) {
-                byte[] value = map.get(key);
-                System.out.println("Key = " + key);
-                byteTool.printByteArray(value);
-            }
+            
             byte[] topic , errorCode,partitionIndex; 
-            if(map.containsKey(TOPIC.substring(0,3))){
-                topic = map.get(TOPIC.substring(0,3));
+            if(logfile.topics.containsKey(TOPIC.substring(0,3))){
+                topic = logfile.topics.get(TOPIC.substring(0,3)).get(0).nameA;
                 errorCode = new byte[]{0,0};
                 partitionIndex = new byte[]{(byte)3};
             }

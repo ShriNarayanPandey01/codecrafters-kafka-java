@@ -2,8 +2,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class partitionRecord {
-    public partitionRecord() {
+class PartitionRecord {
         byte[] frameVersion ;
         byte[] type ;
         byte[] version ;
@@ -22,6 +21,21 @@ class partitionRecord {
         byte[] partitionEpoch;  
         byte[] lengthOfDirectoriesArray;
         ArrayList<byte[]> directories = new ArrayList<byte[]>();
-        byte[] taggedFeildCounts;  
-    }
+        byte[] taggedFeildCounts; 
+}
+class TopicRecord{
+    byte[] frameVersion ;
+    byte[] type ;
+    byte[] version ;
+    byte[] nameLength ;
+    byte[] nameA;
+    String name ;
+    byte[] topicUUID ;
+    byte[] taggedFeildCounts;  
+    ArrayList<PartitionRecord> partitions = new ArrayList<PartitionRecord>();
+}
+
+class LogFileInfo{
+    HashMap<String, ArrayList<TopicRecord>> topics = new HashMap<>();
+    HashMap<String, ArrayList<TopicRecord>> topicUUIDs = new HashMap<>();
 }
