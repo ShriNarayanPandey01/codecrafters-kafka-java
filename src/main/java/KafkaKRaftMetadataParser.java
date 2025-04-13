@@ -253,9 +253,29 @@ public class KafkaKRaftMetadataParser {
 
         return map;
     }
+    static void printWholeLogSegment(String filePath) {
+        File file = new File(filePath);  // Replace with your file path
+
+        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+            long length = raf.length();  // Total bytes in file
+            System.out.println("Total Bytes: " + length);
+
+            raf.seek(0);  // Go to the start
+
+            // Read byte by byte
+            for (long i = 0; i < length; i++) {
+                int b = raf.readUnsignedByte();  // Read as unsigned
+                System.out.printf("Byte %05d: 0x%02X%n", i, b);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     static HashMap<String, byte[]> parseLogSegment(String filePath) {
         System.out.println("\n== Parsing Kafka log segment ==");
         HashMap<String, byte[]> map = new HashMap<>();
+        printWholeLogSegment(filePath);
         try (RandomAccessFile raf = new RandomAccessFile(filePath, "r")) {
             long fileLength = raf.length();
             int tbu = 0 ; // total byte parsed
