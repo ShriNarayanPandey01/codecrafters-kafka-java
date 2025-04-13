@@ -25,5 +25,3 @@ class partitionRecord {
         byte[] taggedFeildCounts;  
     }
 }
-
-class 
