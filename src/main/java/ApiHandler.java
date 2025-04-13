@@ -117,7 +117,7 @@ public class ApiHandler {
             if(map.containsKey(TOPIC.substring(0,3))){
                 topic = map.get(TOPIC.substring(0,3));
                 errorCode = new byte[]{0,0};
-                partitionIndex = new byte[]{(byte)2};
+                partitionIndex = new byte[]{(byte)3};
             }
             else {
                 topic = new byte[15];
