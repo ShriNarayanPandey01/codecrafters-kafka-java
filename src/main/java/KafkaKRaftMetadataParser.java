@@ -274,6 +274,10 @@ public class KafkaKRaftMetadataParser {
                 
                 raf.read(batchOffset);
                 System.out.println("====== Batch Offset =====" );
+
+                if(byteTool.byteArrayToInt(batchOffset) == 0){
+                    return map;
+                }
                 byteTool.printByteArray(batchOffset);
                 raf.read(batchLength);
                 System.out.println("====== Batch Length =====" );
