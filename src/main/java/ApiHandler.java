@@ -102,7 +102,7 @@ public class ApiHandler {
             inputStream.read(cursor);
             // parser.parseMetaProperties("/tmp/kraft-combined-logs/meta.properties");
             // parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
-            // parser.parseServerProperties("/tmp/server.properties");           
+            parser.parseServerProperties("/tmp/server.properties");           
             HashMap<String, byte[]> map = parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log");
             String TOPIC = new String(topicName);
             System.out.println("final topic name "+TOPIC);
