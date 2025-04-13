@@ -95,13 +95,12 @@ public class KafkaKRaftMetadataParser {
         topicRecord.topicUUID = topicUUID;
         topicRecord.taggedFeildCounts = taggedFeildCounts;
         if(logFileInfo.topics.containsKey(TOPIC)){
-            logFileInfo.topics.get(TOPIC).add(topicRecord);
+            logFileInfo.topics.get(TOPIC).count++;
         }
         else{
-            ArrayList<TopicRecord> topicRecords = new ArrayList<TopicRecord>();
-            topicRecords.add(topicRecord);
-            logFileInfo.topics.put(TOPIC, topicRecords);
+            logFileInfo.topics.put(TOPIC, topicRecord);
             logFileInfo.topicUUIDs.put(TOPIC, topicUUID);
+            logFileInfo.topicNames.put(new String(topicUUID) , TOPIC);
         }
 
     }
@@ -128,26 +127,30 @@ public class KafkaKRaftMetadataParser {
         System.out.println("====== toggledFeildCounts ======");
         byteTool.printByteArray(toggledFeildCounts);
     }
-    static void parseTopicPartitionHead(byte[] data) {
+    static void parseTopicPartitionHead(byte[] data , LogFileInfo logFileInfo) {
         int ind = 0;
-
+        PartitionRecord partitionRecord = new PartitionRecord();
         byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
+        partitionRecord.version = version;
         System.out.println("====== version ======");
         byteTool.printByteArray(version);
 
         byte[] partitionID = Arrays.copyOfRange(data, ind , ind + 4);
         ind += 4;
+        partitionRecord.partitionID = partitionID;
         System.out.println("====== Partition ID ======");
         byteTool.printByteArray(partitionID);
 
         byte[] topicUUID = Arrays.copyOfRange(data, ind , ind + 16);
         ind += 16;
+        partitionRecord.topicUUID = topicUUID;
         System.out.println("====== Topic UUID ======");
         byteTool.printByteArray(topicUUID);
 
         byte[] replicaArrayLength = Arrays.copyOfRange(data, ind , ind + 1);
         ind += 1;
+        partitionRecord.replicaArrayLength = replicaArrayLength;
         System.out.println("====== Replica Array Length ======");
         byteTool.printByteArray(replicaArrayLength);
 
@@ -155,64 +158,80 @@ public class KafkaKRaftMetadataParser {
         for(int i = 0 ; i < lengthOfReplicaArray ; i++){
             byte[] replicaID = Arrays.copyOfRange(data, ind , ind + 4);
             ind += 4;
+            partitionRecord.replicaID.add(replicaID);
             System.out.println("====== Replica ID ======");
             byteTool.printByteArray(replicaID);
         }
 
         byte[] inSyncReplicaArrayLength = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
+        partitionRecord.inSyncReplicaArrayLength = inSyncReplicaArrayLength;
         System.out.println("====== In Sync Replica Array Length======");
         byteTool.printByteArray(inSyncReplicaArrayLength);
         int lengthOfInSyncReplicaArray = byteTool.byteArrayToInt(inSyncReplicaArrayLength);
         for(int j = 0 ; j < lengthOfInSyncReplicaArray ; j++){
             byte[] replicaID = Arrays.copyOfRange(data, ind , ind + 4);
             ind += 4;
+            partitionRecord.inSyncReplicaID.add(replicaID);
             System.out.println("====== Replica ID ======");
             byteTool.printByteArray(replicaID);
         }
 
         byte[] removingReplicaArrayLength = new byte[1];
         ind++;
+        partitionRecord.lengthOfRemovingReplicaArray = removingReplicaArrayLength;
         System.out.println("====== Removing Replica Array Length======");
         byteTool.printByteArray(removingReplicaArrayLength);
         int lengthOfRemovingReplicaArray = byteTool.byteArrayToInt(removingReplicaArrayLength);
         for(int k = 0 ; k < lengthOfRemovingReplicaArray ; k++){
             byte[] replicaID = Arrays.copyOfRange(data, ind , ind + 4);
             ind += 4;
+            partitionRecord.removingReplicaID.add(replicaID);
             System.out.println("====== Replica ID ======");
             byteTool.printByteArray(replicaID);        
         }
 
         byte[] leader = new byte[4];
         ind += 4;
+        partitionRecord.leader = leader;
         System.out.println("====== Leader ======");
         byteTool.printByteArray(leader);
 
         byte[] leaderEpoch = new byte[4];
         ind += 4;
+        partitionRecord.leaderEpoch = leaderEpoch;
         System.out.println("====== Leader Epoch ======");
         byteTool.printByteArray(leaderEpoch);
 
         byte[] partitionEpoch = new byte[4];
         ind += 4;
+        partitionRecord.partitionEpoch = partitionEpoch;
         System.out.println("====== Partition Epoch ======");
         byteTool.printByteArray(partitionEpoch);    
 
         byte[] directoriesArrayLength  = new byte[1];
         ind++;
+        partitionRecord.lengthOfDirectoriesArray = directoriesArrayLength;
         System.out.println("====== Directories Array Length======");
         byteTool.printByteArray(directoriesArrayLength);
         for(int i = 1 ; i < byteTool.byteArrayToInt(directoriesArrayLength) ; i++){
             byte[] directoriesUUID = new byte[16];
             ind += 16;
+            partitionRecord.directories.add(directoriesUUID);
             System.out.println("====== Directories UUID ======");
             byteTool.printByteArray(directoriesUUID);
         }
 
         byte[] taggedFeildCounts = new byte[1];
         ind++;
+        partitionRecord.taggedFeildCounts = taggedFeildCounts;
         System.out.println("====== Tagged Feild Counts======");
         byteTool.printByteArray(taggedFeildCounts);
+
+        if(logFileInfo.topicNames.containsKey(new String(topicUUID))){
+            String topicName = logFileInfo.topicNames.get(new String(topicUUID));
+            ArrayList<TopicRecord> topicRecords = logFileInfo.topics.get(topicName);
+        }
 
     }
 
@@ -234,7 +253,7 @@ public class KafkaKRaftMetadataParser {
         }
         else if(typeOfRecord == 3){
             count++;
-            parseTopicPartitionHead(Arrays.copyOfRange(data, ind,data.length-1) );
+            parseTopicPartitionHead(Arrays.copyOfRange(data, ind,data.length-1) , logFileInfo );
         }
         else{
             // System.out.println(ind+" "+(data.length-1));

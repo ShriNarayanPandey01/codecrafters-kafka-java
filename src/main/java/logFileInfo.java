@@ -24,6 +24,7 @@ class PartitionRecord {
         byte[] taggedFeildCounts; 
 }
 class TopicRecord{
+    int count = 0;
     byte[] frameVersion ;
     byte[] type ;
     byte[] version ;
@@ -36,6 +37,7 @@ class TopicRecord{
 }
 
 class LogFileInfo{
-    HashMap<String, ArrayList<TopicRecord>> topics = new HashMap<>();
+    HashMap<String, TopicRecord> topics = new HashMap<>();
     HashMap<String, byte[]> topicUUIDs = new HashMap<>();
+    HashMap<String, String> topicNames = new HashMap<>();
 }
