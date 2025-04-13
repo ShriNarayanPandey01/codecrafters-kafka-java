@@ -281,6 +281,11 @@ public class KafkaKRaftMetadataParser {
                 System.out.println("====== Batch Length =====" );
                 byteTool.printByteArray(batchLength);
                 raf.read(partitionLeaderEpoch);
+
+                if(byteTool.byteArrayToInt(batchLength) == 0){
+                    return map;
+                }
+
                 System.out.println("====== Partition Leader Epoch =====" );
                 byteTool.printByteArray(partitionLeaderEpoch);
                 raf.read(magicByte);
