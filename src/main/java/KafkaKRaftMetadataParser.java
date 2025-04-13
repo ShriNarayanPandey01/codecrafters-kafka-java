@@ -201,7 +201,7 @@ public class KafkaKRaftMetadataParser {
             parseTopicPartitionHead(Arrays.copyOfRange(data, ind,data.length-1) );
         }
         else{
-            System.out.println(ind+" "+(data.length-1));
+            // System.out.println(ind+" "+(data.length-1));
             pareseTopicFeature(Arrays.copyOfRange(data, ind,data.length-1));
         }
         ind = data.length-1;
