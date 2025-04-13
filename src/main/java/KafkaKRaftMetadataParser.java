@@ -375,7 +375,6 @@ public class KafkaKRaftMetadataParser {
         } catch (IOException e) {
             System.err.println("Failed to parse log segment: " + e.getMessage());
         }
-        parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
         return map;
     }
 
