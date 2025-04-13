@@ -265,7 +265,7 @@ public class KafkaKRaftMetadataParser {
             // Read byte by byte
             for (long i = 0; i < length; i++) {
                 int b = raf.readUnsignedByte();  // Read as unsigned
-                System.out.printf("Byte %05d: 0x%02X% ", i, b);
+                System.out.printf("Byte %05d: 0x%02X%n ", i, b);
             }
 
         } catch (IOException e) {
