@@ -107,11 +107,12 @@ public class ApiHandler {
             // parser.parseServerProperties("/tmp/server.properties");           
             parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
             parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
-            parser.partitioncount();
-
+            // parser.partitioncount();
+            
             String TOPIC = new String(topicName);
             System.out.println("final topic name "+TOPIC);
             byteTool.printByteArray(topicName);
+            System.out.println(">>>>>>>>>"+logfile.topics.get(TOPIC).count);
             // byteTool.printByteArray(map.get(TOPIC));
             
             byte[] topic , errorCode,partitionIndex; 
