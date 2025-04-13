@@ -124,7 +124,7 @@ public class KafkaKRaftMetadataParser {
             byteTool.printByteArray(replicaID);
         }
 
-        byte[] inSyncReplicaArrayLength = new byte[1];
+        byte[] inSyncReplicaArrayLength = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
         System.out.println("====== In Sync Replica Array Length======");
         byteTool.printByteArray(inSyncReplicaArrayLength);
@@ -275,7 +275,6 @@ public class KafkaKRaftMetadataParser {
     static HashMap<String, byte[]> parseLogSegment(String filePath) {
         System.out.println("\n== Parsing Kafka log segment ==");
         HashMap<String, byte[]> map = new HashMap<>();
-        printWholeLogSegment(filePath);
         File file = new File(filePath);
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             long fileLength = raf.length();
