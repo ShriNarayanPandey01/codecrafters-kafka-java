@@ -275,7 +275,7 @@ public class KafkaKRaftMetadataParser {
     static HashMap<String, byte[]> parseLogSegment(String filePath) {
         System.out.println("\n== Parsing Kafka log segment ==");
         HashMap<String, byte[]> map = new HashMap<>();
-        printWholeLogSegment(filePath);
+        // printWholeLogSegment(filePath);
         File file = new File(filePath);
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             long fileLength = raf.length();
