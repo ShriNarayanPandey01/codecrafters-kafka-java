@@ -320,7 +320,7 @@ public class KafkaKRaftMetadataParser {
 
                 int recordLengthInt = ByteBuffer.wrap(recordLength).getInt();
                 tbu += 51;
-                for(int i = 0 ; i <= recordLengthInt ; i++){
+                for(int i = 0 ; i < recordLengthInt ; i++){
                     byte[] length;
                     if(i == 0) length = new byte[1];
                     else length = new byte[2];    
