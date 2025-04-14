@@ -60,17 +60,14 @@ public class ApiHandler {
                 responses.add(new byte[]{0,0}); //error code
             }
             responses.add(new byte[]{3});
-            // responses.add(new byte[]{0,18}); //api key
-            // responses.add(new byte[]{0,0}); // min  version 
-            // responses.add(new byte[]{0,4}); // max version
-            // responses.add(new byte[]{(byte)0}); // null
-            responses.add(new byte[]{0,1}); // api key
+            responses.add(new byte[]{0,1}); //api key
             responses.add(new byte[]{0,4}); // min  version 
             responses.add(new byte[]{0,16}); // max version
-            responses.add(new byte[]{(byte)0}); //null
+            responses.add(new byte[]{(byte)0}); // null
             responses.add(new byte[]{0,75}); // api key
             responses.add(new byte[]{0,0}); // min  version 
             responses.add(new byte[]{0,0}); // max version
+            responses.add(new byte[]{(byte)0}); //null
             responses.add(new byte[]{0, 0, 0, 0}); // throttle
             responses.add(new byte[]{(byte)0});  //null
     }
@@ -112,7 +109,8 @@ public class ApiHandler {
             byte[] cursor = new byte[1];
             inputStream.read(cursor);
 
-            LogFileInfo logfile = new LogFileInfo();           
+            LogFileInfo logfile = new LogFileInfo();
+           
             parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
             parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
             // parser.partitioncount();
