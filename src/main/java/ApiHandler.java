@@ -131,7 +131,7 @@ public class ApiHandler {
                 partitionIndex = new byte[]{(byte)3};
             }
             else {
-                topic = new byte[15];
+                topic = new byte[16];
                 errorCode = new byte[]{0,3};
                 partitionIndex = new byte[]{0};
             }
