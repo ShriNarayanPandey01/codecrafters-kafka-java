@@ -51,6 +51,11 @@ class ClientHandler extends Thread {
           apiHandler.describePartitionHandler(inputStream, mssg ,responses);
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
         }
+        else if(api == 1){
+          responses.add(new byte[]{0,0});
+          responses.add(new byte[]{0,0,0,0});
+          responses.add(new byte[]{0,0,0,0});
+        }
         else{
           apiHandler.apiVersionsHandler(inputStream, mssg,version ,responses);
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
