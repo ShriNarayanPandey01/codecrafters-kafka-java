@@ -94,7 +94,7 @@ public class ApiHandler {
             inputStream.read(arrayLength);
             byte[] topicNameLength = new byte[1];
             inputStream.read(topicNameLength);
-            byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)];
+            byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)-1];
             inputStream.read(topicName);
             inputStream.read(buffer);
             byte[] responsePartitionLimit = new byte[4];
