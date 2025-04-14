@@ -22,17 +22,18 @@ class ClientHandler extends Thread {
 
         LogFileInfo logfile = new LogFileInfo();
            
-        File rootDir = new File("/tmp/kraft-combined-logs/");
-        ArrayList<File> logFiles = new ArrayList<>();
-        Files.walk(rootDir.toPath())
-        .filter(path -> path.toFile().isFile() && path.toString().endsWith(".log"))
-        .forEach(path -> logFiles.add(path.toFile()));
+      //   File rootDir = new File("/tmp/kraft-combined-logs/");
+      //   ArrayList<File> logFiles = new ArrayList<>();
+      //   Files.walk(rootDir.toPath())
+      //   .filter(path -> path.toFile().isFile() && path.toString().endsWith(".log"))
+      //   .forEach(path -> logFiles.add(path.toFile()));
 
-        for (File logFile : logFiles) {
-          System.out.println("Parsing log: " + logFile.getAbsolutePath());
-          // Call your existing parser here
-          parser.parseLogSegment(logFile.getAbsolutePath() , logfile);
-      }
+      //   for (File logFile : logFiles) {
+      //     System.out.println("Parsing log: " + logFile.getAbsolutePath());
+      //     // Call your existing parser here
+          
+      // }
+       parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
         // parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
 
         InputStream inputStream = clientSocket.getInputStream();
