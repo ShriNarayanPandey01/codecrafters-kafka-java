@@ -117,6 +117,7 @@ public class ApiHandler {
             for(String key : logfile.topics.keySet()){
                 TopicRecord topicRecord = logfile.topics.get(key);
                 System.out.println("topic name = "+topicRecord.name);
+                System.out.println(topicRecord.partitions.size());
                 byteTool.printByteArray(topicRecord.topicUUID);
             }
             // System.out.println(">>>>>>>>>"+logfile.topics.get(TOPIC).count);
