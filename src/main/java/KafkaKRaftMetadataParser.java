@@ -358,6 +358,7 @@ public class KafkaKRaftMetadataParser {
                 raf.read(partitionLeaderEpoch);
 
                 if(byteTool.byteArrayToInt(batchLength) == 0){
+                    System.out.println(byteTool.byteArrayToInt(batchLength));
                     return ;
                 }
 
