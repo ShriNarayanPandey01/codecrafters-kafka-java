@@ -89,15 +89,21 @@ public class ApiHandler {
         try
         {   
             byteArrayManipulation byteTool = new byteArrayManipulation();
+            ArrayList<byte[]> topicNameList = new ArrayList<>();
+            ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
             byte[] buffer = new byte[1];
             inputStream.read(buffer);
             byte[] arrayLength = new byte[1];
             inputStream.read(arrayLength);
-            byte[] topicNameLength = new byte[1];
-            inputStream.read(topicNameLength);
-            byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)-1];
-            inputStream.read(topicName);
-            inputStream.read(buffer);
+            for(int i = 1 ; i<byteTool.byteArrayToInt(arrayLength) ; i++){
+                byte[] topicNameLength = new byte[1];
+                inputStream.read(topicNameLength);
+                byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)-1];
+                inputStream.read(topicName);
+                inputStream.read(buffer);
+                topicNameList.add(topicName);
+                topicNameLengthList.add(topicNameLength);
+            }
             byte[] responsePartitionLimit = new byte[4];
             inputStream.read(responsePartitionLimit);
             byte[] cursor = new byte[1];
@@ -111,9 +117,6 @@ public class ApiHandler {
             parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
             // parser.partitioncount();
             
-            String TOPIC = new String(Arrays.copyOfRange(topicName,0,3));
-            System.out.println("final topic name "+TOPIC);
-            byteTool.printByteArray(topicName);
 
             for(String key : logfile.topics.keySet()){
                 TopicRecord topicRecord = logfile.topics.get(key);
@@ -131,23 +134,43 @@ public class ApiHandler {
             responses.add(new byte[]{0,0,0,0}); // throttle
             responses.add(new byte[]{(byte)(totalNumOfTopics+1)}); // ArrayLength 
             
-            byte[] errorCode;
-            if(!logfile.topics.containsKey(TOPIC.substring(0,3))){
-                errorCode = new byte[]{0,3};
-                responses.add(errorCode); // error code
-                responses.add(topicNameLength); // topic length
-                responses.add(topicName); // topicName
-                responses.add(new byte[16]);//topicUUID
-                describePartitionAPI(responses, errorCode, null);
-            }
-            else{
-                for(String key : logfile.topics.keySet()){
+            for(int i = 0 ; i < topicNameList.size() ; i++){
+                byte[] errorCode;
+                byte[] topicName = topicNameList.get(i);
+                byte[] topicNameLength =  topicNameLengthList.get(i);
+                String TOPIC = new String(Arrays.copyOfRange(topicName, 0, 3));
+                if(!logfile.topics.containsKey(TOPIC.substring(0,3))){
+                    errorCode = new byte[]{0,3};
+                    responses.add(errorCode); // error code
+                    responses.add(topicNameLength); // topic length
+                    responses.add(topicName); // topicName
+                    responses.add(new byte[16]);//topicUUID
+                    describePartitionAPI(responses, errorCode, null);
+                }
+                else{
                     errorCode = new byte[]{0,0};
-                    TopicRecord topicRecord = logfile.topics.get(key);
+                    TopicRecord topicRecord = logfile.topics.get(TOPIC);
                     responses.add(errorCode); // error code
                     describePartitionAPI(responses,errorCode ,topicRecord);
+                    
                 }
             }
+            // if(!logfile.topics.containsKey(TOPIC.substring(0,3))){
+            //     errorCode = new byte[]{0,3};
+            //     responses.add(errorCode); // error code
+            //     responses.add(topicNameLength); // topic length
+            //     responses.add(topicName); // topicName
+            //     responses.add(new byte[16]);//topicUUID
+            //     describePartitionAPI(responses, errorCode, null);
+            // }
+            // else{
+            //     for(String key : logfile.topics.keySet()){
+            //         errorCode = new byte[]{0,0};
+            //         TopicRecord topicRecord = logfile.topics.get(key);
+            //         responses.add(errorCode); // error code
+            //         describePartitionAPI(responses,errorCode ,topicRecord);
+            //     }
+            // }
             responses.add(new byte[]{(byte)0xff}); // next cursor
             responses.add(new byte[]{(byte)0}); // tag buffer
         }
