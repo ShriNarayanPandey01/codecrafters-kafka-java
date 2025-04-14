@@ -154,6 +154,8 @@ public class ApiHandler {
                     describePartitionAPI(responses,errorCode ,topicRecord);
                     
                 }
+                responses.add(new byte[]{(byte)0xff}); // next cursor
+                responses.add(new byte[]{(byte)0}); // tag buffer
             }
             // if(!logfile.topics.containsKey(TOPIC.substring(0,3))){
             //     errorCode = new byte[]{0,3};
@@ -171,8 +173,7 @@ public class ApiHandler {
             //         describePartitionAPI(responses,errorCode ,topicRecord);
             //     }
             // }
-            responses.add(new byte[]{(byte)0xff}); // next cursor
-            responses.add(new byte[]{(byte)0}); // tag buffer
+            
         }
         catch (IOException e) {
             e.printStackTrace();
