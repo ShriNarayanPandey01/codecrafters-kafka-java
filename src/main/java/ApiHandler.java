@@ -126,9 +126,9 @@ public class ApiHandler {
             }
             // System.out.println(">>>>>>>>>"+logfile.topics.get(TOPIC).count);
             // byteTool.printByteArray(map.get(TOPIC));
-            if(logfile.topics.containsKey(TOPIC.substring(0,3))){
-                System.out.println("number of partitions for given topic = "+logfile.topics.get(TOPIC.substring(0,3)).partitions.size());
-            }
+            // if(logfile.topics.containsKey(TOPIC.substring(0,3))){
+            //     System.out.println("number of partitions for given topic = "+logfile.topics.get(TOPIC.substring(0,3)).partitions.size());
+            // }
             int totalNumOfTopics = logfile.topics.size();
             responses.add(new byte[]{(byte)0}); // tag buffer
             responses.add(new byte[]{0,0,0,0}); // throttle
