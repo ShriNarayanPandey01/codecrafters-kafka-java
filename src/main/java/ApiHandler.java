@@ -33,10 +33,6 @@ public class ApiHandler {
                 addPartitionArray(responses , partitionLength ,errorCode,i);
             }
         }
-        responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
-        responses.add(new byte[]{(byte)0}); // tag buffer
-        responses.add(new byte[]{(byte)0xff}); // next cursor
-        responses.add(new byte[]{(byte)0}); // tag buffer
 
     }
 
@@ -150,6 +146,10 @@ public class ApiHandler {
                     describePartitionAPI(responses,errorCode ,topicRecord);
                 }
             }
+            responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
+            responses.add(new byte[]{(byte)0}); // tag buffer
+            responses.add(new byte[]{(byte)0xff}); // next cursor
+            responses.add(new byte[]{(byte)0}); // tag buffer
         }
         catch (IOException e) {
             e.printStackTrace();
