@@ -72,8 +72,9 @@ class ClientHandler extends Thread {
         }
         else if(api == 1){
           
-          System.out.println("it is getting here");
+          
           apiHandler.fetchRequestHandler(logfile,responses,inputStream);
+          System.out.println("it is getting here");
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
         }
         else{
