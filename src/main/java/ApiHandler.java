@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ApiHandler {
@@ -109,7 +110,7 @@ public class ApiHandler {
             parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
             // parser.partitioncount();
             
-            String TOPIC = new String(topicName);
+            String TOPIC = new String(Arrays.copyOfRange(topicName,0,3));
             System.out.println("final topic name "+TOPIC);
             byteTool.printByteArray(topicName);
 
