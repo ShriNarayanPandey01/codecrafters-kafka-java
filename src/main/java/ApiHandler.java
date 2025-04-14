@@ -124,11 +124,12 @@ public class ApiHandler {
             if(logfile.topics.containsKey(TOPIC.substring(0,3))){
                 System.out.println("number of partitions for given topic = "+logfile.topics.get(TOPIC.substring(0,3)).partitions.size());
             }
+            int numPartition = logfile.topics.get(TOPIC.substring(0,3)).partitions.size();
             byte[] topic , errorCode,partitionIndex; 
             if(logfile.topics.containsKey(TOPIC.substring(0,3))){
                 topic = logfile.topicUUIDs.get(TOPIC.substring(0,3));
                 errorCode = new byte[]{0,0};
-                partitionIndex = new byte[]{(byte)3};
+                partitionIndex = new byte[]{(byte)(numPartition+1)};
             }
             else {
                 topic = new byte[16];
