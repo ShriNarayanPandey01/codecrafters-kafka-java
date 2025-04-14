@@ -20,7 +20,7 @@ public class ApiHandler {
             inputStream.read(buffer);
             byte[] arrayLength = new byte[1];
             inputStream.read(arrayLength);
-            System.out.println("it is getting here");
+            byteTool.printByteArray(arrayLength);
             for(int i = 1 ; i<byteTool.byteArrayToInt(arrayLength) ; i++){
                 byte[] topicNameLength = new byte[1];
                 inputStream.read(topicNameLength);
@@ -30,6 +30,7 @@ public class ApiHandler {
                 topicNameList.add(topicName);
                 topicNameLengthList.add(topicNameLength);
             }
+            System.out.println("it is getting here");
             byte[] responsePartitionLimit = new byte[4];
             inputStream.read(responsePartitionLimit);
             byte[] cursor = new byte[1];
