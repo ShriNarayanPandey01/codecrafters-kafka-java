@@ -18,6 +18,7 @@ public class ApiHandler {
             ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
             byte[] buffer = new byte[1];
             inputStream.read(buffer);
+            System.out.println("it is getting here");
             byte[] arrayLength = new byte[1];
             inputStream.read(arrayLength);
             for(int i = 1 ; i<byteTool.byteArrayToInt(arrayLength) ; i++){
