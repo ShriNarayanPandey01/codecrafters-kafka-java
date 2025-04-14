@@ -33,7 +33,6 @@ class ClientHandler extends Thread {
       //     // Call your existing parser here
           
       // }
-       parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
         // parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
 
         InputStream inputStream = clientSocket.getInputStream();
@@ -44,7 +43,7 @@ class ClientHandler extends Thread {
         byte[] apiVersion = new byte[2];
         byte[] correlationId = new byte[4];
         byte[] clientLenght , clientId ,remainingBytes ;
-        
+        parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
         int responseSize;
         ArrayList<byte[]> responses = new ArrayList<>();
         ApiHandler apiHandler = new ApiHandler();
