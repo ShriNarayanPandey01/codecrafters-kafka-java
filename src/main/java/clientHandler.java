@@ -61,7 +61,7 @@ class ClientHandler extends Thread {
         int correlation = byteTool.byteArrayToInt(correlationId);
 
         responses.add(correlationId);
-        System.out.println("it is getting here");
+        
         if(api == 75){
           clientLenght = new byte[2];
           inputStream.read(clientLenght);
@@ -71,8 +71,10 @@ class ClientHandler extends Thread {
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
         }
         else if(api == 1){
-          responseSize = byteArrayManipulation.sizeOfMessage(responses);
+          
+          System.out.println("it is getting here");
           apiHandler.fetchRequestHandler(logfile,responses,inputStream);
+          responseSize = byteArrayManipulation.sizeOfMessage(responses);
         }
         else{
           apiHandler.apiVersionsHandler(inputStream, mssg,version ,responses);
