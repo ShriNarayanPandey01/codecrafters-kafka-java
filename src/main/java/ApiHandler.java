@@ -60,9 +60,9 @@ public class ApiHandler {
                 responses.add(new byte[]{0,0}); //error code
             }
             responses.add(new byte[]{3});
-            responses.add(new byte[]{0,18}); //api key
+            responses.add(new byte[]{0,75}); //api key
             responses.add(new byte[]{0,0}); // min  version 
-            responses.add(new byte[]{0,4}); // max version
+            responses.add(new byte[]{0,0}); // max version
             responses.add(new byte[]{(byte)0}); // null
             responses.add(new byte[]{0,1}); // api key
             responses.add(new byte[]{0,4}); // min  version 
