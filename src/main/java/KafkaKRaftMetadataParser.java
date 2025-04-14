@@ -118,6 +118,7 @@ public class KafkaKRaftMetadataParser {
         ind += byteTool.byteArrayToInt(nameLength)-1;
         System.out.println("====== name ======");
         byteTool.printByteArray(name);
+        if(ind >= data.length) return ;
         byte[] featuredLevel = Arrays.copyOfRange(data, ind , ind + 2);
         ind += 2;
         System.out.println("====== featuredLevel ======");
