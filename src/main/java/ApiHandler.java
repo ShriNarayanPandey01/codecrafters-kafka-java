@@ -10,24 +10,27 @@ import java.util.HashMap;
 public class ApiHandler {
 
     static KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
-    static byteArrayManipulation byteTool = new byteArrayManipulation();
-    public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] topicName , byte[] topicLength , byte[] topicUUID , byte[] errorCode , byte[] partitionIndex) {
-        responses.add(new byte[]{(byte)0}); // tag buffer
-        responses.add(new byte[]{0,0,0,0}); // throttle
-        responses.add(new byte[]{2}); // ArrayLength   ******
-        responses.add(errorCode); // error code
-        responses.add(topicLength); // topic length
-        responses.add(topicName); // topicName
-        responses.add(topicUUID); // topic id
+    static byteArrayManipulation byteTool = new byteArrayManipulation(); 
+    public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] errorCode , TopicRecord topicRecord) {
+        if(topicRecord != null){
+            responses.add(topicRecord.nameLength); // topic length
+            responses.add(topicRecord.nameA); // topicName
+            responses.add(topicRecord.topicUUID); // topic id
+        }
         responses.add(new byte[]{0x00}); // is internal
-        responses.add(partitionIndex); // array length 
-        for(int i = 1 ; i < byteTool.byteArrayToInt(partitionIndex); i++){
+
+        byte[] partitionLength ;
+        if(topicRecord != null) partitionLength = new byte[]{(byte)(topicRecord.partitions.size() + 1)};
+        else partitionLength = new byte[]{(byte)2};
+        responses.add(partitionLength); // array length 
+
+
+        for(int i = 1 ; i < byteTool.byteArrayToInt(partitionLength); i++){
             if(errorCode[1] == 3){   
-                // responses.add(partitionIndex); // partition array
                 responses.add(new byte[] {0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0});// topic authorization operation
             } 
             else{
-                addPartitionArray(responses , partitionIndex ,errorCode,i);
+                addPartitionArray(responses , partitionLength ,errorCode,i);
             }
         }
         responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
@@ -125,21 +128,28 @@ public class ApiHandler {
             if(logfile.topics.containsKey(TOPIC.substring(0,3))){
                 System.out.println("number of partitions for given topic = "+logfile.topics.get(TOPIC.substring(0,3)).partitions.size());
             }
+            int totalNumOfTopics = logfile.topics.size();
+            responses.add(new byte[]{(byte)0}); // tag buffer
+            responses.add(new byte[]{0,0,0,0}); // throttle
+            responses.add(new byte[]{(byte)(totalNumOfTopics+1)}); // ArrayLength 
             
-            byte[] topic , errorCode,partitionIndex; 
-            if(logfile.topics.containsKey(TOPIC.substring(0,3))){
-                topic = logfile.topicUUIDs.get(TOPIC.substring(0,3));
-                errorCode = new byte[]{0,0};
-                int numPartition = logfile.topics.get(TOPIC.substring(0,3)).partitions.size();
-                partitionIndex = new byte[]{(byte)(numPartition+1)};
-            }
-            else {
-                topic = new byte[16];
+            byte[] errorCode;
+            if(!logfile.topics.containsKey(TOPIC.substring(0,3))){
                 errorCode = new byte[]{0,3};
-                partitionIndex = new byte[]{0};
+                responses.add(errorCode); // error code
+                responses.add(topicNameLength); // topic length
+                responses.add(topicName); // topicName
+                responses.add(new byte[16]);//topicUUID
+                describePartitionAPI(responses, errorCode, null);
             }
-            describePartitionAPI(responses,topicName , topicNameLength , topic , errorCode , partitionIndex);
-            
+            else{
+                for(String key : logfile.topics.keySet()){
+                    errorCode = new byte[]{0,0};
+                    TopicRecord topicRecord = logfile.topics.get(key);
+                    responses.add(errorCode); // error code
+                    describePartitionAPI(responses,errorCode ,topicRecord);
+                }
+            }
         }
         catch (IOException e) {
             e.printStackTrace();
