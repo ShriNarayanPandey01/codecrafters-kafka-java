@@ -21,7 +21,7 @@ public class ApiHandler {
 
         byte[] partitionLength ;
         if(topicRecord != null) partitionLength = new byte[]{(byte)(topicRecord.partitions.size() + 1)};
-        else partitionLength = new byte[]{(byte)2};
+        else partitionLength = new byte[]{(byte)1};
         responses.add(partitionLength); // array length 
 
 
