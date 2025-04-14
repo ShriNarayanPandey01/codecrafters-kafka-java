@@ -10,13 +10,18 @@ class ClientHandler extends Thread {
     public ClientHandler(Socket socket) {
         this.clientSocket = socket;
     }
-
+    static KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
     public void run() {
     byteArrayManipulation byteTool = new byteArrayManipulation();
 
     try {
       while(true)
       {
+
+        LogFileInfo logfile = new LogFileInfo();
+           
+        parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
+
         InputStream inputStream = clientSocket.getInputStream();
         OutputStream outputStream = clientSocket.getOutputStream();
 
@@ -48,15 +53,12 @@ class ClientHandler extends Thread {
           inputStream.read(clientLenght);
           clientId = new byte[byteTool.byteArrayToInt(clientLenght)];
           inputStream.read(clientId);
-          apiHandler.describePartitionHandler(inputStream, mssg ,responses);
+          apiHandler.describePartitionHandler(inputStream, mssg ,responses , logfile);
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
         }
         else if(api == 1){
-          responses.add(new byte[]{0,0});
-          responses.add(new byte[]{0,0,0,0});
-          responses.add(new byte[]{0,0,0,0});
-          responses.add(new byte[]{0,0,0});
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
+          apiHandler.fetchRequestHandler(logfile,responses,inputStream);
         }
         else{
           apiHandler.apiVersionsHandler(inputStream, mssg,version ,responses);

@@ -11,6 +11,39 @@ public class ApiHandler {
 
     static KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
     static byteArrayManipulation byteTool = new byteArrayManipulation(); 
+
+    public static void fetchRequestHandler(LogFileInfo logFileInfo , ArrayList<byte[]> responses , InputStream inputStream ){
+        try{        
+            ArrayList<byte[]> topicNameList = new ArrayList<>();
+            ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
+            byte[] buffer = new byte[1];
+            inputStream.read(buffer);
+            byte[] arrayLength = new byte[1];
+            inputStream.read(arrayLength);
+            for(int i = 1 ; i<byteTool.byteArrayToInt(arrayLength) ; i++){
+                byte[] topicNameLength = new byte[1];
+                inputStream.read(topicNameLength);
+                byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)-1];
+                inputStream.read(topicName);
+                inputStream.read(buffer);
+                topicNameList.add(topicName);
+                topicNameLengthList.add(topicNameLength);
+            }
+            byte[] responsePartitionLimit = new byte[4];
+            inputStream.read(responsePartitionLimit);
+            byte[] cursor = new byte[1];
+            inputStream.read(cursor);
+
+            responses.add(new byte[]{0,0});
+            responses.add(new byte[]{0,0,0,0});
+            responses.add(new byte[]{0,0,0,0});
+            responses.add(new byte[]{0,0,0});
+            
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void describePartitionAPI(ArrayList<byte[]> responses , byte[] errorCode , TopicRecord topicRecord) {
         if(topicRecord != null){
             responses.add(topicRecord.nameLength); // topic length
@@ -89,10 +122,9 @@ public class ApiHandler {
             System.err.println("Error: " + e.getMessage());
         }
     }
-    public static void describePartitionHandler(InputStream inputStream, int mssg ,ArrayList<byte[]> responses){
+    public static void describePartitionHandler(InputStream inputStream, int mssg ,ArrayList<byte[]> responses , LogFileInfo logfile){
         try
         {   
-            byteArrayManipulation byteTool = new byteArrayManipulation();
             ArrayList<byte[]> topicNameList = new ArrayList<>();
             ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
             byte[] buffer = new byte[1];
@@ -113,11 +145,11 @@ public class ApiHandler {
             byte[] cursor = new byte[1];
             inputStream.read(cursor);
 
-            LogFileInfo logfile = new LogFileInfo();
+            // LogFileInfo logfile = new LogFileInfo();
            
-            parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
-            parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
-            // parser.partitioncount();
+            // parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
+            // parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
+            // // parser.partitioncount();
             
 
             for(String key : logfile.topics.keySet()){
