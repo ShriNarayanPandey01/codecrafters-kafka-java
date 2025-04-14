@@ -288,7 +288,7 @@ public class KafkaKRaftMetadataParser {
         byteTool.printByteArray(keyLength);
         
         byte[] value;
-        if(I > 1){
+        if(byteTool.byteArrayToInt(offsetDelta) > 1){
             value = Arrays.copyOfRange(data, ind , ind + 2);
             ind += 2;
         }
