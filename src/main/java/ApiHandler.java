@@ -35,7 +35,7 @@ public class ApiHandler {
         }
         responses.add(new byte[]{0x00,0x00,0x0d,(byte)248}); // tag buffer
         responses.add(new byte[]{(byte)0}); // tag buffer
-
+   
     }
 
     public static void addPartitionArray(ArrayList<byte[]> responses , byte[] partitionIndex , byte[] errorCode , int ind) {
@@ -132,7 +132,7 @@ public class ApiHandler {
             int totalNumOfTopics = logfile.topics.size();
             responses.add(new byte[]{(byte)0}); // tag buffer
             responses.add(new byte[]{0,0,0,0}); // throttle
-            responses.add(new byte[]{(byte)(totalNumOfTopics+1)}); // ArrayLength 
+            responses.add(new byte[]{(byte)(topicNameList.size()+1)}); // ArrayLength 
             
             for(int i = 0 ; i < topicNameList.size() ; i++){
                 byte[] errorCode;
@@ -155,22 +155,6 @@ public class ApiHandler {
                     
                 }
             }
-            // if(!logfile.topics.containsKey(TOPIC.substring(0,3))){
-            //     errorCode = new byte[]{0,3};
-            //     responses.add(errorCode); // error code
-            //     responses.add(topicNameLength); // topic length
-            //     responses.add(topicName); // topicName
-            //     responses.add(new byte[16]);//topicUUID
-            //     describePartitionAPI(responses, errorCode, null);
-            // }
-            // else{
-            //     for(String key : logfile.topics.keySet()){
-            //         errorCode = new byte[]{0,0};
-            //         TopicRecord topicRecord = logfile.topics.get(key);
-            //         responses.add(errorCode); // error code
-            //         describePartitionAPI(responses,errorCode ,topicRecord);
-            //     }
-            // }
             responses.add(new byte[]{(byte)0xff}); // next cursor
             responses.add(new byte[]{(byte)0}); // tag buffer
         }
