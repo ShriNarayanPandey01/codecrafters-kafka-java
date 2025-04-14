@@ -55,6 +55,7 @@ class ClientHandler extends Thread {
           responses.add(new byte[]{0,0});
           responses.add(new byte[]{0,0,0,0});
           responses.add(new byte[]{0,0,0,0});
+          responses.add(new byte[]{0});
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
         }
         else{
