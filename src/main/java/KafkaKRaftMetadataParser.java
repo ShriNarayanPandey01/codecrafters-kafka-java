@@ -177,7 +177,7 @@ public class KafkaKRaftMetadataParser {
             byteTool.printByteArray(replicaID);
         }
 
-        byte[] removingReplicaArrayLength = new byte[1];
+        byte[] removingReplicaArrayLength = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
         partitionRecord.lengthOfRemovingReplicaArray = removingReplicaArrayLength;
         System.out.println("====== Removing Replica Array Length======");
@@ -191,25 +191,25 @@ public class KafkaKRaftMetadataParser {
             byteTool.printByteArray(replicaID);        
         }
 
-        byte[] leader = new byte[4];
+        byte[] leader = Arrays.copyOfRange(data, ind , ind + 4);
         ind += 4;
         partitionRecord.leader = leader;
         System.out.println("====== Leader ======");
         byteTool.printByteArray(leader);
 
-        byte[] leaderEpoch = new byte[4];
+        byte[] leaderEpoch = Arrays.copyOfRange(data, ind , ind + 4);
         ind += 4;
         partitionRecord.leaderEpoch = leaderEpoch;
         System.out.println("====== Leader Epoch ======");
         byteTool.printByteArray(leaderEpoch);
 
-        byte[] partitionEpoch = new byte[4];
+        byte[] partitionEpoch = Arrays.copyOfRange(data, ind , ind + 4);
         ind += 4;
         partitionRecord.partitionEpoch = partitionEpoch;
         System.out.println("====== Partition Epoch ======");
         byteTool.printByteArray(partitionEpoch);    
 
-        byte[] directoriesArrayLength  = new byte[1];
+        byte[] directoriesArrayLength  = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
         partitionRecord.lengthOfDirectoriesArray = directoriesArrayLength;
         System.out.println("====== Directories Array Length======");
@@ -222,7 +222,7 @@ public class KafkaKRaftMetadataParser {
             byteTool.printByteArray(directoriesUUID);
         }
 
-        byte[] taggedFeildCounts = new byte[1];
+        byte[] taggedFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
         partitionRecord.taggedFeildCounts = taggedFeildCounts;
         System.out.println("====== Tagged Feild Counts======");

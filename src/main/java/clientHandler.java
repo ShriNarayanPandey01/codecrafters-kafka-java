@@ -1,7 +1,9 @@
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 class ClientHandler extends Thread {
@@ -20,7 +22,18 @@ class ClientHandler extends Thread {
 
         LogFileInfo logfile = new LogFileInfo();
            
-        parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
+        File rootDir = new File("/tmp/kraft-combined-logs/");
+        ArrayList<File> logFiles = new ArrayList<>();
+        Files.walk(rootDir.toPath())
+        .filter(path -> path.toFile().isFile() && path.toString().endsWith(".log"))
+        .forEach(path -> logFiles.add(path.toFile()));
+
+        for (File logFile : logFiles) {
+          System.out.println("Parsing log: " + logFile.getAbsolutePath());
+          // Call your existing parser here
+          parser.parseLogSegment(logFile.getAbsolutePath() , logfile);
+      }
+        // parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
 
         InputStream inputStream = clientSocket.getInputStream();
         OutputStream outputStream = clientSocket.getOutputStream();
