@@ -71,10 +71,10 @@ class ClientHandler extends Thread {
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
         }
         else if(api == 1){
-          clientLenght = new byte[2];
-          inputStream.read(clientLenght);
-          clientId = new byte[byteTool.byteArrayToInt(clientLenght)];
-          inputStream.read(clientId);
+          // clientLenght = new byte[2];
+          // inputStream.read(clientLenght);
+          // clientId = new byte[byteTool.byteArrayToInt(clientLenght)];
+          // inputStream.read(clientId);
           apiHandler.fetchRequestHandler(logfile,responses,inputStream);
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
         }
