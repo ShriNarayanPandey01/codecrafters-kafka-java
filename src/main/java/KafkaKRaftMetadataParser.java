@@ -230,8 +230,8 @@ public class KafkaKRaftMetadataParser {
         System.out.println("====== Tagged Feild Counts======");
         byteTool.printByteArray(taggedFeildCounts);
 
-        if(logFileInfo.topicNames.containsKey(new String(topicUUID))){
-            String topicName = logFileInfo.topicNames.get(new String(topicUUID));
+        if(logFileInfo.topicNames.containsKey(byteTool.byteArrayToString(topicUUID))){
+            String topicName = logFileInfo.topicNames.get(byteTool.byteArrayToString(topicUUID));
             logFileInfo.topics.get(topicName).partitions.add(partitionRecord);
         }
 
