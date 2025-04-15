@@ -29,7 +29,9 @@ public class ApiHandler {
             inputStream.read(maxBytes);
             inputStream.read(isolationLevel);
             inputStream.read(topicsLength);
-            
+            System.out.println("got here");
+            byteTool.printByteArray(topicsLength);
+
             ArrayList<byte[]> topicList = new ArrayList<>();
             ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
             for(int i = 0 ; i < byteTool.byteArrayToInt(topicsLength) ; i++){
@@ -59,8 +61,7 @@ public class ApiHandler {
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{(byte)(topicList.size()+1)});
 
-            System.out.println("got here");
-            System.out.println(topicList.size());
+            
             for(int i = 0 ; i < topicList.size() ; i++){
                 String topic = new String(Arrays.copyOfRange(topicList.get(i),0,3));
                 TopicRecord topicRecord = logFileInfo.topics.get(topic);
