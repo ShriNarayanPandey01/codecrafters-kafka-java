@@ -153,12 +153,12 @@ public class ApiHandler {
                     responses.add(new byte[]{0, 0, 0, 0}); // number of aborted transaction
                     responses.add(new byte[]{0, 0, 0, 0}); // preferred_read_replica
                     // responses.add(new byte[]{0, 0, 0, 0}); // compact_records_length
-                    responses.add(new byte[]{0});
+                    // responses.add(new byte[]{0});
                 }
                 // responses.add(new byte[]{0});
             }
 
-            // responses.add(new byte[]{0});
+            responses.add(new byte[]{0});
             
         }
         catch(IOException e) {
