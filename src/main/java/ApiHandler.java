@@ -100,8 +100,8 @@ public class ApiHandler {
                 // }
 
                 // topic tagged fields
-                int topicTaggedSize = readVarInt(inputStream);
-                inputStream.skip(topicTaggedSize);
+                // int topicTaggedSize = readVarInt(inputStream);
+                // inputStream.skip(topicTaggedSize);
             }
 
             // forgotten topics
