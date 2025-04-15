@@ -76,8 +76,8 @@ public class ApiHandler {
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
 
-            // if(topicuuidList.size()>0) responses.add(new byte[]{(byte)(2)});
-            // else responses.add(new byte[]{(byte)1});
+            if(topicuuidList.size()>0) responses.add(new byte[]{(byte)(2)});
+            else responses.add(new byte[]{(byte)1});
             for(int j = 0 ; j < topicuuidList.size() ; j++){
                 responses.add(topicuuidList.get(j));
                 if(logFileInfo.topicNames.containsKey(byteTool.byteArrayToString(topicuuidList.get(j)))){
