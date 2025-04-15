@@ -235,7 +235,7 @@ public class ApiHandler {
                 byte[] errorCode;
                 byte[] topicName = topicNameList.get(i);
                 byte[] topicNameLength =  topicNameLengthList.get(i);
-                String TOPIC = new String(Arrays.copyOfRange(topicName, 0, 3));
+                String TOPIC = new String(topicName);
                 if(!logfile.topics.containsKey(TOPIC.substring(0,3))){
                     errorCode = new byte[]{0,3};
                     responses.add(errorCode); // error code
