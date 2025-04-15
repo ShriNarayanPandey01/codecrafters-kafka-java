@@ -72,90 +72,38 @@ public class ApiHandler {
                 byte[] topicId = new byte[16]; // UUID
                 inputStream.read(topicId);
                 topicuuidList.add(topicId);
-                // byte[] partitionCountBytes = new byte[4];
-                // inputStream.read(partitionCountBytes);
-                // int partitionCount = byteTool.byteArrayToInt(partitionCountBytes);
-
-                // for (int j = 0; j < partitionCount; j++) {
-                //     byte[] partition = new byte[4];
-                //     inputStream.read(partition);
-
-                //     byte[] currentLeaderEpoch = new byte[4];
-                //     inputStream.read(currentLeaderEpoch);
-
-                //     byte[] fetchOffset = new byte[8];
-                //     inputStream.read(fetchOffset);
-
-                //     byte[] lastFetchedEpoch = new byte[4];
-                //     inputStream.read(lastFetchedEpoch);
-
-                //     byte[] logStartOffset = new byte[8];
-                //     inputStream.read(logStartOffset);
-
-                //     byte[] partitionMaxBytes = new byte[4];
-                //     inputStream.read(partitionMaxBytes);
-
-                //     // tagged fields
-                //     int taggedSize = readVarInt(inputStream);
-                //     inputStream.skip(taggedSize);  // skip the tagged fields
-                // }
-
-                // topic tagged fields
-                // int topicTaggedSize = readVarInt(inputStream);
-                // inputStream.skip(topicTaggedSize);
             }
-
-            // forgotten topics
-            // byte[] forgottenTopicCountBytes = new byte[4];
-            // inputStream.read(forgottenTopicCountBytes);
-            // int forgottenTopicCount = byteTool.byteArrayToInt(forgottenTopicCountBytes);
-
-            // for (int i = 0; i < forgottenTopicCount; i++) {
-            //     byte[] topicId = new byte[16];
-            //     inputStream.read(topicId);
-
-            //     byte[] partitionCountBytes = new byte[4];
-            //     inputStream.read(partitionCountBytes);
-            //     int partitionCount = byteTool.byteArrayToInt(partitionCountBytes);
-
-            //     for (int j = 0; j < partitionCount; j++) {
-            //         byte[] partition = new byte[4];
-            //         inputStream.read(partition);
-            //     }
-
-            //     int taggedSize = readVarInt(inputStream);
-            //     inputStream.skip(taggedSize);
-            // }
-
-            // // rack_id: compact string
-            // int rackIdLength = readVarInt(inputStream) - 1;
-            // byte[] rackId = new byte[rackIdLength];
-            // inputStream.read(rackId);
-
-            // // final tagged fields
-            // int finalTaggedSize = readVarInt(inputStream);
-            // inputStream.skip(finalTaggedSize);
             responses.add(new byte[]{0});
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
+
             if(topicuuidList.size()>0) responses.add(new byte[]{(byte)(2)});
             else responses.add(new byte[]{(byte)1});
-            for(int j = 1 ; j < 2 && topicuuidList.size() > 0 ; j++){
-                responses.add(topicuuidList.get(j-1));
-                responses.add(new byte[]{(byte)2});
-                for(int k = 1 ; k < 2 ; k++){
-                    responses.add(new byte[]{0,0,0,0}); // partition index
-                    responses.add(new byte[]{0,100}); // error code
-                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // high watermark
-                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // last stable offset
-                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // log start offset
-                    responses.add(new byte[]{0, 0, 0, 0}); // number of aborted transaction
-                    responses.add(new byte[]{0, 0, 0, 0}); // preferred_read_replica
-                    // responses.add(new byte[]{0, 0, 0, 0}); // compact_records_length
-                    // responses.add(new byte[]{0});
+            for(int j = 0 ; j < topicuuidList.size() ; j++){
+                responses.add(topicuuidList.get(j));
+                if(logFileInfo.topicUUIDs.containsKey(new String(topicuuidList.get(j)))){
+                    byte[] nameA =   logFileInfo.topicUUIDs.get(new String(topicuuidList.get(j)));
+                    String name = new String(Arrays.copyOfRange(nameA, 0, 3));
+                    TopicRecord topicRecord = logFileInfo.topics.get(name);
+                    
                 }
-                // responses.add(new byte[]{0});
+                else
+                {
+                    responses.add(new byte[]{(byte)2});
+                    for(int k = 1 ; k < 2 ; k++){
+                        responses.add(new byte[]{0,0,0,0}); // partition index
+                        responses.add(new byte[]{0,100}); // error code
+                        responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // high watermark
+                        responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // last stable offset
+                        responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // log start offset
+                        responses.add(new byte[]{0,0}); // number of aborted transaction
+                        responses.add(new byte[]{0, 0}); // preferred_read_replica
+                        // responses.add(new byte[]{0, 0, 0, 0}); // compact_records_length
+                        responses.add(new byte[]{0});
+                    }
+                }
+                responses.add(new byte[]{0});
             }
 
             responses.add(new byte[]{0});
