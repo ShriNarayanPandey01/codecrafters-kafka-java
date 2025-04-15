@@ -100,7 +100,7 @@ public class ApiHandler {
                     responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // log start offset
                     responses.add(new byte[]{0,0}); // number of aborted transaction
                     responses.add(new byte[]{0, 0}); // preferred_read_replica
-                    responses.add(new byte[]{0, (byte)3}); // compact_records_length
+                    responses.add(new byte[]{0, (byte)(topicRecord.partitions.size()+1)}); // compact_records_length
                     for(int i = 0 ; i < topicRecord.partitions.size() ; i++){
                         String recordPath = "/tmp/kraft-combined-logs/"+name+"-"+i+"/00000000000000000000.log";
                         File file = new File(recordPath);
