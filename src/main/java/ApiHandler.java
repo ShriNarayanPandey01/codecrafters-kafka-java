@@ -65,9 +65,20 @@ public class ApiHandler {
             int topicCount = byteTool.byteArrayToInt(topicCountBytes);
             System.out.println("got here");
             System.out.println(topicCount);
+            
+            ArrayList<byte[]> topicList = new ArrayList<>();
+            ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
+
             for (int i = 0; i < topicCount; i++) {
                 byte[] topicId = new byte[16]; // UUID
                 inputStream.read(topicId);
+                
+                String topic = logFileInfo.topicNames.get(new String(topicId));
+                TopicRecord topicRecord = logFileInfo.topics.get(topic);
+                byte[] nameA = topicRecord.nameA;
+                topicList.add(nameA);
+                byte[] nameLength = topicRecord.nameLength;
+                topicNameLengthList.add(nameLength);
 
                 byte[] partitionCountBytes = new byte[4];
                 inputStream.read(partitionCountBytes);
