@@ -57,7 +57,24 @@ public class ApiHandler {
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
-            responses.add(new byte[]{2});
+            responses.add(new byte[]{(byte)(topicList.size()+1)});
+            for(int i = 0 ; i < topicList.size() ; i++){
+                String topic = new String(Arrays.copyOfRange(topicList.get(i),0,3));
+                TopicRecord topicRecord = logFileInfo.topics.get(topic);
+                responses.add(topicRecord.topicUUID);
+                responses.add(new byte[]{0,(byte)(topicRecord.partitions.size()+1)});
+                for(int j = 0 ; j < topicRecord.partitions.size() ; j++){
+                    PartitionRecord partitionRecord = topicRecord.partitions.get(j);
+                    responses.add(partitionRecord.partitionID);
+                    responses.add(new byte[]{0,0});
+                    responses.add(new byte[]{0,0,0,0,0,0,0,0});
+                    responses.add(new byte[]{0,0,0,0,0,0,0,0});
+                    responses.add(new byte[]{0,0,0,0,0,0,0,0});
+                    responses.add(new byte[]{0});
+
+                }
+                responses.add(new byte[]{0});
+            }
             responses.add(new byte[]{0});
             
         }
