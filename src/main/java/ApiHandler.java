@@ -67,10 +67,11 @@ public class ApiHandler {
             System.out.println("got here");
             System.out.println(topicCount);
 
+            ArrayList<byte[]> topicuuidList = new ArrayList<>();
             for (int i = 1; i < topicCount; i++) {
                 byte[] topicId = new byte[16]; // UUID
                 inputStream.read(topicId);
-
+                topicuuidList.add(topicId);
                 // byte[] partitionCountBytes = new byte[4];
                 // inputStream.read(partitionCountBytes);
                 // int partitionCount = byteTool.byteArrayToInt(partitionCountBytes);
@@ -139,6 +140,17 @@ public class ApiHandler {
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{(byte)(2)});
+            for(int j = 1 ; j < 2 ; j++){
+                responses.add(topicuuidList.get(j-1));
+                responses.add(new byte[]{(byte)2});
+                responses.add(new byte[]{0,0,0,0});
+                responses.add(new byte[]{0,100});
+                responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0});
+                responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0});
+                responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0});
+                responses.add(new byte[]{0, 0, 0, 0});
+                responses.add(new byte[]{0});
+            }
 
             responses.add(new byte[]{0});
             
