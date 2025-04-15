@@ -26,6 +26,7 @@ public class ApiHandler {
             inputStream.read(maxBytes);
             inputStream.read(isolationLevel);
             inputStream.read(topicsLength);
+            System.out.println("got here");
             ArrayList<byte[]> topicList = new ArrayList<>();
             ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
             for(int i = 1 ; i < byteTool.byteArrayToInt(topicsLength) ; i++){
@@ -38,7 +39,7 @@ public class ApiHandler {
 
                 byte[] partitionLength = new byte[4];
                 inputStream.read(partitionLength);
-                System.out.println("got here");
+                
                 for(int j = 1 ; j < byteTool.byteArrayToInt(partitionLength) ; j++){
                     byte[] partitionID = new byte[4];
                     inputStream.read(partitionID);
