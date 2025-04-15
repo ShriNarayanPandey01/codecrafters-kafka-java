@@ -60,6 +60,7 @@ public class KafkaKRaftMetadataParser {
             System.err.println("Failed to read partition.metadata: " + e.getMessage());
         }
     }
+
     static void parseTopicTopic(byte[] data , LogFileInfo logFileInfo) {
         int ind = 0;
         byte[] version = Arrays.copyOfRange(data, ind , ind + 1);
@@ -100,7 +101,7 @@ public class KafkaKRaftMetadataParser {
         else{
             logFileInfo.topics.put(TOPIC, topicRecord);
             logFileInfo.topicUUIDs.put(TOPIC, topicUUID);
-            logFileInfo.topicNames.put(new String(topicUUID) , TOPIC);
+            logFileInfo.topicNames.put(byteTool.byteArrayToString(topicUUID) , TOPIC);
         }
 
     }

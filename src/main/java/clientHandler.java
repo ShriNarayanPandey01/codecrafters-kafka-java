@@ -21,7 +21,7 @@ class ClientHandler extends Thread {
     System.out.println();
     System.out.println("==================printing all the uuid string saved======================");
 
-    for(String uuid : logfile.topicUUIDs.keySet()){
+    for(String uuid : logfile.topicNames.keySet()){
       System.out.println(uuid);
       System.out.println(logfile.topicUUIDs.get(uuid));
     }
