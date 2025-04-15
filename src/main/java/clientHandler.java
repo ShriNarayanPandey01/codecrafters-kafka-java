@@ -75,6 +75,8 @@ class ClientHandler extends Thread {
           inputStream.read(clientLenght);
           clientId = new byte[byteTool.byteArrayToInt(clientLenght)];
           inputStream.read(clientId);
+          byte[] buffer = new byte[1];
+          inputStream.read(buffer);
           apiHandler.fetchRequestHandler(logfile,responses,inputStream);
           responseSize = byteArrayManipulation.sizeOfMessage(responses);
         }
