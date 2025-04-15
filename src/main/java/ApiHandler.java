@@ -86,7 +86,7 @@ public class ApiHandler {
                     byte[] nameA =   logFileInfo.topicUUIDs.get(new String(topicuuidList.get(j)));
                     String name = new String(Arrays.copyOfRange(nameA, 0, 3));
                     TopicRecord topicRecord = logFileInfo.topics.get(name);
-                    
+
                 }
                 else
                 {
@@ -99,7 +99,7 @@ public class ApiHandler {
                         responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // log start offset
                         responses.add(new byte[]{0,0}); // number of aborted transaction
                         responses.add(new byte[]{0, 0}); // preferred_read_replica
-                        // responses.add(new byte[]{0, 0, 0, 0}); // compact_records_length
+                        responses.add(new byte[]{0, 0}); // compact_records_length
                         responses.add(new byte[]{0});
                     }
                 }
