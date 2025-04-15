@@ -34,7 +34,7 @@ public class ApiHandler {
                 inputStream.read(topicNameLength);
                 byteTool.printByteArray(topicNameLength);
                 System.out.println("got here");
-                byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)-1];
+                byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)];
                 inputStream.read(topicName);
                 topicList.add(topicName);
                 topicNameLengthList.add(topicNameLength);
