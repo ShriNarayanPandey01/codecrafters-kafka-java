@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +13,32 @@ public class ApiHandler {
     static KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
     static byteArrayManipulation byteTool = new byteArrayManipulation(); 
 
+    public static int readVarInt(InputStream input) throws IOException {
+        int value = 0;
+        int position = 0;
+        int currentByte;
+
+        while (true) {
+            currentByte = input.read();
+            if (currentByte == -1) {
+                throw new EOFException("Unexpected end of stream while reading VarInt");
+            }
+
+            value |= (currentByte & 0x7F) << position;
+
+            if ((currentByte & 0x80) == 0) {  // high bit is not set — last byte
+                break;
+            }
+
+            position += 7;
+
+            if (position > 28) {  // VarInt shouldn't exceed 5 bytes (7x5=35 bits)
+                throw new IOException("VarInt is too long");
+            }
+        }
+
+        return value;
+    }
     public static void fetchRequestHandler(LogFileInfo logFileInfo , ArrayList<byte[]> responses , InputStream inputStream ){
         try{        
             byte[] maxWaitTime = new byte[4];
