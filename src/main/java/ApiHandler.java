@@ -143,12 +143,17 @@ public class ApiHandler {
             for(int j = 1 ; j < 2 ; j++){
                 responses.add(topicuuidList.get(j-1));
                 responses.add(new byte[]{(byte)2});
-                responses.add(new byte[]{0,0,0,0});
-                responses.add(new byte[]{0,100});
-                responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0});
-                responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0});
-                responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0});
-                responses.add(new byte[]{0, 0, 0, 0});
+                for(int k = 1 ; k < 2 ; k++){
+                    responses.add(new byte[]{0,0,0,0}); // partition index
+                    responses.add(new byte[]{0,100}); // error code
+                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // high watermark
+                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // last stable offset
+                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // log start offset
+                    responses.add(new byte[]{0, 0, 0, 0}); // number of aborted transaction
+                    responses.add(new byte[]{0, 0, 0, 0}); // number of aborted transaction
+                    responses.add(new byte[]{0, 0, 0, 0}); // number of aborted transaction
+                    responses.add(new byte[]{0});
+                }
                 responses.add(new byte[]{0});
             }
 
