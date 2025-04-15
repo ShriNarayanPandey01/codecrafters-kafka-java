@@ -140,7 +140,7 @@ public class ApiHandler {
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{(byte)(2)});
-            for(int j = 1 ; j < 2 ; j++){
+            for(int j = 1 ; j < 2 && topicuuidList.size() > 0 ; j++){
                 responses.add(topicuuidList.get(j-1));
                 responses.add(new byte[]{(byte)2});
                 for(int k = 1 ; k < 2 ; k++){
