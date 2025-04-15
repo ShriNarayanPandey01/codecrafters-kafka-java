@@ -60,7 +60,7 @@ public class ApiHandler {
             inputStream.read(sessionEpoch);
 
             // topics array
-            byte[] topicCountBytes = new byte[4];
+            byte[] topicCountBytes = new byte[1];
             inputStream.read(topicCountBytes);
             int topicCount = byteTool.byteArrayToInt(topicCountBytes);
             System.out.println("got here");
