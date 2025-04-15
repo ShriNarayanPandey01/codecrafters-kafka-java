@@ -20,20 +20,22 @@ public class ApiHandler {
             byte[] maxBytes = new byte[4];
             byte[] isolationLevel = new byte[1];
             byte[] topicsLength = new byte[4];
+            
+            System.out.println("got here");
+
             inputStream.read(replicaID);
             inputStream.read(maxWaitTime);
             inputStream.read(minBytes);            
             inputStream.read(maxBytes);
             inputStream.read(isolationLevel);
             inputStream.read(topicsLength);
-            byteTool.printByteArray(topicsLength);
+            
             ArrayList<byte[]> topicList = new ArrayList<>();
             ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
             for(int i = 0 ; i < byteTool.byteArrayToInt(topicsLength) ; i++){
                 byte[] topicNameLength = new byte[2];
                 inputStream.read(topicNameLength);
                 byteTool.printByteArray(topicNameLength);
-                System.out.println("got here");
                 byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)];
                 inputStream.read(topicName);
                 topicList.add(topicName);
