@@ -132,6 +132,10 @@ public class ApiHandler {
         else partitionLength = new byte[]{(byte)1};
         responses.add(partitionLength); // array length 
 
+        System.out.println(topicRecord.name);
+        byteTool.printByteArray(topicRecord.topicUUID);
+        System.out.println(topicRecord.partitions.size());
+
 
         for(int i = 1 ; i < byteTool.byteArrayToInt(partitionLength); i++){
             if(errorCode[1] == 3){   
