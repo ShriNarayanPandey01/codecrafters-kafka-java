@@ -86,9 +86,9 @@ public class ApiHandler {
                 if(logFileInfo.topicNames.containsKey(byteTool.byteArrayToString(topicuuidList.get(j)))){
                     String name = logFileInfo.topicNames.get(byteTool.byteArrayToString(topicuuidList.get(j)));
                     TopicRecord topicRecord = logFileInfo.topics.get(name);
-                    String recordPath = "/tmp/kraft-combined-logs/"+name+"-0/00000000000000000000.log";
-                    LogFileInfo log = new LogFileInfo();
-                    parser.parseLogSegment(recordPath , log);
+                   
+                    // LogFileInfo log = new LogFileInfo();
+                    // parser.parseLogSegment(recordPath , log);
 
                     
 
@@ -101,16 +101,18 @@ public class ApiHandler {
                     responses.add(new byte[]{0,0}); // number of aborted transaction
                     responses.add(new byte[]{0, 0}); // preferred_read_replica
                     responses.add(new byte[]{0, 2}); // compact_records_length
-                    
-                    File file = new File(recordPath);
-                    try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
-                        long fileLength = raf.length();
-                        byte[] record = new byte[(int)fileLength];
-                        raf.read(record);
-                        responses.add(record);
-            
-                    } catch (IOException e) {
-                        System.err.println("Failed to parse log segment: " + e.getMessage());
+                    for(int i = 0 ; i < topicRecord.partitions.size() ; i++){
+                        String recordPath = "/tmp/kraft-combined-logs/"+name+"-"+i+"/00000000000000000000.log";
+                        File file = new File(recordPath);
+                        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+                            long fileLength = raf.length();
+                            byte[] record = new byte[(int)fileLength];
+                            raf.read(record);
+                            responses.add(record);
+                
+                        } catch (IOException e) {
+                            System.err.println("Failed to parse log segment: " + e.getMessage());
+                        }
                     }
 
                     responses.add(new byte[]{0});
