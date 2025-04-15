@@ -83,7 +83,7 @@ public class ApiHandler {
                 if(logFileInfo.topicNames.containsKey(byteTool.byteArrayToString(topicuuidList.get(j)))){
                     String name = logFileInfo.topicNames.get(byteTool.byteArrayToString(topicuuidList.get(j)));
                     TopicRecord topicRecord = logFileInfo.topics.get(name);
-                    String recordPath = "/tmp/kraft-combined-logs/"+name+"/00000000000000000000.log";
+                    String recordPath = "/tmp/kraft-combined-logs/"+name+"-0/00000000000000000000.log";
                     LogFileInfo log = new LogFileInfo();
                     parser.parseLogSegment(recordPath , log);
                     responses.add(new byte[]{(byte)(2)});
