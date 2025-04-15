@@ -14,27 +14,39 @@ public class ApiHandler {
 
     public static void fetchRequestHandler(LogFileInfo logFileInfo , ArrayList<byte[]> responses , InputStream inputStream ){
         try{        
-            ArrayList<byte[]> topicNameList = new ArrayList<>();
+            byte[] replicaID = new byte[4];
+            byte[] maxWaitTime = new byte[4];
+            byte[] minBytes = new byte[4];
+            byte[] maxBytes = new byte[4];
+            byte[] isolationLevel = new byte[1];
+            byte[] topicsLength = new byte[4];
+            inputStream.read(replicaID);
+            inputStream.read(maxWaitTime);
+            inputStream.read(minBytes);            
+            inputStream.read(maxBytes);
+            inputStream.read(isolationLevel);
+            inputStream.read(topicsLength);
+            ArrayList<byte[]> topicList = new ArrayList<>();
             ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
-            byte[] buffer = new byte[1];
-            inputStream.read(buffer);
-            byte[] arrayLength = new byte[1];
-            inputStream.read(arrayLength);
-            byteTool.printByteArray(arrayLength);
-            for(int i = 1 ; i<byteTool.byteArrayToInt(arrayLength) ; i++){
-                byte[] topicNameLength = new byte[1];
+            for(int i = 1 ; i < byteTool.byteArrayToInt(topicsLength) ; i++){
+                byte[] topicNameLength = new byte[2];
                 inputStream.read(topicNameLength);
                 byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)-1];
                 inputStream.read(topicName);
-                inputStream.read(buffer);
-                topicNameList.add(topicName);
+                topicList.add(topicName);
                 topicNameLengthList.add(topicNameLength);
+                
+                byte[] partitionLength = new byte[4];
+                inputStream.read(partitionLength);
+                for(int j = 1 ; j < byteTool.byteArrayToInt(partitionLength) ; j++){
+                    byte[] partitionID = new byte[4];
+                    inputStream.read(partitionID);
+                    byte[] fetchOffset = new byte[8];
+                    inputStream.read(fetchOffset);
+                    byte[] partitionMaxBytes = new byte[4];
+                    inputStream.read(partitionMaxBytes);
+                }
             }
-            System.out.println("it is getting here");
-            byte[] responsePartitionLimit = new byte[4];
-            inputStream.read(responsePartitionLimit);
-            byte[] cursor = new byte[1];
-            inputStream.read(cursor);
 
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
