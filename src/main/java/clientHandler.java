@@ -17,6 +17,16 @@ class ClientHandler extends Thread {
     byteArrayManipulation byteTool = new byteArrayManipulation();
     LogFileInfo logfile = new LogFileInfo();
     parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
+    
+    System.out.println();
+    System.out.println("==================printing all the uuid string saved======================");
+
+    for(String uuid : logfile.topicUUIDs.keySet()){
+      System.out.println(uuid);
+      System.out.println(logfile.topicUUIDs.get(uuid));
+    }
+    
+    
     try {
       while(true)
       {
