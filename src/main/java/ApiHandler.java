@@ -90,6 +90,18 @@ public class ApiHandler {
                     LogFileInfo log = new LogFileInfo();
                     parser.parseLogSegment(recordPath , log);
 
+                    
+
+                    responses.add(new byte[]{(byte)(2)});
+                    responses.add(new byte[]{0,0,0,0}); // partition index
+                    responses.add(new byte[]{0,0}); // error code
+                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // high watermark
+                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // last stable offset
+                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // log start offset
+                    responses.add(new byte[]{0,0}); // number of aborted transaction
+                    responses.add(new byte[]{0, 0}); // preferred_read_replica
+                    responses.add(new byte[]{0, 0}); // compact_records_length
+                    responses.add(new byte[]{(byte)(2)});
                     File file = new File(recordPath);
                     try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
                         long fileLength = raf.length();
@@ -101,15 +113,6 @@ public class ApiHandler {
                         System.err.println("Failed to parse log segment: " + e.getMessage());
                     }
 
-                    responses.add(new byte[]{(byte)(2)});
-                    responses.add(new byte[]{0,0,0,0}); // partition index
-                    responses.add(new byte[]{0,0}); // error code
-                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // high watermark
-                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // last stable offset
-                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // log start offset
-                    responses.add(new byte[]{0,0}); // number of aborted transaction
-                    responses.add(new byte[]{0, 0}); // preferred_read_replica
-                    responses.add(new byte[]{0, 0}); // compact_records_length
                     responses.add(new byte[]{0});
                 }
                 else
