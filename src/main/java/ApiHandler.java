@@ -1,9 +1,12 @@
 import java.io.BufferedReader;
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -86,6 +89,18 @@ public class ApiHandler {
                     String recordPath = "/tmp/kraft-combined-logs/"+name+"-0/00000000000000000000.log";
                     LogFileInfo log = new LogFileInfo();
                     parser.parseLogSegment(recordPath , log);
+
+                    File file = new File(recordPath);
+                    try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+                        long fileLength = raf.length();
+                        byte[] record = new byte[(int)fileLength-1];
+                        raf.read(record);
+                        responses.add(record);
+            
+                    } catch (IOException e) {
+                        System.err.println("Failed to parse log segment: " + e.getMessage());
+                    }
+
                     responses.add(new byte[]{(byte)(2)});
                     responses.add(new byte[]{0,0,0,0}); // partition index
                     responses.add(new byte[]{0,0}); // error code
