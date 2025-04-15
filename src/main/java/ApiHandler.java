@@ -29,7 +29,7 @@ public class ApiHandler {
             byteTool.printByteArray(topicsLength);
             ArrayList<byte[]> topicList = new ArrayList<>();
             ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
-            for(int i = 1 ; i < byteTool.byteArrayToInt(topicsLength) ; i++){
+            for(int i = 0 ; i < byteTool.byteArrayToInt(topicsLength) ; i++){
                 byte[] topicNameLength = new byte[2];
                 inputStream.read(topicNameLength);
                 byteTool.printByteArray(topicNameLength);
@@ -42,7 +42,7 @@ public class ApiHandler {
                 byte[] partitionLength = new byte[4];
                 inputStream.read(partitionLength);
                 
-                for(int j = 1 ; j < byteTool.byteArrayToInt(partitionLength) ; j++){
+                for(int j = 0 ; j < byteTool.byteArrayToInt(partitionLength) ; j++){
                     byte[] partitionID = new byte[4];
                     inputStream.read(partitionID);
                     byte[] fetchOffset = new byte[8];
