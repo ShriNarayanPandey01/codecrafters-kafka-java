@@ -82,7 +82,7 @@ public class ApiHandler {
             else responses.add(new byte[]{(byte)1});
             for(int j = 0 ; j < topicuuidList.size() ; j++){
                 responses.add(topicuuidList.get(j));
-                if(logFileInfo.topicUUIDs.containsKey(new String(Arrays.copyOfRange(topicuuidList.get(j),0,3)))){
+                if(logFileInfo.topicUUIDs.containsKey(new String(topicuuidList.get(j)))){
                     byte[] nameA =   logFileInfo.topicUUIDs.get(new String(topicuuidList.get(j)));
                     String name = new String(Arrays.copyOfRange(nameA, 0, 3));
                     TopicRecord topicRecord = logFileInfo.topics.get(name);
@@ -235,7 +235,7 @@ public class ApiHandler {
                 byte[] errorCode;
                 byte[] topicName = topicNameList.get(i);
                 byte[] topicNameLength =  topicNameLengthList.get(i);
-                String TOPIC = new String(topicName);
+                String TOPIC = new String(Arrays.copyOfRange(topicName, 0, 3));
                 if(!logfile.topics.containsKey(TOPIC.substring(0,3))){
                     errorCode = new byte[]{0,3};
                     responses.add(errorCode); // error code
