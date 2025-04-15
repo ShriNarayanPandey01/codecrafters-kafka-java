@@ -100,8 +100,7 @@ public class ApiHandler {
                     responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // log start offset
                     responses.add(new byte[]{0,0}); // number of aborted transaction
                     responses.add(new byte[]{0, 0}); // preferred_read_replica
-                    responses.add(new byte[]{(byte)(2)});
-                    responses.add(new byte[]{0, 0}); // compact_records_length
+                    responses.add(new byte[]{0, 2}); // compact_records_length
                     
                     File file = new File(recordPath);
                     try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
