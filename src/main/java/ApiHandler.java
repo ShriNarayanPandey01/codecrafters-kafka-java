@@ -105,7 +105,7 @@ public class ApiHandler {
                     File file = new File(recordPath);
                     try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
                         long fileLength = raf.length();
-                        byte[] record = new byte[(int)fileLength-1];
+                        byte[] record = new byte[(int)fileLength];
                         raf.read(record);
                         responses.add(record);
             
