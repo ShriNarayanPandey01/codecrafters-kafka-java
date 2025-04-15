@@ -82,11 +82,10 @@ public class ApiHandler {
             else responses.add(new byte[]{(byte)1});
             for(int j = 0 ; j < topicuuidList.size() ; j++){
                 responses.add(topicuuidList.get(j));
-                if(logFileInfo.topicUUIDs.containsKey(new String(topicuuidList.get(j)))){
+                if(logFileInfo.topicUUIDs.containsKey(new String(Arrays.copyOfRange(topicuuidList.get(j),0,3)))){
                     byte[] nameA =   logFileInfo.topicUUIDs.get(new String(topicuuidList.get(j)));
                     String name = new String(Arrays.copyOfRange(nameA, 0, 3));
                     TopicRecord topicRecord = logFileInfo.topics.get(name);
-
                 }
                 else
                 {
