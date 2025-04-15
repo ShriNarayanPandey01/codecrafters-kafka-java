@@ -57,7 +57,7 @@ public class ApiHandler {
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
-            responses.add(new byte[]{1});
+            responses.add(new byte[]{2});
             responses.add(new byte[]{0});
             
         }
