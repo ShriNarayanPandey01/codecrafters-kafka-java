@@ -21,7 +21,7 @@ public class ApiHandler {
             byte[] isolationLevel = new byte[1];
             byte[] topicsLength = new byte[4];
 
-            System.out.println("got here");
+            
 
             inputStream.read(replicaID);
             inputStream.read(maxWaitTime);
@@ -58,6 +58,9 @@ public class ApiHandler {
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{(byte)(topicList.size()+1)});
+
+            System.out.println("got here");
+            System.out.println(topicList.size());
             for(int i = 0 ; i < topicList.size() ; i++){
                 String topic = new String(Arrays.copyOfRange(topicList.get(i),0,3));
                 TopicRecord topicRecord = logFileInfo.topics.get(topic);
