@@ -100,10 +100,9 @@ public class ApiHandler {
                     responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // log start offset
                     responses.add(new byte[]{0,0}); // number of aborted transaction
                     responses.add(new byte[]{0, 0}); // preferred_read_replica
-                    responses.add(new byte[]{0, (byte)(topicRecord.partitions.size()+1)}); // compact_records_length
+                    responses.add(new byte[]{0, 2}); // compact_records_length
                     
-                    for(int i = 0 ; i < topicRecord.partitions.size() ; i++){
-                        String recordPath = "/tmp/kraft-combined-logs/"+name+"-"+i+"/00000000000000000000.log";
+                        String recordPath = "/tmp/kraft-combined-logs/"+name+"-0/00000000000000000000.log";
                         File file = new File(recordPath);
                         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
                             long fileLength = raf.length();
@@ -120,7 +119,6 @@ public class ApiHandler {
                         } catch (IOException e) {
                             System.err.println("Failed to parse log segment: " + e.getMessage());
                         }
-                    }
 
                     responses.add(new byte[]{0});
                 }
