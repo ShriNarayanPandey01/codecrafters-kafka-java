@@ -85,8 +85,7 @@ public class ApiHandler {
                 System.out.println("topic uuid recieved string : ========");
                 System.out.println(byteTool.byteArrayToString(topicuuidList.get(j)));
                 if(logFileInfo.topicNames.containsKey(byteTool.byteArrayToString(topicuuidList.get(j)))){
-                    byte[] nameA =   logFileInfo.topicUUIDs.get(new String(topicuuidList.get(j)));
-                    String name = new String(Arrays.copyOfRange(nameA, 0, 3));
+                    String name = logFileInfo.topicNames.get(byteTool.byteArrayToString(topicuuidList.get(j)));
                     TopicRecord topicRecord = logFileInfo.topics.get(name);
                 }
                 else
