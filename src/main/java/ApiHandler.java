@@ -113,7 +113,7 @@ public class ApiHandler {
                         System.err.println("Failed to parse log segment: " + e.getMessage());
                     }
 
-                    responses.add(new byte[]{0});
+                    responses.add(new byte[]{0,0});
                 }
                 else
                 {
