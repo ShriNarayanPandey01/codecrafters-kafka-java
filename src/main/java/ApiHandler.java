@@ -14,47 +14,97 @@ public class ApiHandler {
 
     public static void fetchRequestHandler(LogFileInfo logFileInfo , ArrayList<byte[]> responses , InputStream inputStream ){
         try{        
-            byte[] replicaID = new byte[4];
             byte[] maxWaitTime = new byte[4];
-            byte[] minBytes = new byte[4];
-            byte[] maxBytes = new byte[4];
-            byte[] isolationLevel = new byte[1];
-            byte[] topicsLength = new byte[4];
-
-            
-
-            inputStream.read(replicaID);
             inputStream.read(maxWaitTime);
-            inputStream.read(minBytes);            
+
+            byte[] minBytes = new byte[4];
+            inputStream.read(minBytes);
+
+            byte[] maxBytes = new byte[4];
             inputStream.read(maxBytes);
+
+            byte[] isolationLevel = new byte[1];
             inputStream.read(isolationLevel);
-            inputStream.read(topicsLength);
+
+            byte[] sessionId = new byte[4];
+            inputStream.read(sessionId);
+
+            byte[] sessionEpoch = new byte[4];
+            inputStream.read(sessionEpoch);
+
+            // topics array
+            byte[] topicCountBytes = new byte[4];
+            inputStream.read(topicCountBytes);
+            int topicCount = byteTool.byteArrayToInt(topicCountBytes);
             System.out.println("got here");
-            byteTool.printByteArray(topicsLength);
+            System.out.println(topicCount);
+            for (int i = 0; i < topicCount; i++) {
+                byte[] topicId = new byte[16]; // UUID
+                inputStream.read(topicId);
 
-            ArrayList<byte[]> topicList = new ArrayList<>();
-            ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
-            for(int i = 0 ; i < byteTool.byteArrayToInt(topicsLength) ; i++){
-                byte[] topicNameLength = new byte[2];
-                inputStream.read(topicNameLength);
-                byteTool.printByteArray(topicNameLength);
-                byte[] topicName = new byte[byteTool.byteArrayToInt(topicNameLength)];
-                inputStream.read(topicName);
-                topicList.add(topicName);
-                topicNameLengthList.add(topicNameLength);
+                byte[] partitionCountBytes = new byte[4];
+                inputStream.read(partitionCountBytes);
+                int partitionCount = byteTool.byteArrayToInt(partitionCountBytes);
 
-                byte[] partitionLength = new byte[4];
-                inputStream.read(partitionLength);
-                
-                for(int j = 0 ; j < byteTool.byteArrayToInt(partitionLength) ; j++){
-                    byte[] partitionID = new byte[4];
-                    inputStream.read(partitionID);
+                for (int j = 0; j < partitionCount; j++) {
+                    byte[] partition = new byte[4];
+                    inputStream.read(partition);
+
+                    byte[] currentLeaderEpoch = new byte[4];
+                    inputStream.read(currentLeaderEpoch);
+
                     byte[] fetchOffset = new byte[8];
                     inputStream.read(fetchOffset);
+
+                    byte[] lastFetchedEpoch = new byte[4];
+                    inputStream.read(lastFetchedEpoch);
+
+                    byte[] logStartOffset = new byte[8];
+                    inputStream.read(logStartOffset);
+
                     byte[] partitionMaxBytes = new byte[4];
                     inputStream.read(partitionMaxBytes);
+
+                    // tagged fields
+                    int taggedSize = readVarInt(inputStream);
+                    inputStream.skip(taggedSize);  // skip the tagged fields
                 }
+
+                // topic tagged fields
+                int topicTaggedSize = readVarInt(inputStream);
+                inputStream.skip(topicTaggedSize);
             }
+
+            // forgotten topics
+            byte[] forgottenTopicCountBytes = new byte[4];
+            inputStream.read(forgottenTopicCountBytes);
+            int forgottenTopicCount = byteTool.byteArrayToInt(forgottenTopicCountBytes);
+
+            for (int i = 0; i < forgottenTopicCount; i++) {
+                byte[] topicId = new byte[16];
+                inputStream.read(topicId);
+
+                byte[] partitionCountBytes = new byte[4];
+                inputStream.read(partitionCountBytes);
+                int partitionCount = byteTool.byteArrayToInt(partitionCountBytes);
+
+                for (int j = 0; j < partitionCount; j++) {
+                    byte[] partition = new byte[4];
+                    inputStream.read(partition);
+                }
+
+                int taggedSize = readVarInt(inputStream);
+                inputStream.skip(taggedSize);
+            }
+
+            // rack_id: compact string
+            int rackIdLength = readVarInt(inputStream) - 1;
+            byte[] rackId = new byte[rackIdLength];
+            inputStream.read(rackId);
+
+            // final tagged fields
+            int finalTaggedSize = readVarInt(inputStream);
+            inputStream.skip(finalTaggedSize);
             responses.add(new byte[]{0});
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{0,0});
