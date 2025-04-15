@@ -71,33 +71,33 @@ public class ApiHandler {
                 byte[] topicId = new byte[16]; // UUID
                 inputStream.read(topicId);
 
-                byte[] partitionCountBytes = new byte[4];
-                inputStream.read(partitionCountBytes);
-                int partitionCount = byteTool.byteArrayToInt(partitionCountBytes);
+                // byte[] partitionCountBytes = new byte[4];
+                // inputStream.read(partitionCountBytes);
+                // int partitionCount = byteTool.byteArrayToInt(partitionCountBytes);
 
-                for (int j = 0; j < partitionCount; j++) {
-                    byte[] partition = new byte[4];
-                    inputStream.read(partition);
+                // for (int j = 0; j < partitionCount; j++) {
+                //     byte[] partition = new byte[4];
+                //     inputStream.read(partition);
 
-                    byte[] currentLeaderEpoch = new byte[4];
-                    inputStream.read(currentLeaderEpoch);
+                //     byte[] currentLeaderEpoch = new byte[4];
+                //     inputStream.read(currentLeaderEpoch);
 
-                    byte[] fetchOffset = new byte[8];
-                    inputStream.read(fetchOffset);
+                //     byte[] fetchOffset = new byte[8];
+                //     inputStream.read(fetchOffset);
 
-                    byte[] lastFetchedEpoch = new byte[4];
-                    inputStream.read(lastFetchedEpoch);
+                //     byte[] lastFetchedEpoch = new byte[4];
+                //     inputStream.read(lastFetchedEpoch);
 
-                    byte[] logStartOffset = new byte[8];
-                    inputStream.read(logStartOffset);
+                //     byte[] logStartOffset = new byte[8];
+                //     inputStream.read(logStartOffset);
 
-                    byte[] partitionMaxBytes = new byte[4];
-                    inputStream.read(partitionMaxBytes);
+                //     byte[] partitionMaxBytes = new byte[4];
+                //     inputStream.read(partitionMaxBytes);
 
-                    // tagged fields
-                    int taggedSize = readVarInt(inputStream);
-                    inputStream.skip(taggedSize);  // skip the tagged fields
-                }
+                //     // tagged fields
+                //     int taggedSize = readVarInt(inputStream);
+                //     inputStream.skip(taggedSize);  // skip the tagged fields
+                // }
 
                 // topic tagged fields
                 int topicTaggedSize = readVarInt(inputStream);
