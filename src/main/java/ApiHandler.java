@@ -83,7 +83,7 @@ public class ApiHandler {
                 if(logFileInfo.topicNames.containsKey(byteTool.byteArrayToString(topicuuidList.get(j)))){
                     String name = logFileInfo.topicNames.get(byteTool.byteArrayToString(topicuuidList.get(j)));
                     TopicRecord topicRecord = logFileInfo.topics.get(name);
-                    responses.add(new byte[]{(byte)(topicRecord.partitions.size()+1)});
+                    responses.add(new byte[]{(byte)(2)});
                     responses.add(new byte[]{0,0,0,0}); // partition index
                     responses.add(new byte[]{0,0}); // error code
                 }
