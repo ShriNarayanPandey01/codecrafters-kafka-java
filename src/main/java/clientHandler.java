@@ -15,12 +15,13 @@ class ClientHandler extends Thread {
     static KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
     public void run() {
     byteArrayManipulation byteTool = new byteArrayManipulation();
-
+    LogFileInfo logfile = new LogFileInfo();
+    parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
     try {
       while(true)
       {
 
-        LogFileInfo logfile = new LogFileInfo();
+        
            
       //   File rootDir = new File("/tmp/kraft-combined-logs/");
       //   ArrayList<File> logFiles = new ArrayList<>();
@@ -43,13 +44,7 @@ class ClientHandler extends Thread {
         byte[] apiVersion = new byte[2];
         byte[] correlationId = new byte[4];
         byte[] clientLenght , clientId ,remainingBytes ;
-        parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
-        parser.parsePartitionMetadata("/tmp/kraft-combined-logs/bar-0/partition.metadata");
-        parser.parsePartitionMetadata("/tmp/kraft-combined-logs/foo-0/partition.metadata");
-        parser.parsePartitionMetadata("/tmp/kraft-combined-logs/paz-0/partition.metadata");
-        parser.parsePartitionMetadata("/tmp/kraft-combined-logs/paz-1/partition.metadata");
         
-
         int responseSize;
         ArrayList<byte[]> responses = new ArrayList<>();
         ApiHandler apiHandler = new ApiHandler();
