@@ -44,7 +44,12 @@ class ClientHandler extends Thread {
         byte[] correlationId = new byte[4];
         byte[] clientLenght , clientId ,remainingBytes ;
         parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
+        parser.parsePartitionMetadata("/tmp/kraft-combined-logs/bar-0/partition.metadata");
+        parser.parsePartitionMetadata("/tmp/kraft-combined-logs/foo-0/partition.metadata");
+        parser.parsePartitionMetadata("/tmp/kraft-combined-logs/paz-0/partition.metadata");
+        parser.parsePartitionMetadata("/tmp/kraft-combined-logs/paz-1/partition.metadata");
         
+
         int responseSize;
         ArrayList<byte[]> responses = new ArrayList<>();
         ApiHandler apiHandler = new ApiHandler();
