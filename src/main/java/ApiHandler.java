@@ -14,11 +14,6 @@ public class ApiHandler {
 
     public static void fetchRequestHandler(LogFileInfo logFileInfo , ArrayList<byte[]> responses , InputStream inputStream ){
         try{        
-            byte[] clientIDLength = new byte[2];
-            inputStream.read(clientIDLength);
-            byte[] clientID = new byte[byteTool.byteArrayToInt(clientIDLength)-1];
-            inputStream.read(clientID);
-
             byte[] replicaID = new byte[4];
             byte[] maxWaitTime = new byte[4];
             byte[] minBytes = new byte[4];
