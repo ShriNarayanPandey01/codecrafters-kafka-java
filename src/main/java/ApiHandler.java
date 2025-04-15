@@ -105,35 +105,35 @@ public class ApiHandler {
             }
 
             // forgotten topics
-            byte[] forgottenTopicCountBytes = new byte[4];
-            inputStream.read(forgottenTopicCountBytes);
-            int forgottenTopicCount = byteTool.byteArrayToInt(forgottenTopicCountBytes);
+            // byte[] forgottenTopicCountBytes = new byte[4];
+            // inputStream.read(forgottenTopicCountBytes);
+            // int forgottenTopicCount = byteTool.byteArrayToInt(forgottenTopicCountBytes);
 
-            for (int i = 0; i < forgottenTopicCount; i++) {
-                byte[] topicId = new byte[16];
-                inputStream.read(topicId);
+            // for (int i = 0; i < forgottenTopicCount; i++) {
+            //     byte[] topicId = new byte[16];
+            //     inputStream.read(topicId);
 
-                byte[] partitionCountBytes = new byte[4];
-                inputStream.read(partitionCountBytes);
-                int partitionCount = byteTool.byteArrayToInt(partitionCountBytes);
+            //     byte[] partitionCountBytes = new byte[4];
+            //     inputStream.read(partitionCountBytes);
+            //     int partitionCount = byteTool.byteArrayToInt(partitionCountBytes);
 
-                for (int j = 0; j < partitionCount; j++) {
-                    byte[] partition = new byte[4];
-                    inputStream.read(partition);
-                }
+            //     for (int j = 0; j < partitionCount; j++) {
+            //         byte[] partition = new byte[4];
+            //         inputStream.read(partition);
+            //     }
 
-                int taggedSize = readVarInt(inputStream);
-                inputStream.skip(taggedSize);
-            }
+            //     int taggedSize = readVarInt(inputStream);
+            //     inputStream.skip(taggedSize);
+            // }
 
-            // rack_id: compact string
-            int rackIdLength = readVarInt(inputStream) - 1;
-            byte[] rackId = new byte[rackIdLength];
-            inputStream.read(rackId);
+            // // rack_id: compact string
+            // int rackIdLength = readVarInt(inputStream) - 1;
+            // byte[] rackId = new byte[rackIdLength];
+            // inputStream.read(rackId);
 
-            // final tagged fields
-            int finalTaggedSize = readVarInt(inputStream);
-            inputStream.skip(finalTaggedSize);
+            // // final tagged fields
+            // int finalTaggedSize = readVarInt(inputStream);
+            // inputStream.skip(finalTaggedSize);
             responses.add(new byte[]{0});
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{0,0});
