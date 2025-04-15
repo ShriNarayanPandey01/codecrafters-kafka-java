@@ -86,8 +86,13 @@ public class ApiHandler {
                     responses.add(new byte[]{(byte)(2)});
                     responses.add(new byte[]{0,0,0,0}); // partition index
                     responses.add(new byte[]{0,0}); // error code
-                    responses.add(new byte[]{0,0,0,0});
-                    responses.add(new byte[]{0,0});
+                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // high watermark
+                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // last stable offset
+                    responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // log start offset
+                    responses.add(new byte[]{0,0}); // number of aborted transaction
+                    responses.add(new byte[]{0, 0}); // preferred_read_replica
+                    responses.add(new byte[]{0, 0}); // compact_records_length
+                    responses.add(new byte[]{0});
                 }
                 else
                 {
