@@ -35,7 +35,7 @@ public class ApiHandler {
                 inputStream.read(topicName);
                 topicList.add(topicName);
                 topicNameLengthList.add(topicNameLength);
-                
+
                 byte[] partitionLength = new byte[4];
                 inputStream.read(partitionLength);
                 for(int j = 1 ; j < byteTool.byteArrayToInt(partitionLength) ; j++){
@@ -47,7 +47,7 @@ public class ApiHandler {
                     inputStream.read(partitionMaxBytes);
                 }
             }
-
+            System.out.println("got here");
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{0,0,0,0});
