@@ -20,7 +20,7 @@ public class ApiHandler {
             byte[] maxBytes = new byte[4];
             byte[] isolationLevel = new byte[1];
             byte[] topicsLength = new byte[4];
-            
+
             System.out.println("got here");
 
             inputStream.read(replicaID);
@@ -53,11 +53,12 @@ public class ApiHandler {
                     inputStream.read(partitionMaxBytes);
                 }
             }
-            
+            responses.add(new byte[]{0});
+            responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
-            responses.add(new byte[]{0,0,0,0});
-            responses.add(new byte[]{0,0,0});
+            responses.add(new byte[]{1});
+            responses.add(new byte[]{0});
             
         }
         catch(IOException e) {
