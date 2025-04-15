@@ -139,7 +139,8 @@ public class ApiHandler {
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
-            responses.add(new byte[]{(byte)(2)});
+            if(topicuuidList.size()>0) responses.add(new byte[]{(byte)(2)});
+            else responses.add(new byte[]{(byte)1});
             for(int j = 1 ; j < 2 && topicuuidList.size() > 0 ; j++){
                 responses.add(topicuuidList.get(j-1));
                 responses.add(new byte[]{(byte)2});
