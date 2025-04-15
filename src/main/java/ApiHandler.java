@@ -26,7 +26,7 @@ public class ApiHandler {
             inputStream.read(maxBytes);
             inputStream.read(isolationLevel);
             inputStream.read(topicsLength);
-            
+            byteTool.printByteArray(topicsLength);
             ArrayList<byte[]> topicList = new ArrayList<>();
             ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
             for(int i = 1 ; i < byteTool.byteArrayToInt(topicsLength) ; i++){
