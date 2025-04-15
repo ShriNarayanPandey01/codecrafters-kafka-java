@@ -65,20 +65,10 @@ public class ApiHandler {
             int topicCount = byteTool.byteArrayToInt(topicCountBytes);
             System.out.println("got here");
             System.out.println(topicCount);
-            
-            ArrayList<byte[]> topicList = new ArrayList<>();
-            ArrayList<byte[]> topicNameLengthList = new ArrayList<>();
 
             for (int i = 0; i < topicCount; i++) {
                 byte[] topicId = new byte[16]; // UUID
                 inputStream.read(topicId);
-                
-                String topic = logFileInfo.topicNames.get(new String(topicId));
-                TopicRecord topicRecord = logFileInfo.topics.get(topic);
-                byte[] nameA = topicRecord.nameA;
-                topicList.add(nameA);
-                byte[] nameLength = topicRecord.nameLength;
-                topicNameLengthList.add(nameLength);
 
                 byte[] partitionCountBytes = new byte[4];
                 inputStream.read(partitionCountBytes);
@@ -147,26 +137,8 @@ public class ApiHandler {
             responses.add(new byte[]{0,0,0,0});
             responses.add(new byte[]{0,0});
             responses.add(new byte[]{0,0,0,0});
-            responses.add(new byte[]{(byte)(topicList.size()+1)});
+            responses.add(new byte[]{(byte)(2)});
 
-            
-            for(int i = 0 ; i < topicList.size() ; i++){
-                String topic = new String(Arrays.copyOfRange(topicList.get(i),0,3));
-                TopicRecord topicRecord = logFileInfo.topics.get(topic);
-                responses.add(topicRecord.topicUUID);
-                responses.add(new byte[]{0,(byte)(topicRecord.partitions.size()+1)});
-                for(int j = 0 ; j < topicRecord.partitions.size() ; j++){
-                    PartitionRecord partitionRecord = topicRecord.partitions.get(j);
-                    responses.add(partitionRecord.partitionID);
-                    responses.add(new byte[]{0,0});
-                    responses.add(new byte[]{0,0,0,0,0,0,0,0});
-                    responses.add(new byte[]{0,0,0,0,0,0,0,0});
-                    responses.add(new byte[]{0,0,0,0,0,0,0,0});
-                    responses.add(new byte[]{0});
-
-                }
-                responses.add(new byte[]{0});
-            }
             responses.add(new byte[]{0});
             
         }
