@@ -62,6 +62,7 @@ public class ApiHandler {
             // topics array
             byte[] topicCountBytes = new byte[1];
             inputStream.read(topicCountBytes);
+            
             int topicCount = byteTool.byteArrayToInt(topicCountBytes);
             System.out.println("got here");
             System.out.println(topicCount);
