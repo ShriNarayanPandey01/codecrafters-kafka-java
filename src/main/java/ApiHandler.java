@@ -130,8 +130,9 @@ public class ApiHandler {
                     responses.add(new byte[]{0,0,0,0}); // number of aborted transaction
    
                     ArrayList<String> isrList = parseLogsForTopic("/tmp/kraft-combined-logs/",name);
-                    putUnsignedVarInt(responses, 3);
+                    
     
+                    ArrayList<byte[]> responsesTemp = new ArrayList<>();
                     
                     for(int i = 0 ; i < isrList.size() ; i++){
                         String recordPath = isrList.get(i);
@@ -140,18 +141,20 @@ public class ApiHandler {
                             long fileLength = raf.length();
                             byte[] offset = new byte[8];
                             raf.read(offset);
-                            responses.add(offset);
+                            responsesTemp.add(offset);
                             byte[] length = new byte[4];
                             raf.read(length);
-                            responses.add(length);
+                            responsesTemp.add(length);
                             byte[] record = new byte[byteTool.byteArrayToInt(length)];
                             raf.read(record);
-                            responses.add(record);
-                
+                            responsesTemp.add(record);
                         } catch (IOException e) {
                             System.err.println("Failed to parse log segment: " + e.getMessage());
                         }
                     }
+                    int recordSize = byteTool.sizeOfMessage(responsesTemp);
+                    putUnsignedVarInt(responses, recordSize);
+                    responses.addAll(responsesTemp);
 
                     responses.add(new byte[]{0});
                 }
