@@ -129,8 +129,7 @@ public class ApiHandler {
                     putUnsignedVarInt(responses, 0);
                     responses.add(new byte[]{0,0,0,0}); // number of aborted transaction
                     responses.add(new byte[]{0, 0}); // preferred_read_replica
-                    ArrayList<String> isrList = new ArrayList<>();
-                    isrList.addAll(parseLogsForTopic("/tmp/kraft-combined-logs/",name));
+                    ArrayList<String> isrList = parseLogsForTopic("/tmp/kraft-combined-logs/",name);
                     responses.add(new byte[]{0, (byte)(isrList.size()+1)}); // compact_records_length
                     
                     for(int i = 0 ; i < isrList.size() ; i++){
