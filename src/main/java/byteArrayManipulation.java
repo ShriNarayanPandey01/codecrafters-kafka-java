@@ -93,7 +93,8 @@ public class byteArrayManipulation {
         return size;
       }
 
-      public static void printByteArray(byte[] value) {
+      public static void printByteArray(byte[] value , String s) {
+        // System.out.println("====== "+s+" =====" );
       //   for (byte b : value) {
       //     System.out.printf("%02X ", b);
       // }
