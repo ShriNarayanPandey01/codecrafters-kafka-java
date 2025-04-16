@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,6 +44,32 @@ public class ApiHandler {
 
         return value;
     }
+
+
+     static void putUnsignedVarInt(ArrayList<byte[]> responses, int v) throws IOException {
+        byte[] bytes = new byte[unsignedVarIntSize(v)];
+        putUnsignedVarInt(v, bytes, 0);
+        responses.add(bytes);
+    }
+    private static int putUnsignedVarInt(int v, byte[] sink, int offset) {
+        do {
+        // Encode next 7 bits + terminator bit
+        int bits = v & 0x7F;
+        v >>>= 7;
+        byte b = (byte) (bits + ((v != 0) ? 0x80 : 0));
+        sink[offset++] = b;
+        } while (v != 0);
+        return offset;
+    }
+    private static int unsignedVarIntSize(int i) {
+        int result = 0;
+        do {
+        result++;
+        i >>>= 7;
+        } while (i != 0);
+        return result;
+    }
+
     public static void fetchRequestHandler(LogFileInfo logFileInfo , ArrayList<byte[]> responses , InputStream inputStream ){
         try{        
             byte[] maxWaitTime = new byte[4];
@@ -98,12 +126,15 @@ public class ApiHandler {
                     responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // high watermark
                     responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // last stable offset
                     responses.add(new byte[]{0, 0, 0, 0, 0, 0, 0, 0}); // log start offset
-                    responses.add(new byte[]{0,0}); // number of aborted transaction
+                    putUnsignedVarInt(responses, 0);
+                    responses.add(new byte[]{0,0,0,0}); // number of aborted transaction
                     responses.add(new byte[]{0, 0}); // preferred_read_replica
-                    responses.add(new byte[]{0, (byte)(topicRecord.partitions.size()+1)}); // compact_records_length
+                    ArrayList<String> isrList = new ArrayList<>();
+                    isrList.addAll(parseLogsForTopic("/tmp/kraft-combined-logs/",name));
+                    responses.add(new byte[]{0, (byte)(isrList.size()+1)}); // compact_records_length
                     
-                    // for(int i = 0 ; i < topicRecord.partitions.size() ; i++){
-                        String recordPath = "/tmp/kraft-combined-logs/"+name+"-"+"0"+"/00000000000000000000.log";
+                    for(int i = 0 ; i < isrList.size() ; i++){
+                        String recordPath = isrList.get(i);
                         File file = new File(recordPath);
                         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
                             long fileLength = raf.length();
@@ -120,7 +151,7 @@ public class ApiHandler {
                         } catch (IOException e) {
                             System.err.println("Failed to parse log segment: " + e.getMessage());
                         }
-                    // }
+                    }
 
                     responses.add(new byte[]{0});
                 }
@@ -296,5 +327,42 @@ public class ApiHandler {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<String> parseLogsForTopic(String basePath, String topicName) {
+        File rootDir = new File(basePath);
+
+        if (!rootDir.exists() || !rootDir.isDirectory()) {
+            System.out.println("Invalid base directory!");
+            return new ArrayList<>();
+        }
+
+        // find all folders starting with "paz-"
+        File[] topicFolders = rootDir.listFiles(file ->
+            file.isDirectory() && file.getName().startsWith(topicName + "-")
+        );
+
+        if (topicFolders == null || topicFolders.length == 0) {
+            System.out.println("No folders found for topic: " + topicName);
+            return new ArrayList<>();
+        }
+        ArrayList<String> logFilesPath = new ArrayList<>();
+        for (File topicFolder : topicFolders) {
+            System.out.println("Scanning folder: " + topicFolder.getAbsolutePath());
+
+            try {
+                Files.walk(topicFolder.toPath())
+                    .filter(path -> path.toFile().isFile() && path.toString().endsWith(".log"))
+                    .forEach(path -> {
+                        File logFile = path.toFile();
+                        System.out.println("Parsing log: " + logFile.getAbsolutePath());
+                        logFilesPath.add(logFile.getAbsolutePath());
+                    });
+            } catch (IOException e) {
+                System.out.println("Error while scanning: " + topicFolder.getAbsolutePath());
+                e.printStackTrace();
+            }
+        }
+        return logFilesPath;
     }
 }
