@@ -139,13 +139,13 @@ public class ApiHandler {
                         File file = new File(recordPath);
                         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
                             long fileLength = raf.length();
-                            byte[] offset = new byte[8];
-                            raf.read(offset);
-                            responsesTemp.add(offset);
-                            byte[] length = new byte[4];
-                            raf.read(length);
-                            responsesTemp.add(length);
-                            byte[] record = new byte[byteTool.byteArrayToInt(length)];
+                            byte[] record = new byte[(int)fileLength];
+                            // raf.read(offset);
+                            // responsesTemp.add(offset);
+                            // byte[] length = new byte[4];
+                            // raf.read(length);
+                            // responsesTemp.add(length);
+                            // byte[] record = new byte[byteTool.byteArrayToInt(length)];
                             raf.read(record);
                             responsesTemp.add(record);
                         } catch (IOException e) {
