@@ -130,7 +130,7 @@ public class ApiHandler {
                     responses.add(new byte[]{0,0,0,0}); // number of aborted transaction
                     responses.add(new byte[]{0, 0}); // preferred_read_replica
                     ArrayList<String> isrList = parseLogsForTopic("/tmp/kraft-combined-logs/",name);
-                    responses.add(new byte[]{0, (byte)(isrList.size()+1)}); // compact_records_length
+                    responses.add(new byte[]{0, (byte)(3)}); // compact_records_length
                     
                     for(int i = 0 ; i < isrList.size() ; i++){
                         String recordPath = isrList.get(i);
