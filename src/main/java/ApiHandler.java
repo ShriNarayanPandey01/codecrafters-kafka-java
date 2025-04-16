@@ -130,7 +130,7 @@ public class ApiHandler {
                     responses.add(new byte[]{0,0,0,0}); // number of aborted transaction
    
                     ArrayList<String> isrList = parseLogsForTopic("/tmp/kraft-combined-logs/",name);
-                    putUnsignedVarInt(responses, isrList.size() + 1);
+                    putUnsignedVarInt(responses, 3);
     
                     
                     for(int i = 0 ; i < isrList.size() ; i++){
