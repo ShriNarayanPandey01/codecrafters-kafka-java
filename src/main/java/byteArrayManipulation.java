@@ -94,9 +94,9 @@ public class byteArrayManipulation {
       }
 
       public static void printByteArray(byte[] value) {
-        for (byte b : value) {
-          System.out.printf("%02X ", b);
-      }
+      //   for (byte b : value) {
+      //     System.out.printf("%02X ", b);
+      // }
         System.out.println();
     }
 
