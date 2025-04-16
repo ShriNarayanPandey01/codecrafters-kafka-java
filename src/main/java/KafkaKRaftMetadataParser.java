@@ -237,8 +237,7 @@ public class KafkaKRaftMetadataParser {
         ind = data.length-1;
         byte[] headerArrayCount = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
-        System.out.println("====== headerArrayCount ======");
-        byteTool.printByteArray(headerArrayCount);    
+        byteTool.printByteArray(headerArrayCount , "Header Array Count");    
     }
     static void pareseTopic(byte[] data,int I ,LogFileInfo logFileInfo) {
         int ind = 0;

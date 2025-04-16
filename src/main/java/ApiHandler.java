@@ -294,9 +294,8 @@ public class ApiHandler {
 
             for(String key : logfile.topics.keySet()){
                 TopicRecord topicRecord = logfile.topics.get(key);
-                System.out.println("topic name = "+topicRecord.name);
+                byteTool.printByteArray(topicRecord.topicUUID , "topic name = "+topicRecord.name);
                 System.out.println(topicRecord.partitions.size());
-                byteTool.printByteArray(topicRecord.topicUUID);
             }
             int totalNumOfTopics = logfile.topics.size();
             responses.add(new byte[]{(byte)0}); // tag buffer
