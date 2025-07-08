@@ -114,12 +114,6 @@ public class ApiHandler {
                 if(logFileInfo.topicNames.containsKey(byteTool.byteArrayToString(topicuuidList.get(j)))){
                     String name = logFileInfo.topicNames.get(byteTool.byteArrayToString(topicuuidList.get(j)));
                     TopicRecord topicRecord = logFileInfo.topics.get(name);
-                   
-                    // LogFileInfo log = new LogFileInfo();
-                    // parser.parseLogSegment(recordPath , log);
-
-                    
-
                     responses.add(new byte[]{(byte)(2)});
                     responses.add(new byte[]{0,0,0,0}); // partition index
                     responses.add(new byte[]{0,0}); // error code
@@ -140,12 +134,6 @@ public class ApiHandler {
                         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
                             long fileLength = raf.length();
                             byte[] record = new byte[(int)fileLength];
-                            // raf.read(offset);
-                            // responsesTemp.add(offset);
-                            // byte[] length = new byte[4];
-                            // raf.read(length);
-                            // responsesTemp.add(length);
-                            // byte[] record = new byte[byteTool.byteArrayToInt(length)];
                             raf.read(record);
                             responsesTemp.add(record);
                         } catch (IOException e) {
@@ -284,17 +272,8 @@ public class ApiHandler {
             inputStream.read(responsePartitionLimit);
             byte[] cursor = new byte[1];
             inputStream.read(cursor);
-
-            // LogFileInfo logfile = new LogFileInfo();
-           
-            // parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
-            // parser.parsePartitionMetadata("/tmp/kraft-combined-logs/__cluster_metadata-0/partition.metadata");
-            // // parser.partitioncount();
-            
-
             for(String key : logfile.topics.keySet()){
                 TopicRecord topicRecord = logfile.topics.get(key);
-                byteTool.printByteArray(topicRecord.topicUUID , "topic name = "+topicRecord.name);
                 System.out.println(topicRecord.partitions.size());
             }
             int totalNumOfTopics = logfile.topics.size();

@@ -1,13 +1,6 @@
 import java.util.ArrayList;
 
 public class byteArrayManipulation {
-    /**
-     * Converts a byte array to an integer, using big-endian byte order. That is,
-     * the first byte in the array is the most significant byte of the integer.
-     *
-     * @param b the byte array to convert
-     * @return the integer value of the byte array
-     */
     public static int byteArrayToInt(byte[] b) {
     
         int value  = 0;
@@ -16,14 +9,6 @@ public class byteArrayManipulation {
         }
         return value ;
       }
-
-    /**
-     * Converts a byte array to a short, using big-endian byte order. That is,
-     * the first byte in the array is the most significant byte of the short.
-     *
-     * @param b the byte array to convert
-     * @return the short value of the byte array
-     */
       public static short byteArrayToShort(byte[] b) {
         int value  = 0;
         for(byte b1 : b) {
@@ -31,15 +16,6 @@ public class byteArrayManipulation {
         }
         return (short)value;
       }
-
-      /**
-       * Converts an integer to a byte array, using big-endian byte order. That is,
-       * the most significant byte of the integer is the first byte in the array.
-       * 
-       * @param data the integer to convert
-       * @return the byte array representation of the integer
-       */
-
       public static long byteArrayToLong(byte[] bytes) {
         if (bytes.length > 8) {
             throw new IllegalArgumentException("Byte array too long to convert to long");
@@ -60,29 +36,13 @@ public class byteArrayManipulation {
         result[3] = (byte) (data & 0xFF);
         return result;        
     }
-    
-      /**
-       * Converts a short to a byte array, using big-endian byte order. That is,
-       * the most significant byte of the short is the first byte in the array.
-       * 
-       * @param d the short to convert
-       * @return the byte array representation of the short
-       */
+
       public static byte[] shortToByteArray(short d) {
         byte[] result = new byte[2];
         result[0] = (byte) ((d >> 8) & 0xFF); 
         result[1] = (byte) (d & 0xFF);       
         return result;
     }
-
-      /**
-       * Calculates the total size in bytes of all the messages in the ArrayList
-       * of byte arrays. This is useful for determining the size of the message
-       * when sending it over the wire.
-       * 
-       * @param responses the ArrayList of byte arrays to calculate the size of
-       * @return the total size in bytes of all the messages in the ArrayList
-       */
       public static int sizeOfMessage(ArrayList<byte[]> responses){
         if(responses.size() == 0) return 0;
         int size = 0;
@@ -94,10 +54,10 @@ public class byteArrayManipulation {
       }
 
       public static void printByteArray(byte[] value , String s) {
-        // System.out.println("====== "+s+" =====" );
-      //   for (byte b : value) {
-      //     System.out.printf("%02X ", b);
-      // }
+        System.out.println("====== "+s+" =====" );
+        for (byte b : value) {
+          System.out.printf("%02X ", b);
+      }
         System.out.println();
     }
 
