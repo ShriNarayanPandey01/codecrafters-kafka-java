@@ -72,8 +72,8 @@ public class KafkaKRaftMetadataParser {
         byte[] topicUUID  = Arrays.copyOfRange(data, ind , ind + 16);
         ind += 8;
         String TOPIC = new String(Arrays.copyOfRange(name,0,3));
-        System.out.println("========= TOPIC NAME  ========");
-        System.out.println(TOPIC);
+        // System.out.println("========= TOPIC NAME  ========");
+        // System.out.println(TOPIC);
         // map.put(TOPIC, topicUUID);
         byte[] taggedFeildCounts = Arrays.copyOfRange(data, ind , ind + 1);
         ind++;
@@ -246,14 +246,14 @@ public class KafkaKRaftMetadataParser {
 
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             long length = raf.length();  // Total bytes in file
-            System.out.println("Total Bytes: " + length);
+            // System.out.println("Total Bytes: " + length);
 
             raf.seek(0);  // Go to the start
 
             // Read byte by byte
             for (long i = 0; i < length; i++) {
                 int b = raf.readUnsignedByte();  // Read as unsigned
-                System.out.printf("Byte %05d: 0x%02X%n ", i, b);
+                // System.out.printf("Byte %05d: 0x%02X%n ", i, b);
             }
 
         } catch (IOException e) {
@@ -261,7 +261,7 @@ public class KafkaKRaftMetadataParser {
         }
     }
     static void parseLogSegment(String filePath , LogFileInfo logFileInfo) {
-        System.out.println("\n== Parsing Kafka log segment ==");
+        // System.out.println("\n== Parsing Kafka log segment ==");
         File file = new File(filePath);
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             long fileLength = raf.length();
@@ -285,7 +285,7 @@ public class KafkaKRaftMetadataParser {
                 raf.read(batchLength);
 
                 if(byteTool.byteArrayToInt(batchLength) == 0){
-                    System.out.println(byteTool.byteArrayToInt(batchLength));
+                    // System.out.println(byteTool.byteArrayToInt(batchLength));
                     return ;
                 }
                 raf.read(partitionLeaderEpoch);
@@ -311,21 +311,21 @@ public class KafkaKRaftMetadataParser {
                     byteTool.printByteArray(length, "");
                     
                     int sort = byteTool.byteArrayToInt(Arrays.copyOfRange(length, 0, 1));
-                    System.out.println("====== Record " + i + " big indian length =====" );
-                    System.out.println(sort);
+                    // System.out.println("====== Record " + i + " big indian length =====" );
+                    // System.out.println(sort);
 
                     int recLength = byteTool.zigZagDecode(sort);
-                    System.out.println("====== Record " + i + " zig zag length =====" );
-                    System.out.println(recLength);
+                    // System.out.println("====== Record " + i + " zig zag length =====" );
+                    // System.out.println(recLength);
 
                     byte[] content = new byte[recLength];
                     
-                    System.out.println("====== RECORD LENGTH ========");
-                    System.out.println(recLength);   
+                    // System.out.println("====== RECORD LENGTH ========");
+                    // System.out.println(recLength);   
                     raf.read(content);  
                     if(sort == 0) continue;
                     pareseTopic(content,i,logFileInfo);
-                    System.out.println("***** Record iteration complete ****");
+                    // System.out.println("***** Record iteration complete ****");
                 }
             }
  
