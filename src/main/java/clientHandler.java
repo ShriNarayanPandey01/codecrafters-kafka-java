@@ -34,7 +34,7 @@ class ClientHandler extends Thread {
         ArrayList<byte[]> responses = new ArrayList<>();
         ApiHandler apiHandler = new ApiHandler();
         if (inputStream.read(mssgSize) == -1) {
-          break;  // Client closed connection
+          break;   // Client closed connection
         }
 
         int mssg = byteTool.byteArrayToInt(mssgSize);
