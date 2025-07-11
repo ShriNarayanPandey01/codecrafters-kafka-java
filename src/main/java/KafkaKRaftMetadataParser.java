@@ -261,22 +261,23 @@ public class KafkaKRaftMetadataParser {
             e.printStackTrace();
         }
     }
-    static void parseLogSegment(String filePath , LogFileInfo logFileInfo) throws IOException {
+    static void parseLogSegment(String filePath , LogFileInfo logFileInfo) {
         // System.out.println("\n== Parsing Kafka log segment ==");
         File file = new File(filePath);
-        System.out.println("=== File Hex Dump (first 256 bytes) ===");
-        try (FileInputStream fis = new FileInputStream(file)) {
-            byte[] preview = new byte[Math.min(256, (int)file.length())];
-            fis.read(preview);
-            for (int i = 0; i < preview.length; i++) {
-                if (i % 16 == 0) System.out.printf("\n%04X: ", i);
-                System.out.printf("%02X ", preview[i] & 0xFF);
-            }
-            System.out.println("\n");
-        }
+        
 
         System.out.println("==================");
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+            System.out.println("=== File Hex Dump (first 256 bytes) ===");
+            try (FileInputStream fis = new FileInputStream(file)) {
+                byte[] preview = new byte[Math.min(256, (int)file.length())];
+                fis.read(preview);
+                for (int i = 0; i < preview.length; i++) {
+                    if (i % 16 == 0) System.out.printf("\n%04X: ", i);
+                    System.out.printf("%02X ", preview[i] & 0xFF);
+                }
+                System.out.println("\n");
+            }
             long fileLength = raf.length();
             int tbu = 0 ; // total byte parsed
             while(tbu < fileLength){
