@@ -132,6 +132,17 @@ public class ApiHandler {
                         String recordPath = isrList.get(i);
                         File file = new File(recordPath);
                         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+                            System.out.println("==================");
+                                System.out.println("=== "+ recordPath +" File Hex Dump ===");
+                                try (FileInputStream fis = new FileInputStream(file)) {
+                                    byte[] preview = new byte[(int)file.length()];
+                                    fis.read(preview);
+                                    for (int k = 0; k < preview.length; k++) {
+                                        System.out.printf("%02X ", preview[k] & 0xFF);
+                                    }
+                                    System.out.println("\n");
+                                }
+                            System.out.println("============================");
                             long fileLength = raf.length();
                             byte[] record = new byte[(int)fileLength];
                             raf.read(record);

@@ -266,7 +266,7 @@ public class KafkaKRaftMetadataParser {
         File file = new File(filePath);
         
 
-        System.out.println("==================");
+        
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             System.out.println("=== File Hex Dump ===");
             try (FileInputStream fis = new FileInputStream(file)) {
@@ -277,6 +277,7 @@ public class KafkaKRaftMetadataParser {
                 }
                 System.out.println("\n");
             }
+            System.out.println("============================");
             long fileLength = raf.length();
             int tbu = 0 ; // total byte parsed
             while(tbu < fileLength){

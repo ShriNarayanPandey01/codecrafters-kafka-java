@@ -71,8 +71,8 @@ class ClientHandler extends Thread {
           remainingBytes = new byte[mssg - 8];
           inputStream.read(remainingBytes);
         }
-
-        outputStream.write(byteTool.intToByteArray(responseSize));  
+        byte[] resp = byteTool.intToByteArray(responseSize);
+        outputStream.write(resp);  
         for (byte[] response : responses) {
           outputStream.write(response);
         }
