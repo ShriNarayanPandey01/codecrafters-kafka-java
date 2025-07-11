@@ -245,7 +245,7 @@ public class KafkaKRaftMetadataParser {
     static void printWholeLogSegment(String filePath) throws IOException {
         File file = new File(filePath);  // Replace with your file path
         List<String> lines = Files.readAllLines(file.toPath());
-        System.out.println("=============MetaData.log===================")
+        System.out.println("=============MetaData.log===================");
         for (String line : lines) {
             System.out.println(line);
         }
