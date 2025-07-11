@@ -54,11 +54,11 @@ public class byteArrayManipulation {
       }
 
       public static void printByteArray(byte[] value , String s) {
-        System.out.println("====== "+s+" =====" );
-        for (byte b : value) {
-          System.out.printf("%02X ", b);
-      }
-        System.out.println();
+      //   System.out.println("====== "+s+" =====" );
+      //   for (byte b : value) {
+      //     System.out.printf("%02X ", b);
+      // }
+      //   System.out.println();
     }
 
     public static int zigZagDecode(int n) {
