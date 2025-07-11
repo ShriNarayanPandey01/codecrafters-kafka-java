@@ -261,87 +261,120 @@ public class KafkaKRaftMetadataParser {
             e.printStackTrace();
         }
     }
-    static void parseLogSegment(String filePath , LogFileInfo logFileInfo) throws IOException {
-        // System.out.println("\n== Parsing Kafka log segment ==");
-        File file = new File(filePath);
-        List<String> lines = Files.readAllLines(file.toPath());
-        System.out.println("=============MetaData.log===================");
-        for (String line : lines) {
-            System.out.println(line);
+    static void parseLogSegment(String filePath, LogFileInfo logFileInfo) throws IOException {
+    File file = new File(filePath);
+    
+    // Debug: Print file hex dump
+    System.out.println("=== File Hex Dump (first 256 bytes) ===");
+    try (FileInputStream fis = new FileInputStream(file)) {
+        byte[] preview = new byte[Math.min(256, (int)file.length())];
+        fis.read(preview);
+        for (int i = 0; i < preview.length; i++) {
+            if (i % 16 == 0) System.out.printf("\n%04X: ", i);
+            System.out.printf("%02X ", preview[i] & 0xFF);
         }
-        System.out.println("===========================================");
-        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
-            long fileLength = raf.length();
-            int tbu = 0 ; // total byte parsed
-            while(tbu < fileLength){
-                byte[] batchOffset = new byte[8];
-                byte[] batchLength = new byte[4];
-                byte[] partitionLeaderEpoch = new byte[4];
-                byte[] magicByte = new byte[1];
-                byte[] CRC =  new byte[4];
-                byte[] attributes = new byte[2];
-                byte[] lastOffset = new byte[4];
-                byte[] baseTimestamp = new byte[8];
-                byte[] maxTimestamp = new byte[8];
-                byte[] produerId = new byte[8];
-                byte[] producerEpoch = new byte[2];
-                byte[] baseSequence = new byte[4];
-                byte[] recordLength= new byte[4];
-                
-                raf.read(batchOffset);
-                raf.read(batchLength);
-
-                if(byteTool.byteArrayToInt(batchLength) == 0){
-                    // System.out.println(byteTool.byteArrayToInt(batchLength));
-                    return ;
-                }
-                raf.read(partitionLeaderEpoch);
-                raf.read(magicByte);
-                raf.read(CRC);
-                raf.read(attributes);
-                raf.read(lastOffset);
-                raf.read(baseTimestamp);
-                raf.read(maxTimestamp);
-                raf.read(produerId);
-                raf.read(producerEpoch);
-                raf.read(baseSequence);  
-                raf.read(recordLength);
-
-                int recordLengthInt = ByteBuffer.wrap(recordLength).getInt();
-                tbu += 51;
-                for(int i = 0 ; i < recordLengthInt ; i++){
-                    byte[] length;
-                    if(i == 0) length = new byte[1];
-                    else length = new byte[2];    
-                    
-                    raf.read(length);
-                    byteTool.printByteArray(length, "");
-                    
-                    int sort = byteTool.byteArrayToInt(Arrays.copyOfRange(length, 0, 1));
-                    // System.out.println("====== Record " + i + " big indian length =====" );
-                    // System.out.println(sort);
-
-                    int recLength = byteTool.zigZagDecode(sort);
-                    // System.out.println("====== Record " + i + " zig zag length =====" );
-                    // System.out.println(recLength);
-
-                    byte[] content = new byte[recLength];
-                    
-                    // System.out.println("====== RECORD LENGTH ========");
-                    // System.out.println(recLength);   
-                    raf.read(content);  
-                    if(sort == 0) continue;
-                    pareseTopic(content,i,logFileInfo);
-                    // System.out.println("***** Record iteration complete ****");
-                }
-            }
- 
-        } catch (IOException e) {
-            System.err.println("Failed to parse log segment: " + e.getMessage());
-        }
-        return ;
+        System.out.println("\n");
     }
 
+    System.out.println("==================");
+    
+    try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+        long fileLength = raf.length();
+        long position = 0;
+        
+        while (position < fileLength) {
+            // Save current position
+            long batchStartPosition = raf.getFilePointer();
+            
+            // Read batch header
+            byte[] batchOffset = new byte[8];
+            byte[] batchLength = new byte[4];
+            
+            if (raf.read(batchOffset) != 8 || raf.read(batchLength) != 4) {
+                break; // End of file
+            }
+            
+            int batchLengthInt = ByteBuffer.wrap(batchLength).getInt();
+            if (batchLengthInt <= 0) {
+                System.out.println("Invalid batch length: " + batchLengthInt);
+                break;
+            }
+            
+            // Read rest of batch header
+            byte[] partitionLeaderEpoch = new byte[4];
+            byte[] magicByte = new byte[1];
+            byte[] crc = new byte[4];
+            byte[] attributes = new byte[2];
+            byte[] lastOffsetDelta = new byte[4];
+            byte[] baseTimestamp = new byte[8];
+            byte[] maxTimestamp = new byte[8];
+            byte[] producerId = new byte[8];
+            byte[] producerEpoch = new byte[2];
+            byte[] baseSequence = new byte[4];
+            byte[] recordCount = new byte[4];
+            
+            readFully(raf, partitionLeaderEpoch);
+            readFully(raf, magicByte);
+            readFully(raf, crc);
+            readFully(raf, attributes);
+            readFully(raf, lastOffsetDelta);
+            readFully(raf, baseTimestamp);
+            readFully(raf, maxTimestamp);
+            readFully(raf, producerId);
+            readFully(raf, producerEpoch);
+            readFully(raf, baseSequence);
+            readFully(raf, recordCount);
+            
+            int recordCountInt = ByteBuffer.wrap(recordCount).getInt();
+            System.out.println("Batch at offset " + ByteBuffer.wrap(batchOffset).getLong() + 
+                             " has " + recordCountInt + " records");
+            
+            // Parse records
+            for (int i = 0; i < recordCountInt; i++) {
+                try {
+                    // Read record length (varint encoding)
+                    int recordLength = readVarint(raf);
+                    if (recordLength <= 0) continue;
+                    
+                    byte[] recordData = new byte[recordLength];
+                    readFully(raf, recordData);
+                    
+                    // Parse the record
+                    parseRecord(recordData, i, logFileInfo);
+                    
+                } catch (Exception e) {
+                    System.err.println("Error parsing record " + i + ": " + e.getMessage());
+                    break;
+                }
+            }
+            
+            // Move to next batch
+            position = batchStartPosition + 12 + batchLengthInt;
+            raf.seek(position);
+        }
+    }
+}
+
+    private static void readFully(RandomAccessFile raf, byte[] buffer) throws IOException {
+        int totalRead = 0;
+        while (totalRead < buffer.length) {
+            int read = raf.read(buffer, totalRead, buffer.length - totalRead);
+            if (read == -1) throw new EOFException();
+            totalRead += read;
+        }
+    }
+
+    private static int readVarint(RandomAccessFile raf) throws IOException {
+        int value = 0;
+        int shift = 0;
+        byte b;
+        do {
+            b = raf.readByte();
+            value |= (b & 0x7F) << shift;
+            shift += 7;
+        } while ((b & 0x80) != 0);
+        return value;
+    }
     public static void parseServerProperties(String path) {
         Properties props = new Properties();
         try (FileInputStream fis = new FileInputStream(path)) {
