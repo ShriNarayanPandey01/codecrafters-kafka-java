@@ -268,12 +268,11 @@ public class KafkaKRaftMetadataParser {
 
         System.out.println("==================");
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
-            System.out.println("=== File Hex Dump (first 256 bytes) ===");
+            System.out.println("=== File Hex Dump ===");
             try (FileInputStream fis = new FileInputStream(file)) {
                 byte[] preview = new byte[(int)file.length()];
                 fis.read(preview);
                 for (int i = 0; i < preview.length; i++) {
-                    if (i % 16 == 0) System.out.printf("\n%04X: ", i);
                     System.out.printf("%02X ", preview[i] & 0xFF);
                 }
                 System.out.println("\n");
