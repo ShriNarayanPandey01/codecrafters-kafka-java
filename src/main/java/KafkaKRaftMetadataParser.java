@@ -244,12 +244,7 @@ public class KafkaKRaftMetadataParser {
     }
     static void printWholeLogSegment(String filePath) throws IOException {
         File file = new File(filePath);  // Replace with your file path
-        List<String> lines = Files.readAllLines(file.toPath());
-        System.out.println("=============MetaData.log===================");
-        for (String line : lines) {
-            System.out.println(line);
-        }
-        System.out.println("===========================================");
+        
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             long length = raf.length();  // Total bytes in file
             // System.out.println("Total Bytes: " + length);
@@ -266,10 +261,15 @@ public class KafkaKRaftMetadataParser {
             e.printStackTrace();
         }
     }
-    static void parseLogSegment(String filePath , LogFileInfo logFileInfo) {
+    static void parseLogSegment(String filePath , LogFileInfo logFileInfo) throws IOException {
         // System.out.println("\n== Parsing Kafka log segment ==");
         File file = new File(filePath);
-        
+        List<String> lines = Files.readAllLines(file.toPath());
+        System.out.println("=============MetaData.log===================");
+        for (String line : lines) {
+            System.out.println(line);
+        }
+        System.out.println("===========================================");
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             long fileLength = raf.length();
             int tbu = 0 ; // total byte parsed
