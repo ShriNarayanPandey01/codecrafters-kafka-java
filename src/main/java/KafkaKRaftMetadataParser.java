@@ -242,7 +242,7 @@ public class KafkaKRaftMetadataParser {
 
         return ;
     }
-    static void printWholeLogSegment(String filePath) throws IOException {
+    static void printWholeLogSegment(String filePath){
         File file = new File(filePath);  // Replace with your file path
         
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
