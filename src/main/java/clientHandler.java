@@ -1,3 +1,5 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,86 +10,172 @@ import java.util.ArrayList;
 
 class ClientHandler extends Thread {
     private Socket clientSocket;
+    
+    // Static instances to avoid repeated creation
+    private static final KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
+    private static final byteArrayManipulation byteTool = new byteArrayManipulation();
+    
+    // Pre-allocated byte arrays for common operations
+    private final byte[] mssgSizeBuffer = new byte[4];
+    private final byte[] apiKeyBuffer = new byte[2];
+    private final byte[] apiVersionBuffer = new byte[2];
+    private final byte[] correlationIdBuffer = new byte[4];
+    private final byte[] clientLengthBuffer = new byte[2];
+    private final byte[] singleByteBuffer = new byte[1];
+    
+    // Reusable response list
+    private final ArrayList<byte[]> responses = new ArrayList<>();
+    
+    // Reusable API handler
+    private final ApiHandler apiHandler = new ApiHandler();
 
     public ClientHandler(Socket socket) {
         this.clientSocket = socket;
     }
-    static KafkaKRaftMetadataParser parser = new KafkaKRaftMetadataParser();
+
     public void run() {
-    byteArrayManipulation byteTool = new byteArrayManipulation();
-    LogFileInfo logfile = new LogFileInfo();
-    parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log" , logfile);
+        LogFileInfo logfile = new LogFileInfo();
+        parser.parseLogSegment("/tmp/kraft-combined-logs/__cluster_metadata-0/00000000000000000000.log", logfile);
         
-    try {
-      while(true)
-      {
-        InputStream inputStream = clientSocket.getInputStream();
-        OutputStream outputStream = clientSocket.getOutputStream();
+        // Use buffered streams for better performance
+        try (BufferedInputStream inputStream = new BufferedInputStream(clientSocket.getInputStream(), 8192);
+             BufferedOutputStream outputStream = new BufferedOutputStream(clientSocket.getOutputStream(), 8192)) {
+            
+            while (true) {
+                // Clear responses list for reuse
+                responses.clear();
+                
+                // Read message size
+                if (readFully(inputStream, mssgSizeBuffer) == -1) {
+                    break; // Client closed connection
+                }
 
-        byte[] mssgSize  = new byte[4];
-        byte[] apiKey = new byte[2];
-        byte[] apiVersion = new byte[2];
-        byte[] correlationId = new byte[4];
-        byte[] clientLenght , clientId ,remainingBytes ;
-        
-        int responseSize;
-        ArrayList<byte[]> responses = new ArrayList<>();
-        ApiHandler apiHandler = new ApiHandler();
-        if (inputStream.read(mssgSize) == -1) {
-          break;   // Client closed connection
-        }
+                int mssg = byteTool.byteArrayToInt(mssgSizeBuffer);
+                
+                // Read API key
+                if (readFully(inputStream, apiKeyBuffer) == -1) break;
+                short api = byteTool.byteArrayToShort(apiKeyBuffer);
+                
+                // Read API version
+                if (readFully(inputStream, apiVersionBuffer) == -1) break;
+                short version = byteTool.byteArrayToShort(apiVersionBuffer);
+                
+                // Read correlation ID
+                if (readFully(inputStream, correlationIdBuffer) == -1) break;
+                int correlation = byteTool.byteArrayToInt(correlationIdBuffer);
 
-        int mssg = byteTool.byteArrayToInt(mssgSize);
-        inputStream.read(apiKey);
-        short api = byteTool.byteArrayToShort(apiKey);
-        inputStream.read(apiVersion);
-        short version = byteTool.byteArrayToShort(apiVersion);
-        inputStream.read(correlationId);
-        int correlation = byteTool.byteArrayToInt(correlationId);
-
-        responses.add(correlationId);
-        
-        if(api == 75){
-          clientLenght = new byte[2];
-          inputStream.read(clientLenght);
-          clientId = new byte[byteTool.byteArrayToInt(clientLenght)];
-          inputStream.read(clientId);
-          apiHandler.describePartitionHandler(inputStream, mssg ,responses , logfile);
-          responseSize = byteArrayManipulation.sizeOfMessage(responses);
+                // Add correlation ID to responses (reuse the buffer)
+                byte[] correlationIdCopy = new byte[4];
+                System.arraycopy(correlationIdBuffer, 0, correlationIdCopy, 0, 4);
+                responses.add(correlationIdCopy);
+                
+                int responseSize;
+                
+                if (api == 75) {
+                    // Handle describe partition request
+                    if (readFully(inputStream, clientLengthBuffer) == -1) break;
+                    int clientIdLength = byteTool.byteArrayToInt(clientLengthBuffer);
+                    
+                    byte[] clientId = new byte[clientIdLength];
+                    if (readFully(inputStream, clientId) == -1) break;
+                    
+                    apiHandler.describePartitionHandler(inputStream, mssg, responses, logfile);
+                    responseSize = byteArrayManipulation.sizeOfMessage(responses);
+                    
+                } else if (api == 1) {
+                    // Handle fetch request
+                    if (readFully(inputStream, clientLengthBuffer) == -1) break;
+                    int clientIdLength = byteTool.byteArrayToInt(clientLengthBuffer);
+                    
+                    byte[] clientId = new byte[clientIdLength];
+                    if (readFully(inputStream, clientId) == -1) break;
+                    
+                    if (readFully(inputStream, singleByteBuffer) == -1) break;
+                    
+                    apiHandler.fetchRequestHandler(logfile, responses, inputStream);
+                    responseSize = byteArrayManipulation.sizeOfMessage(responses);
+                    
+                } else {
+                    // Handle API versions request
+                    apiHandler.apiVersionsHandler(inputStream, mssg, version, responses);
+                    responseSize = byteArrayManipulation.sizeOfMessage(responses);
+                    
+                    // Read remaining bytes
+                    int remainingBytesCount = mssg - 8;
+                    if (remainingBytesCount > 0) {
+                        skipBytes(inputStream, remainingBytesCount);
+                    }
+                }
+                
+                // Write response
+                byte[] responseSizeBytes = byteTool.intToByteArray(responseSize);
+                outputStream.write(responseSizeBytes);
+                
+                // Write all response parts
+                for (byte[] response : responses) {
+                    outputStream.write(response);
+                }
+                
+                outputStream.flush();
+            }
+            
+        } catch (IOException e) {
+            System.out.println("IOException in ClientHandler: " + e.getMessage());
+        } finally {
+            closeSocket();
         }
-        else if(api == 1){
-          clientLenght = new byte[2];
-          inputStream.read(clientLenght);
-          clientId = new byte[byteTool.byteArrayToInt(clientLenght)];
-          inputStream.read(clientId);
-          byte[] buffer = new byte[1];
-          inputStream.read(buffer);
-          apiHandler.fetchRequestHandler(logfile,responses,inputStream);
-          responseSize = byteArrayManipulation.sizeOfMessage(responses);
-        }
-        else{
-          apiHandler.apiVersionsHandler(inputStream, mssg,version ,responses);
-          responseSize = byteArrayManipulation.sizeOfMessage(responses);
-          remainingBytes = new byte[mssg - 8];
-          inputStream.read(remainingBytes);
-        }
-        byte[] resp = byteTool.intToByteArray(responseSize);
-        outputStream.write(resp);  
-        for (byte[] response : responses) {
-          outputStream.write(response);
-        }
-        outputStream.flush();
     }
-    } catch (IOException e) {
-      System.out.println("IOException: " + e.getMessage());
-    } finally {
-      try {
-        if (clientSocket != null) {
-          clientSocket.close();
+    
+    /**
+     * Reads exactly the specified number of bytes from the input stream
+     * Returns -1 if end of stream is reached before all bytes are read
+     */
+    private int readFully(InputStream inputStream, byte[] buffer) throws IOException {
+        int totalBytesRead = 0;
+        int bytesToRead = buffer.length;
+        
+        while (totalBytesRead < bytesToRead) {
+            int bytesRead = inputStream.read(buffer, totalBytesRead, bytesToRead - totalBytesRead);
+            if (bytesRead == -1) {
+                return -1; // End of stream
+            }
+            totalBytesRead += bytesRead;
         }
-      } catch (IOException e) {
-        System.out.println("IOException: " + e.getMessage());
-      }
+        return totalBytesRead;
     }
+    
+    /**
+     * Efficiently skips the specified number of bytes
+     */
+    private void skipBytes(InputStream inputStream, int bytesToSkip) throws IOException {
+        long totalSkipped = 0;
+        while (totalSkipped < bytesToSkip) {
+            long skipped = inputStream.skip(bytesToSkip - totalSkipped);
+            if (skipped <= 0) {
+                // skip() didn't work, fall back to reading
+                int remaining = (int)(bytesToSkip - totalSkipped);
+                byte[] skipBuffer = new byte[Math.min(remaining, 8192)];
+                int read = inputStream.read(skipBuffer, 0, Math.min(remaining, skipBuffer.length));
+                if (read == -1) {
+                    break; // End of stream
+                }
+                totalSkipped += read;
+            } else {
+                totalSkipped += skipped;
+            }
+        }
+    }
+    
+    /**
+     * Safely close the client socket
+     */
+    private void closeSocket() {
+        try {
+            if (clientSocket != null && !clientSocket.isClosed()) {
+                clientSocket.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error closing socket: " + e.getMessage());
+        }
     }
 }
